@@ -2,9 +2,7 @@ package fi.metropolia.audiostory.activities;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
-import android.media.AudioRecord;
 import android.media.AudioTrack;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -20,18 +18,15 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunnin
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 
 import fi.metropolia.audiostory.R;
+import fi.metropolia.audiostory.threads.RecordThread;
 
 public class RecordActivity extends AppCompatActivity {
 
@@ -39,14 +34,16 @@ public class RecordActivity extends AppCompatActivity {
     private final String TEMP_FILE = "record_temp.raw";
     private final String DEBUG_TAG = "RecordActivity";
 
-    private boolean recordRunning = false;
     private boolean playing = false;
+    private boolean recordClicked = false;
 
     private File folder = null;
     private File rawFile = null;
     private File wavFile = null;
 
     private TextView titleTextView;
+
+    private RecordThread recordThread;
 
 
 
@@ -55,6 +52,16 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+
+        initViews();
+        init();
+    }
+
+    private void init() {
+
+    }
+
+    private void initViews() {
         titleTextView = (TextView)findViewById(R.id.titleText);
     }
 
@@ -69,23 +76,22 @@ public class RecordActivity extends AppCompatActivity {
     }
 
     public void onRecordClick(View v) {
+        if (!recordClicked) {
+            recordClicked = true;
 
-        if (!recordRunning) {
-            Thread recordThread = new Thread() {
-                @Override
-                public void run() {
-                    recordRunning = true;
-                    startRecording();
-                }
-            };
+            rawFile = createRawOnExternalStorage();
+            recordThread = new RecordThread(rawFile);
+
             Toast.makeText(this, "Recording", Toast.LENGTH_SHORT).show();
             recordThread.start();
         }
     }
 
     public void onStopClick(View v) {
-        if (recordRunning) {
-            recordRunning = false;
+
+        if (recordClicked) {
+            recordClicked = false;
+            recordThread.stopRecording();
             Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
         }
     }
@@ -127,8 +133,9 @@ public class RecordActivity extends AppCompatActivity {
         playing = true;
         track.play();
 
-        int i = 0;
+
         byte[] buffer = new byte[minBufferSize];
+
 
         try {
 
@@ -136,6 +143,7 @@ public class RecordActivity extends AppCompatActivity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             DataInputStream dataInputStream = new DataInputStream(bufferedInputStream);
 
+            int i;
             while ((i = dataInputStream.read(buffer, 0, minBufferSize)) != -1){
                 track.write(buffer,0,i);
             }
@@ -150,50 +158,7 @@ public class RecordActivity extends AppCompatActivity {
 
     }
 
-    private void startRecording() {
-        rawFile = createRawOnExternalStorage();
-        Log.d(DEBUG_TAG, "rawFile path: " + rawFile.getAbsolutePath());
 
-        try {
-            OutputStream outputStream = new FileOutputStream(rawFile);
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-            DataOutputStream dataOutputStream = new DataOutputStream(bufferedOutputStream);
-
-            int minBufferSize = AudioRecord.getMinBufferSize(
-                    44100,
-                    AudioFormat.CHANNEL_OUT_STEREO,
-                    AudioFormat.ENCODING_PCM_16BIT
-            );
-
-            byte[] audioData = new byte[minBufferSize];
-
-            AudioRecord audioRecord = new AudioRecord(
-                    MediaRecorder.AudioSource.MIC,
-                    44100,
-                    AudioFormat.CHANNEL_OUT_STEREO,
-                    AudioFormat.ENCODING_PCM_16BIT,
-                    minBufferSize
-            );
-            audioRecord.startRecording();
-
-
-            while(recordRunning){
-                int numofBytes = audioRecord.read(audioData, 0, minBufferSize);
-                for(int i = 0; i < numofBytes; i++){
-                    dataOutputStream.write(audioData[i]);
-                }
-            }
-
-            audioRecord.stop();
-            dataOutputStream.close();
-
-
-        } catch (IOException e){
-            Log.e(DEBUG_TAG,e.getMessage());
-        }
-
-
-    }
 
     private File createRawOnExternalStorage() {
         String rootPath = getExternalFilesDir(null).getAbsolutePath();
