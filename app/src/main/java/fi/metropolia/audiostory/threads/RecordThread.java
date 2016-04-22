@@ -7,27 +7,26 @@ import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * Created by wipsi on 4/21/2016.
- */
+import fi.metropolia.audiostory.filestorage.RawFile;
+
+
+/** Thread for recording audio. Takes in a .raw file container and stores recording on it.
+ * Audio record properties: 44100HZ, 16bit, mono, .raw.*/
 public class RecordThread extends Thread {
 
     private boolean recordingRunning = false;
     private final String DEBUG_TAG = "RecordThread";
-    private File rawFile;
+    private RawFile rawFile;
 
-    public RecordThread(File rawFile){
+
+    public RecordThread(RawFile rawFile){
         this.rawFile = rawFile;
     }
 
-    public void setRawFile(File rawFile){
-        this.rawFile = rawFile;
-    }
 
     @Override
     public void run() {
@@ -42,13 +41,13 @@ public class RecordThread extends Thread {
         recordingRunning = true;
 
         try {
-            OutputStream outputStream = new FileOutputStream(rawFile);
+            OutputStream outputStream = new FileOutputStream(rawFile.getFile());
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
             DataOutputStream dataOutputStream = new DataOutputStream(bufferedOutputStream);
 
             int minBufferSize = AudioRecord.getMinBufferSize(
                     44100,
-                    AudioFormat.CHANNEL_OUT_STEREO,
+                    AudioFormat.CHANNEL_IN_MONO,
                     AudioFormat.ENCODING_PCM_16BIT
             );
 
@@ -57,7 +56,7 @@ public class RecordThread extends Thread {
             AudioRecord audioRecord = new AudioRecord(
                     MediaRecorder.AudioSource.MIC,
                     44100,
-                    AudioFormat.CHANNEL_OUT_STEREO,
+                    AudioFormat.CHANNEL_IN_MONO,
                     AudioFormat.ENCODING_PCM_16BIT,
                     minBufferSize
             );

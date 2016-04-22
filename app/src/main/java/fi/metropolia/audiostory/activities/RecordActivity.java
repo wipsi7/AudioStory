@@ -26,24 +26,28 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import fi.metropolia.audiostory.R;
+import fi.metropolia.audiostory.filestorage.Folder;
+import fi.metropolia.audiostory.filestorage.RawFile;
 import fi.metropolia.audiostory.threads.RecordThread;
 
 public class RecordActivity extends AppCompatActivity {
 
-    private final String FOLDER_NAME = "AudioStoryRecords";
-    private final String TEMP_FILE = "record_temp.raw";
+
+
     private final String DEBUG_TAG = "RecordActivity";
 
     private boolean playing = false;
     private boolean recordClicked = false;
 
-    private File folder = null;
-    private File rawFile = null;
+
+
     private File wavFile = null;
 
     private TextView titleTextView;
 
     private RecordThread recordThread;
+    private Folder folder;
+    private RawFile rawFile;
 
 
 
@@ -52,13 +56,13 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
-
         initViews();
         init();
     }
 
     private void init() {
-
+        folder = new Folder(getApplicationContext());
+        rawFile = new RawFile(folder);
     }
 
     private void initViews() {
@@ -75,15 +79,19 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
+    public void onInfoClick(View v){
+        Log.d(DEBUG_TAG,"Files in folder: " + Arrays.toString(folder.getListOfFiles()));
+
+    }
+
     public void onRecordClick(View v) {
         if (!recordClicked) {
             recordClicked = true;
 
-            rawFile = createRawOnExternalStorage();
+            rawFile.createNewFile();
             recordThread = new RecordThread(rawFile);
-
-            Toast.makeText(this, "Recording", Toast.LENGTH_SHORT).show();
             recordThread.start();
+            Toast.makeText(this, "Recording", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -97,7 +105,7 @@ public class RecordActivity extends AppCompatActivity {
     }
 
     public void onPlayClick(View v){
-        if(rawFile != null && rawFile.exists()){
+        if(rawFile.getFile() != null && rawFile.exists()){
             if(!playing){
                 Thread playThread = new Thread(){
                     @Override
@@ -120,11 +128,11 @@ public class RecordActivity extends AppCompatActivity {
 
     private void startPlaying(){
 
-        int minBufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+        int minBufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
         AudioTrack track = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 44100,
-                AudioFormat.CHANNEL_OUT_STEREO,
+                AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 minBufferSize,
                 AudioTrack.MODE_STREAM
@@ -139,7 +147,7 @@ public class RecordActivity extends AppCompatActivity {
 
         try {
 
-            InputStream inputStream = new FileInputStream(rawFile);
+            InputStream inputStream = new FileInputStream(rawFile.getFile());
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             DataInputStream dataInputStream = new DataInputStream(bufferedInputStream);
 
@@ -159,43 +167,6 @@ public class RecordActivity extends AppCompatActivity {
     }
 
 
-
-    private File createRawOnExternalStorage() {
-        String rootPath = getExternalFilesDir(null).getAbsolutePath();
-        folder = new File(rootPath, FOLDER_NAME);
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-        String[] names = getExternalFilesDir(null).list();
-        Log.d(DEBUG_TAG, "List of files: " + Arrays.toString(names));
-
-        File tempFile = new File(folder, TEMP_FILE);
-
-
-        Log.d(DEBUG_TAG, "Folder absolute path:" + folder.getAbsolutePath());
-
-        if (tempFile.exists()) {
-            tempFile.delete();
-        }
-
-
-        try {
-            if (tempFile.createNewFile()) {
-                Log.d(DEBUG_TAG, "File created");
-            } else {
-                Log.d(DEBUG_TAG, "File already exists");
-            }
-        } catch (IOException e) {
-            Log.e(DEBUG_TAG, e.getMessage());
-        }
-
-        String files[] = folder.list();
-        Log.d(DEBUG_TAG, "Files in folder:" + Arrays.toString(files));
-        return tempFile;
-    }
-
-
-
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
@@ -212,16 +183,12 @@ public class RecordActivity extends AppCompatActivity {
             wav = titleTextView.getText() + ".wav";
         }
 
-        wavFile = new File(folder, wav);
+        wavFile = new File(folder.getFolderPath(), wav);
         if(wavFile.exists()){
             wavFile.delete();
         }
 
-/*        try {
-            wavFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+
 
         FFmpeg fFmpeg = FFmpeg.getInstance(getApplicationContext());
 
@@ -231,14 +198,14 @@ public class RecordActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String command = String.format("-f s16le -ar 44.1k -ac 2 -i %s %s", rawFile.getAbsolutePath(), wavFile.getAbsolutePath());
+        String command = String.format("-f s16le -ar 44.1k -ac 2 -i %s %s", rawFile.getRawFilePath(), wavFile.getAbsolutePath());
 
         try {
             fFmpeg.execute(command, new ExecuteBinaryResponseHandler(){
                 @Override
                 public void onSuccess(String message) {
                     Log.d(DEBUG_TAG, "SUCCESS: ");
-                    Log.d(DEBUG_TAG, "In folder is now files: " + Arrays.toString(folder.list()));
+                    Log.d(DEBUG_TAG, "In folder is now files: " + Arrays.toString(folder.getListOfFiles()));
                 }
             });
 
