@@ -14,24 +14,39 @@ public class RawFile {
     private Folder folder = null;
     private File rawFile = null;
 
+    private boolean deleted;
+
     public RawFile(Folder folder){
         this.folder = folder;
+        init();
+    }
 
+    private void init() {
+        rawFile = new File(folder.getFolderPath(), RAW_FILE);
+        deleteIfExists();
+    }
+
+    private void deleteIfExists() {
+        if (rawFile.exists()) {
+            deleted = rawFile.delete();
+
+            if(deleted)
+                Log.d(DEBUG_TAG, ".raw deleted");
+            else
+                Log.d(DEBUG_TAG, ".raw was not deleted");
+        }
     }
 
     /** Creates new .raw file. Also removes old .raw file if it existed.*/
     public void createNewFile() {
-        rawFile = new File(folder.getFolderPath(), RAW_FILE);
 
-        if (rawFile.exists()) {
-            rawFile.delete();
-        }
+        deleteIfExists();
 
         try {
             if (rawFile.createNewFile()) {
-                Log.d(DEBUG_TAG, "Raw file created");
+                Log.d(DEBUG_TAG, ".raw created");
             } else {
-                Log.d(DEBUG_TAG, "Raw file already exists");
+                Log.d(DEBUG_TAG, ".raw already exists");
             }
         } catch (IOException e) {
             Log.e(DEBUG_TAG, e.getMessage());
