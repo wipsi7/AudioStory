@@ -40,7 +40,7 @@ public class RawToWavConverter {
             e.printStackTrace();
         }
 
-        command = String.format("-f s16le -ar 44.1k -ac 2 -i %s %s", sourcePath, destinationPath);
+        command = String.format("-f s16le -ar 44.1k -ac 1 -i %s %s", sourcePath, destinationPath);
 
         try {
             fFmpeg.execute(command, new ExecuteBinaryResponseHandler(){
