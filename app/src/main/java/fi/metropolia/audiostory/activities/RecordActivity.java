@@ -14,12 +14,12 @@ import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
-import java.io.File;
 import java.util.Arrays;
 
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.Folder;
 import fi.metropolia.audiostory.filestorage.RawFile;
+import fi.metropolia.audiostory.filestorage.WavFile;
 import fi.metropolia.audiostory.threads.PlayThread;
 import fi.metropolia.audiostory.threads.RecordThread;
 
@@ -28,15 +28,15 @@ public class RecordActivity extends AppCompatActivity {
     private final String DEBUG_TAG = "RecordActivity";
 
     private boolean recordClicked = false;
-
-    private File wavFile = null;
-
+    
     private TextView titleTextView;
 
     private RecordThread recordThread = null;
     private PlayThread playThread = null;
     private Folder folder = null;
+
     private RawFile rawFile = null;
+    private WavFile wavFile = null;
 
 
     @Override
@@ -119,18 +119,8 @@ public class RecordActivity extends AppCompatActivity {
 
     public void convWav(){
 
-        String wav;
-        if(titleTextView.getTextSize() == 0) {
-            wav = "random.wav";
-        }else {
-            wav = titleTextView.getText() + ".wav";
-        }
 
-        wavFile = new File(folder.getFolderPath(), wav);
-        if(wavFile.exists()){
-            wavFile.delete();
-        }
-
+        wavFile = new WavFile(folder, titleTextView.getText().toString());
 
 
         FFmpeg fFmpeg = FFmpeg.getInstance(getApplicationContext());
@@ -141,7 +131,7 @@ public class RecordActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String command = String.format("-f s16le -ar 44.1k -ac 2 -i %s %s", rawFile.getRawFilePath(), wavFile.getAbsolutePath());
+        String command = String.format("-f s16le -ar 44.1k -ac 2 -i %s %s", rawFile.getRawFilePath(), wavFile.getWavFilePath());
 
         try {
             fFmpeg.execute(command, new ExecuteBinaryResponseHandler(){
