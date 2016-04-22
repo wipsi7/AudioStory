@@ -8,17 +8,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
-import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
-
 import java.util.Arrays;
 
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.Folder;
 import fi.metropolia.audiostory.filestorage.RawFile;
+import fi.metropolia.audiostory.filestorage.RawToWavConverter;
 import fi.metropolia.audiostory.filestorage.WavFile;
 import fi.metropolia.audiostory.threads.PlayThread;
 import fi.metropolia.audiostory.threads.RecordThread;
@@ -28,9 +23,10 @@ public class RecordActivity extends AppCompatActivity {
     private final String DEBUG_TAG = "RecordActivity";
 
     private boolean recordClicked = false;
-    
+
     private TextView titleTextView;
 
+    private RawToWavConverter rawToWavConverter;
     private RecordThread recordThread = null;
     private PlayThread playThread = null;
     private Folder folder = null;
@@ -51,6 +47,7 @@ public class RecordActivity extends AppCompatActivity {
     private void init() {
         folder = new Folder(getApplicationContext());
         rawFile = new RawFile(folder);
+        rawToWavConverter = new RawToWavConverter(getApplicationContext());
     }
 
     private void initViews() {
@@ -118,34 +115,12 @@ public class RecordActivity extends AppCompatActivity {
 
 
     public void convWav(){
-
-
-        wavFile = new WavFile(folder, titleTextView.getText().toString());
-
-
-        FFmpeg fFmpeg = FFmpeg.getInstance(getApplicationContext());
-
-        try {
-            fFmpeg.loadBinary(new LoadBinaryResponseHandler());
-        } catch (FFmpegNotSupportedException e) {
-            e.printStackTrace();
-        }
-
-        String command = String.format("-f s16le -ar 44.1k -ac 2 -i %s %s", rawFile.getRawFilePath(), wavFile.getWavFilePath());
-
-        try {
-            fFmpeg.execute(command, new ExecuteBinaryResponseHandler(){
-                @Override
-                public void onSuccess(String message) {
-                    Log.d(DEBUG_TAG, "SUCCESS: ");
-                    Log.d(DEBUG_TAG, "In folder is now files: " + Arrays.toString(folder.getListOfFiles()));
-                }
-            });
-
-
-
-        } catch (FFmpegCommandAlreadyRunningException e) {
-            e.printStackTrace();
+        if(titleTextView.getText().length() != 0){
+            wavFile = new WavFile(folder, titleTextView.getText().toString());
+            rawToWavConverter.setFilePaths(rawFile.getRawFilePath(),wavFile.getWavFilePath());
+            rawToWavConverter.convert();
+        }else {
+            Toast.makeText(this, "Enter a title first!", Toast.LENGTH_SHORT).show();
         }
     }
 }
