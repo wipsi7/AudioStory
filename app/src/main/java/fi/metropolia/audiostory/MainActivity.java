@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import fi.metropolia.audiostory.Server.ServerConnection;
 import fi.metropolia.audiostory.interfaces.AsyncResponse;
 import fi.metropolia.audiostory.museum.Artifact;
+import fi.metropolia.audiostory.museum.Constant;
+import fi.metropolia.audiostory.museum.Credentials;
 import fi.metropolia.audiostory.nfc.NfcController;
 import fi.metropolia.audiostory.tasks.LoginTask;
 
@@ -29,11 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int API_KEY_LENGTH = 128;
 
     private PendingIntent pendingIntent;
-
     private NfcController nfcController;
-    private NdefRecord[] ndefRecords;
-    private ArrayList<String> records;
+
     private Artifact artifact = null;
+    private Credentials currentCredentials, newCredentials = null;
 
 
     @Override
@@ -69,47 +70,68 @@ public class MainActivity extends AppCompatActivity {
 
             if(msgs != null){
                 // Currently only one Ndef message is sent
-                ndefRecords = msgs[0].getRecords();
+                NdefRecord[] ndefRecords = msgs[0].getRecords();
                 if(ndefRecords.length == 5) {
-                    records = nfcController.readRecords(ndefRecords);
+                    ArrayList<String>  records = nfcController.readRecords(ndefRecords);
                     if(records.get(4).equals(PACKAGE_NAME)) {
                         Log.d(DEBUG_TAG, "Correct package");
-                        proceed();
+                        proceed(records);
                     }
                 }
             }
         }
     }
 
-    private void proceed() {
 
-        artifact = new Artifact(records);
+    private void proceed(ArrayList<String> records) {
         if(isNetworkAvailable()) {
+            artifact.setArtifactName(records.get(Constant.ARTIFACT_INDEX));
+            newCredentials = new Credentials(records);
 
-            LoginTask loginTask = new LoginTask();
-            loginTask.setOnLoginResult(new AsyncResponse() {
-
-                @Override
-                public void onProcessFinish(ServerConnection result) {
-                    int length = result.getApiKey().length();
-                    if(length == API_KEY_LENGTH){
-                        artifact.setApiKey(result.getApiKey());
-                    }
-                    else{
-                        Toast.makeText(getBaseContext(), "Wrong username or password", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            loginTask.execute(artifact.getUserName(), artifact.getPassword());
-
+            // if same credentials
+            if(currentCredentials != null && currentCredentials.getUserName().equals(newCredentials.getUserName())){
+                Log.d(DEBUG_TAG, "Same credentials");
+            }
+            else {
+                acquireKey(records);
+            }
         }else {
             Toast.makeText(getBaseContext(), "You are not connected to internet", Toast.LENGTH_SHORT).show();
         }
     }
 
+    //gets apiKey, if failed, credentials will equal to null
+    private void acquireKey(ArrayList<String> records) {
+
+        currentCredentials = new Credentials(records);
+
+        LoginTask loginTask = new LoginTask();
+        loginTask.setOnLoginResult(new AsyncResponse() {
+
+            @Override
+            public void onProcessFinish(ServerConnection result) {
+                int length = result.getApiKey().length();
+
+                // If successfully retrieved API KEY
+                if(length == API_KEY_LENGTH){
+
+                    currentCredentials.setApiKey(result.getApiKey());
+                        //Todo: go foward
+                }
+                else{
+                    Toast.makeText(getBaseContext(), "Wrong username or password", Toast.LENGTH_SHORT).show();
+                    currentCredentials = null;
+                }
+            }
+        });
+        loginTask.execute(currentCredentials.getUserName(), currentCredentials.getPassword());
+    }
+
+
     private void init() {
 
         nfcController = new NfcController(this);
+        artifact = new Artifact();
 
         Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
