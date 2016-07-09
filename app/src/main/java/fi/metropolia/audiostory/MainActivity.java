@@ -11,11 +11,13 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import fi.metropolia.audiostory.Server.ServerConnection;
+import fi.metropolia.audiostory.activities.RecordActivity;
 import fi.metropolia.audiostory.interfaces.AsyncResponse;
 import fi.metropolia.audiostory.museum.Artifact;
 import fi.metropolia.audiostory.museum.Constant;
@@ -142,5 +144,11 @@ public class MainActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
+    public void onRecordClick(View v){
+        Intent intent = new Intent(this, RecordActivity.class);
+        startActivity(intent);
     }
 }
