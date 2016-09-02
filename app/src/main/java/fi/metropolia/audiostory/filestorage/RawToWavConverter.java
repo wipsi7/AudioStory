@@ -37,6 +37,7 @@ public class RawToWavConverter {
         try {
             fFmpeg.loadBinary(new LoadBinaryResponseHandler());
         } catch (FFmpegNotSupportedException e) {
+            Log.d(DEBUG_TAG, "ffmpeg not supported");
             e.printStackTrace();
         }
 
