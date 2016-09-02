@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AudioStory</string>
+    <string name="record_txt">Record</string>
 </resources>
