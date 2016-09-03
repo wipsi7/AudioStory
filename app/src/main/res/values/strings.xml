@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AudioStory</string>
+    <string name="splash_screen_app_name">FEELING\nTHINGS</string>
     <string name="record_txt">Record</string>
 </resources>
