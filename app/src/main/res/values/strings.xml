@@ -2,4 +2,6 @@
     <string name="app_name">AudioStory</string>
     <string name="splash_screen_app_name">FEELING\nTHINGS</string>
     <string name="record_txt">Record</string>
+    <string name="share_story_btn">Share my story</string>
+    <string name="listen_story_btn">Listen to a story</string>
 </resources>

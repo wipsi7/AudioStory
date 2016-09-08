@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/appBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="fi.metropolia.audiostory.activities.SplashScreenActivity">
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="@string/splash_screen_app_name"
         android:textSize="40sp"
-        android:textColor="@color/bright_pink"
+        android:textColor="@color/active_pink"
         android:layout_above="@+id/frameLayout"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:id="@+id/good_feelings"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/button5">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@drawable/interest_button"
+        android:clickable="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:tag="Interest"
+        android:id="@+id/interest_view"
+        android:layout_margin="5dp"
+        android:onClick="onFeelingClick"/>
+
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@drawable/attraction_button"
+        android:clickable="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:tag="Attraction"
+        android:id="@+id/attraction_view"
+        android:onClick="onFeelingClick"
+        android:layout_margin="5dp" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@drawable/surprise_button"
+        android:clickable="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:tag="Surprise"
+        android:id="@+id/surprise_view"
+        android:onClick="onFeelingClick"
+        android:layout_margin="5dp" />
+</LinearLayout>

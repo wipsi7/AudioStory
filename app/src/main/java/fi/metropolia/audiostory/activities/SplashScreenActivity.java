@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
-import fi.metropolia.audiostory.MainActivity;
 import fi.metropolia.audiostory.R;
 
 public class SplashScreenActivity extends AppCompatActivity {

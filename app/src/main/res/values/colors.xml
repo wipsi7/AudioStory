@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
-    <color name="bright_pink">#fa3f7e</color>
+    <color name="active_pink">#fa3f7e</color>
+    <color name="passive_pink">#8f3252</color>
 </resources>

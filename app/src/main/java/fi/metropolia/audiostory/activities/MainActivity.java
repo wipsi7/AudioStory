@@ -1,4 +1,4 @@
-package fi.metropolia.audiostory;
+package fi.metropolia.audiostory.activities;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.Server.ServerConnection;
-import fi.metropolia.audiostory.activities.RecordActivity;
 import fi.metropolia.audiostory.interfaces.AsyncResponse;
 import fi.metropolia.audiostory.museum.Artifact;
 import fi.metropolia.audiostory.museum.Constant;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d(DEBUG_TAG, "in mainActivity");
         init();
     }
 
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onRecordClick(View v){
-        Intent intent = new Intent(this, RecordActivity.class);
+        Intent intent = new Intent(this, FeelingsActivity.class);
         startActivity(intent);
     }
 }
