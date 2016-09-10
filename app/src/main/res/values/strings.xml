@@ -4,4 +4,7 @@
     <string name="record_txt">Record</string>
     <string name="share_story_btn">Share my story</string>
     <string name="listen_story_btn">Listen to a story</string>
+    <string name="continue_button">Continue</string>
+    <string name="string_story_about">This story is about:</string>
+    <string name="select_toast">Select up to 3 feelings</string>
 </resources>

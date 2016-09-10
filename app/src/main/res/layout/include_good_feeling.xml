@@ -1,48 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:id="@+id/good_feelings"
-    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:id="@+id/good_feelings"
     android:layout_below="@+id/button5">
 
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:src="@drawable/interest_button"
-        android:clickable="true"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:tag="Interest"
-        android:id="@+id/interest_view"
-        android:layout_margin="5dp"
-        android:onClick="onFeelingClick"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/good_feeling_row_1"
+        android:layout_width="match_parent"
+        android:tag="good_feeling_row_1"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/interest_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Interest"
+            android:layout_margin="2dp"
+            android:onClick="onFeelingClick"/>
 
 
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:src="@drawable/attraction_button"
-        android:clickable="true"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:tag="Attraction"
-        android:id="@+id/attraction_view"
-        android:onClick="onFeelingClick"
-        android:layout_margin="5dp" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/attraction_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Attraction"
+            android:onClick="onFeelingClick"
+            android:layout_margin="2dp" />
 
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:src="@drawable/surprise_button"
-        android:clickable="true"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:tag="Surprise"
-        android:id="@+id/surprise_view"
-        android:onClick="onFeelingClick"
-        android:layout_margin="5dp" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/surprise_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Surprise"
+            android:onClick="onFeelingClick"
+            android:layout_margin="2dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/good_feeling_row_2"
+        android:tag="good_feeling_row_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/hope_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Hope"
+            android:layout_margin="2dp"
+            android:onClick="onFeelingClick"/>
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gratitude_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Gratitude"
+            android:onClick="onFeelingClick"
+            android:layout_margin="2dp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/joy_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Joy"
+            android:onClick="onFeelingClick"
+            android:layout_margin="2dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/good_feeling_row_3"
+        android:tag="good_feeling_row_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/relief_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Relief"
+            android:layout_margin="2dp"
+            android:onClick="onFeelingClick"/>
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pride_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Pride"
+            android:onClick="onFeelingClick"
+            android:layout_margin="2dp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/love_button"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="Love"
+            android:onClick="onFeelingClick"
+            android:layout_margin="2dp" />
+    </LinearLayout>
 </LinearLayout>

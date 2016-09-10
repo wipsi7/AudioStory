@@ -1,11 +1,13 @@
 package fi.metropolia.audiostory.activities;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -16,8 +18,13 @@ public class FeelingsActivity extends AppCompatActivity {
 
 
     private final static  String DEBUG_TAG = "FeelingsActivity";
-    private LinearLayout goodFeelingLayout, badFeelingLayout;
+    private final static  int MAX_SELECTED = 3;
+    private LinearLayout goodFeelingLayout, badFeelingLayout, tempGoodFeelingRow, tempBadFeelingRow, choosedLayout;
+    private int selectedCount = 0;
+    private ImageView iView, cView;
     private ArrayList<Feeling> feelingsList;
+    private ArrayList<View> selectedList;
+    private Object choose;
 
 
 
@@ -25,21 +32,34 @@ public class FeelingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feelings);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         init();
     }
 
     private void init() {
         goodFeelingLayout = (LinearLayout)findViewById(R.id.good_feelings);
         badFeelingLayout = (LinearLayout)findViewById(R.id.bad_feelings);
+        choosedLayout = (LinearLayout)findViewById(R.id.choosed_views_layout);
 
-        feelingsList = new ArrayList<Feeling>();
+
+        feelingsList = new ArrayList<>();
+        selectedList = new ArrayList<>();
         initList();
     }
 
     private void initList() {
-        for(int i = 0; i < goodFeelingLayout.getChildCount(); i++){
-            Feeling feeling = new Feeling(getApplicationContext(), (ImageView)goodFeelingLayout.getChildAt(i), (ImageView)badFeelingLayout.getChildAt(i));
-            feelingsList.add(feeling);
+        for(int row_index = 0; row_index < goodFeelingLayout.getChildCount(); row_index++){
+            tempGoodFeelingRow = (LinearLayout)goodFeelingLayout.getChildAt(row_index);
+            tempBadFeelingRow = (LinearLayout)badFeelingLayout.getChildAt(row_index);
+            for(int view_index = 0; view_index < tempGoodFeelingRow.getChildCount(); view_index++){
+                Feeling feeling = new Feeling(this, (ImageView)tempGoodFeelingRow.getChildAt(view_index), (ImageView)tempBadFeelingRow.getChildAt(view_index));
+                feelingsList.add(feeling);
+            }
         }
     }
 
@@ -52,12 +72,79 @@ public class FeelingsActivity extends AppCompatActivity {
     }
 
     public void onFeelingClick(View v){
+        Log.d(DEBUG_TAG, "is activated: " + v.isActivated());
+        Log.d(DEBUG_TAG, "is selected: " + v.isSelected());
 
-        Log.d(DEBUG_TAG, "Tag is: " + v.getTag().toString());
         if(!v.isSelected()){
-            v.setSelected(true);
-        }else {
+            if(!isMaxReached()) {
+                selectedCount++;
+
+                //changing state to selected
+                v.setSelected(true);
+
+                addToChoosed(v);
+
+
+
+            }
+
+        } else{
+            selectedCount--;
+
+            //changing state to not selected
             v.setSelected(false);
+
+            removeFromChoosed(v);
+
+
+
+        }
+
+
+    }
+
+    private void removeFromChoosed(View v) {
+
+        ImageView imageView = (ImageView)choosedLayout.findViewWithTag(v.getTag());
+        if(imageView != null) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.choose));
+            imageView.setTag("choose");
+            imageView.setSelected(false);
+        }else {
+            Log.d(DEBUG_TAG, "Tag not found");
+        }
+    }
+
+    private void addToChoosed(View v) {
+        ImageView tempView = (ImageView)v;
+        ImageView imageView;
+
+        for(int i = 0; i < MAX_SELECTED; i++){
+            imageView = (ImageView)choosedLayout.getChildAt(i);
+            if(!imageView.isSelected()){
+
+                imageView.setImageDrawable(tempView.getDrawable());
+                imageView.setTag(tempView.getTag());
+                imageView.setSelected(true);
+                break;
+            }
+        }
+
+    }
+
+    private boolean isMaxReached() {
+        if( selectedCount < MAX_SELECTED){
+            return false;
+        }else {
+            Toast.makeText(this, R.string.select_toast, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    }
+
+
+    public void onContinueClick(View v){
+        for (int i = 0; i < choosedLayout.getChildCount(); i++){
+            Log.d(DEBUG_TAG, choosedLayout.getChildAt(i).getTag().toString());
         }
     }
 }
