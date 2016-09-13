@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".activities.RecordActivity" />
         <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
@@ -29,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FeelingsActivity"/>
+        <activity android:name=".activities.FeelingsActivity" />
+        <activity android:name=".activities.RecordingActivity"/>
     </application>
 
 </manifest>

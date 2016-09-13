@@ -7,4 +7,8 @@
     <string name="continue_button">Continue</string>
     <string name="string_story_about">This story is about:</string>
     <string name="select_toast">Select up to 3 feelings</string>
+    <string name="tap_record_txt">Tap to record</string>
+    <string name="tap_pause_txt">Recording, tap to pause</string>
+    <string name="tap_continue_txt">Tap to continue recording</string>
+    <string name="enter_title">Enter Title of your Story</string>
 </resources>
