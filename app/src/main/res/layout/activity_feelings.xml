@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/appBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    tools:context=".activities.FeelingsActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="flip"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_rotate"
+        android:id="@+id/button5"
+        android:onClick="flipViews"
+        android:layout_centerHorizontal="true" />
+
+    <!-- layout below flip icon, visible at start  -->
+
+    <!-- layout below flip icon, not visible at start  -->
+
+    <include layout="@layout/include_bad_feelings"/>
+
+    <include layout="@layout/include_good_feeling" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginBottom="5dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="@string/string_story_about"
+        android:id="@+id/textView"
+        android:layout_above="@+id/choosed_views_layout" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/choosed_views_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/continue_button">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/choose"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="choose"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp" />
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/choose"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="choose"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/choose"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="choose"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/continue_button"
+        android:id="@+id/continue_button"
+        android:onClick="onContinueClick"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
