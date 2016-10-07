@@ -104,7 +104,7 @@
             android:layout_marginLeft="20dp"
             android:layout_gravity="center_vertical"
             android:textSize="12sp"
-            android:singleLine="true" />
+            android:maxLines="1" />
     </LinearLayout>
 
 

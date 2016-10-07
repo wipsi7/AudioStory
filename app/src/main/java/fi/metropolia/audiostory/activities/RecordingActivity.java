@@ -21,6 +21,7 @@ import java.util.List;
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.Folder;
 import fi.metropolia.audiostory.filestorage.RawFile;
+import fi.metropolia.audiostory.threads.PlayThread;
 import fi.metropolia.audiostory.threads.RecordThread;
 
 public class RecordingActivity extends AppCompatActivity {
@@ -33,6 +34,7 @@ public class RecordingActivity extends AppCompatActivity {
     private boolean saveEnabled;
 
 
+    private PlayThread playThread = null;
     private RecordThread recordThread = null;
     private RawFile rawFile = null;
     private Folder folder = null;
@@ -67,21 +69,6 @@ public class RecordingActivity extends AppCompatActivity {
         initViews();
     }
 
-    private void init() {
-        folder = new Folder(getApplicationContext());
-        rawFile = new RawFile(folder);
-    }
-
-    private void initViews() {
-        recordView = (ImageView)findViewById(R.id.recordButton);
-        pauseView = (ImageView)findViewById(R.id.pauseButton);
-        recordTextView = (TextView)findViewById(R.id.record_txt);
-        saveView = (ImageView)findViewById(R.id.save_button);
-        deleteView = (ImageView)findViewById(R.id.delete_button);
-        uploadLayout = (LinearLayout)findViewById(R.id.uploadingLayout);
-        continueBtn = (Button)findViewById(R.id.record_continue_button);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -98,6 +85,23 @@ public class RecordingActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    private void init() {
+        folder = new Folder(getApplicationContext());
+        rawFile = new RawFile(folder);
+    }
+
+    private void initViews() {
+        recordView = (ImageView)findViewById(R.id.recordButton);
+        pauseView = (ImageView)findViewById(R.id.pauseButton);
+        recordTextView = (TextView)findViewById(R.id.record_txt);
+        saveView = (ImageView)findViewById(R.id.save_button);
+        deleteView = (ImageView)findViewById(R.id.delete_button);
+        uploadLayout = (LinearLayout)findViewById(R.id.uploadingLayout);
+        continueBtn = (Button)findViewById(R.id.record_continue_button);
+    }
+
+
 
     private void checkForPermissions() {
         int result;
@@ -122,12 +126,19 @@ public class RecordingActivity extends AppCompatActivity {
             v.setSelected(true);
             recordTextView.setText(R.string.tap_pause_txt);
             setVisibilitiesOnRecording();
+            rawFile.createNewFile();
+            recordThread = new RecordThread(rawFile);
+            recordThread.start();
 
         }else
         //continues recording
         {
             recordTextView.setText(R.string.tap_continue_txt);
             setVisibilitiesOnPause();
+
+            if(!recordThread.isRecording()){
+                recordThread.start();
+            }
 
         }
     }
@@ -155,6 +166,18 @@ public class RecordingActivity extends AppCompatActivity {
         }else {
             v.setSelected(false);
         }
+    }
+
+
+    /** A pause drawable, to continue recording */
+    public void onPausedClick(View v){
+        recordTextView.setText(R.string.tap_pause_txt);
+        setVisibilitesForContinue();
+        if(recordThread.isRecording()){
+            recordThread.stopRecording();
+        }
+
+
     }
 
 
@@ -191,13 +214,6 @@ public class RecordingActivity extends AppCompatActivity {
         }
     }
 
-    /** A pause drawable, to continue recording */
-    public void onPausedClick(View v){
-        recordTextView.setText(R.string.tap_pause_txt);
-        setVisibilitesForContinue();
-
-
-    }
 
     /** called when record is paused and user wants to continue recording */
     private void setVisibilitesForContinue() {

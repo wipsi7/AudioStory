@@ -37,6 +37,10 @@ public class RecordThread extends Thread {
         recordingRunning = false;
     }
 
+    public boolean isRecording(){
+        return recordingRunning;
+    }
+
     private void startRecording() {
         recordingRunning = true;
 
