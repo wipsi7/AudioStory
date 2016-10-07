@@ -28,7 +28,7 @@ public class RecordActivity extends AppCompatActivity {
 
     private RawToWavConverter rawToWavConverter;
     private RecordThread recordThread = null;
-    private PlayThread playThread = null;
+
     private Folder folder = null;
 
     private RawFile rawFile = null;
@@ -81,8 +81,9 @@ public class RecordActivity extends AppCompatActivity {
     }
 
     public void onPlayClick(View v){
+        PlayThread playThread = null;
         if(rawFile.getFile() != null && rawFile.exists()){
-            if(playThread == null || !playThread.isPlaying()){
+            if(!playThread.isPlaying()){
                 playThread = new PlayThread(rawFile);
                 playThread.start();
                 Toast.makeText(this, "Playing", Toast.LENGTH_SHORT).show();
