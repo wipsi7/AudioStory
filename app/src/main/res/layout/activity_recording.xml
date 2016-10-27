@@ -6,73 +6,55 @@
     android:background="@color/black"
     tools:context="fi.metropolia.audiostory.activities.RecordingActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tap_record_txt"
-        android:textColor="@android:color/white"
-        android:id="@+id/record_txt"
-        android:textSize="16sp"
-        android:layout_centerInParent="true" />
-
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/record_txt"
+        android:layout_marginTop="20dp"
+
         android:id="@+id/recordButton"
-        android:clickable="true"
         android:src="@drawable/microphone_button"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
-        android:onClick="onRecordingClick"
-        android:layout_marginTop="20dp" />
+        android:contentDescription="@string/desc_record"
 
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:id="@+id/pauseButton"
         android:clickable="true"
-        android:src="@drawable/pause_button"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
-        android:onClick="onPausedClick"
-        android:visibility="invisible"
-        android:layout_marginTop="20dp" />
+        android:onClick="onRecordingClick" />
+
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/record_txt"
+        android:layout_marginTop="40dp"
+        android:layout_toStartOf="@+id/recordButton"
+        android:layout_marginEnd="25dp"
+
         android:id="@+id/delete_button"
         android:src="@drawable/delete_button"
+        android:contentDescription="@string/desc_delete"
+
         android:clickable="true"
         android:onClick="onDeleteClick"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
-        android:layout_marginTop="40dp"
-        android:layout_toLeftOf="@+id/recordButton"
-        android:layout_marginRight="25dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:id="@+id/save_button"
-        android:src="@drawable/save_button"
-        android:clickable="true"
-        android:onClick="onSaveClick"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/record_txt"
         android:layout_marginTop="40dp"
-        android:layout_toRightOf="@+id/recordButton"
-        android:layout_marginLeft="25dp"
-        android:visibility="invisible" />
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@+id/recordButton"
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/continue_button"
-        android:visibility="invisible"
-        android:id="@+id/record_continue_button"
-        android:layout_alignParentBottom="true" />
+        android:id="@+id/save_button"
+        android:src="@drawable/save_button"
+        android:contentDescription="@string/desc_save"
+
+        android:clickable="true"
+        android:onClick="onSaveClick"
+        android:visibility="invisible"/>
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -85,15 +67,6 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="40dp">
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/play_button"
-            android:src="@drawable/play_button"
-            android:clickable="true"
-            android:onClick="onPlayClick"
-            android:layout_gravity="center_vertical" />
-
         <EditText
             android:hint="@string/enter_title"
             android:textColorHint="@android:color/white"
@@ -101,11 +74,54 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editText"
-            android:layout_marginLeft="20dp"
             android:layout_gravity="center_vertical"
             android:textSize="12sp"
             android:maxLines="1" />
     </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/continue_button"
+        android:visibility="invisible"
+        android:id="@+id/record_continue_button"
+        android:layout_alignParentBottom="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tap_record_txt"
+        android:textColor="@android:color/white"
+        android:id="@+id/record_txt"
+        android:textSize="16sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/circular"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+
+        android:id="@+id/play_stop_button"
+        android:src="@drawable/play_stop_button"
+        android:contentDescription="@string/desc_play_stop"
+
+        android:clickable="true"
+        android:onClick="onPlayStopClick"
+        android:visibility="invisible"
+        android:layout_alignTop="@+id/recordButton"
+        android:layout_toEndOf="@+id/delete_button" />
 
 
 </RelativeLayout>

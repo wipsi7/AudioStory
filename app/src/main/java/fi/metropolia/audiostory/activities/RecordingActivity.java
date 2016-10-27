@@ -27,7 +27,7 @@ import fi.metropolia.audiostory.threads.RecordThread;
 public class RecordingActivity extends AppCompatActivity {
 
     private static final int RECORD_PERMISSIONS = 24;
-    private ImageView recordView, pauseView, deleteView, saveView;
+    private ImageView recordView, deleteView, saveView, playStopView;
     private LinearLayout uploadLayout;
     private Button continueBtn;
     private TextView recordTextView;
@@ -75,8 +75,8 @@ public class RecordingActivity extends AppCompatActivity {
         switch(requestCode){
             case RECORD_PERMISSIONS:
                 if (grantResults.length > 0){
-                    for(int i = 0 ; i < grantResults.length; i++){
-                        if(grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    for (int grantResult : grantResults) {
+                        if (grantResult == PackageManager.PERMISSION_DENIED) {
                             Toast.makeText(this, "All permissions must be allowed to continue", Toast.LENGTH_LONG).show();
                             finish();
                         }
@@ -85,23 +85,6 @@ public class RecordingActivity extends AppCompatActivity {
                 break;
         }
     }
-
-    private void init() {
-        folder = new Folder(getApplicationContext());
-        rawFile = new RawFile(folder);
-    }
-
-    private void initViews() {
-        recordView = (ImageView)findViewById(R.id.recordButton);
-        pauseView = (ImageView)findViewById(R.id.pauseButton);
-        recordTextView = (TextView)findViewById(R.id.record_txt);
-        saveView = (ImageView)findViewById(R.id.save_button);
-        deleteView = (ImageView)findViewById(R.id.delete_button);
-        uploadLayout = (LinearLayout)findViewById(R.id.uploadingLayout);
-        continueBtn = (Button)findViewById(R.id.record_continue_button);
-    }
-
-
 
     private void checkForPermissions() {
         int result;
@@ -119,48 +102,25 @@ public class RecordingActivity extends AppCompatActivity {
         }
     }
 
+    private void init() {
+        folder = new Folder(getApplicationContext());
+        rawFile = new RawFile(folder);
+    }
+
+    private void initViews() {
+        playStopView = (ImageView)findViewById(R.id.play_stop_button);
+        recordView = (ImageView)findViewById(R.id.recordButton);
+        recordTextView = (TextView)findViewById(R.id.record_txt);
+        saveView = (ImageView)findViewById(R.id.save_button);
+        deleteView = (ImageView)findViewById(R.id.delete_button);
+        uploadLayout = (LinearLayout)findViewById(R.id.uploadingLayout);
+        continueBtn = (Button)findViewById(R.id.record_continue_button);
+
+    }
+
+
 
     public void onRecordingClick(View v){
-        //starts recording
-        if(!v.isSelected()){
-            v.setSelected(true);
-            recordTextView.setText(R.string.tap_pause_txt);
-            setVisibilitiesOnRecording();
-            rawFile.createNewFile();
-            recordThread = new RecordThread(rawFile);
-            recordThread.start();
-
-        }else
-        //continues recording
-        {
-            recordTextView.setText(R.string.tap_continue_txt);
-            setVisibilitiesOnPause();
-
-            if(!recordThread.isRecording()){
-                recordThread.start();
-            }
-
-        }
-    }
-
-
-    public void onDeleteClick(View v){
-
-        setVisibilityOnFinish();
-    }
-
-
-
-
-    public void onSaveClick(View v){
-        setVisibilityonSave();
-        setVisibilityOnFinish();
-
-        saveEnabled = true;
-    }
-
-
-    public void onPlayClick(View v){
         if(!v.isSelected()){
             v.setSelected(true);
         }else {
@@ -168,28 +128,61 @@ public class RecordingActivity extends AppCompatActivity {
         }
     }
 
-
-    /** A pause drawable, to continue recording */
-    public void onPausedClick(View v){
-        recordTextView.setText(R.string.tap_pause_txt);
-        setVisibilitesForContinue();
-        if(recordThread.isRecording()){
-            recordThread.stopRecording();
-        }
-
-
+    private void makePlayVisible() {
+        recordView.setVisibility(View.INVISIBLE);
+        playStopView.setVisibility(View.VISIBLE);
+        deleteView.setVisibility(View.VISIBLE);
+        saveView.setVisibility(View.VISIBLE);
     }
 
 
+    public void onDeleteClick(View v){
+
+        setToInitial();
+    }
+
+
+    public void onSaveClick(View v){
+        setVisibilityonSave();
+        setToInitial();
+
+        saveEnabled = true;
+    }
+
+
+    public void onPlayStopClick(View v){
+        //play record
+        if(!v.isSelected()){
+            v.setSelected(true);
+            deleteView.setVisibility(View.INVISIBLE);
+            saveView.setVisibility(View.INVISIBLE);
+
+            recordTextView.setText(R.string.record_playing_stop);
+            playThread.run();
+
+        }else {
+            //stop playing record
+            v.setSelected(false);
+            deleteView.setVisibility(View.VISIBLE);
+            saveView.setVisibility(View.VISIBLE
+
+            );
+            recordTextView.setText(R.string.record_tap_delete_play_save);
+            if(playThread.isPlaying()){
+                playThread.stopPlaying();
+            }
+
+        }
+    }
 
     /** restores views to initial */
-    private void setVisibilityOnFinish() {
+    private void setToInitial() {
         recordView.setSelected(false);
         recordTextView.setText(R.string.tap_record_txt);
         recordView.setVisibility(View.VISIBLE);
-        pauseView.setVisibility(View.INVISIBLE);
         deleteView.setVisibility(View.INVISIBLE);
         saveView.setVisibility(View.INVISIBLE);
+        playStopView.setVisibility(View.INVISIBLE);
     }
 
     private void setVisibilityonSave(){
@@ -199,9 +192,8 @@ public class RecordingActivity extends AppCompatActivity {
     }
 
     /** method called when recording is on Pause */
-    private void setVisibilitiesOnPause(){
+    private void setVisibilitiesOnStop(){
         recordView.setVisibility(View.INVISIBLE);
-        pauseView.setVisibility(View.VISIBLE);
         deleteView.setVisibility(View.VISIBLE);
         saveView.setVisibility(View.VISIBLE);
     }
@@ -212,15 +204,6 @@ public class RecordingActivity extends AppCompatActivity {
             uploadLayout.setVisibility(View.INVISIBLE);
             continueBtn.setVisibility(View.INVISIBLE);
         }
-    }
-
-
-    /** called when record is paused and user wants to continue recording */
-    private void setVisibilitesForContinue() {
-        pauseView.setVisibility(View.INVISIBLE);
-        recordView.setVisibility(View.VISIBLE);
-        deleteView.setVisibility(View.INVISIBLE);
-        saveView.setVisibility(View.INVISIBLE);
     }
 
 

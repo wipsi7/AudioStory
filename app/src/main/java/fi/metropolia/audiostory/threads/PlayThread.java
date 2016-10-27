@@ -20,6 +20,7 @@ public class PlayThread extends Thread {
 
     private int minBufferSize;
     private boolean playing = false;
+    private AudioTrack track;
 
     public PlayThread(RawFile rawFile) {
         this.rawFile = rawFile;
@@ -37,7 +38,7 @@ public class PlayThread extends Thread {
 
     private void startPlaying() {
 
-        AudioTrack track = new AudioTrack(
+         track = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 44100,
                 AudioFormat.CHANNEL_OUT_MONO,
@@ -75,5 +76,11 @@ public class PlayThread extends Thread {
 
     public boolean isPlaying(){
         return playing;
+    }
+
+
+    public void stopPlaying(){
+        track.pause();
+        track.flush();
     }
 }
