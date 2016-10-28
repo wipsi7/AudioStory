@@ -3,23 +3,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context="fi.metropolia.audiostory.activities.RecordingActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/circular"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tap_record_txt"
+        android:id="@+id/record_txt"
+        android:layout_centerVertical="false"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/recordButton"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="sans-serif"
+        android:textSize="14sp" />
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
-        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"
 
         android:id="@+id/recordButton"
         android:src="@drawable/microphone_button"
         android:contentDescription="@string/desc_record"
 
         android:clickable="true"
-        android:onClick="onRecordingClick" />
+        android:onClick="onRecordingClick"/>
 
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+
+        android:id="@+id/play_stop_button"
+        android:src="@drawable/play_stop_button"
+        android:contentDescription="@string/desc_play_stop"
+
+        android:clickable="true"
+        android:onClick="onPlayStopClick"
+        android:visibility="invisible"/>
 
     <ImageView
         android:layout_width="48dp"
@@ -57,71 +91,44 @@
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:orientation="vertical"
         android:id="@+id/uploadingLayout"
-        android:visibility="invisible"
-        android:layout_above="@+id/record_continue_button"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="40dp">
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+
+            android:text="@string/activity_recording_txt_title"
+            android:textSize="14sp" />
 
         <EditText
-            android:hint="@string/enter_title"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+
+            android:id="@+id/editText"
+            android:hint="@string/activity_recording_hint_title"
             android:textSize="12sp"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textColorHint="?android:attr/textColorHint"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/pink_button"
+            android:text="@string/continue_button"
+            android:id="@+id/record_continue_button" />
     </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/continue_button"
-        android:visibility="invisible"
-        android:id="@+id/record_continue_button"
-        android:layout_alignParentBottom="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tap_record_txt"
-        android:textColor="@android:color/white"
-        android:id="@+id/record_txt"
-        android:textSize="16sp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="200dp"
-        android:max="100"
-        android:progress="0"
-        android:progressDrawable="@drawable/circular"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-
-        android:id="@+id/play_stop_button"
-        android:src="@drawable/play_stop_button"
-        android:contentDescription="@string/desc_play_stop"
-
-        android:clickable="true"
-        android:onClick="onPlayStopClick"
-        android:visibility="invisible"
-        android:layout_alignTop="@+id/recordButton"
-        android:layout_toEndOf="@+id/delete_button" />
 
 
 </RelativeLayout>

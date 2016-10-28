@@ -10,14 +10,35 @@
     <string name="tap_record_txt">Tap to record</string>
     <string name="tap_stop_txt">Recording, tap to stop</string>
     <string name="tap_continue_txt">Tap to continue recording</string>
-    <string name="enter_title">Enter Title of your Story</string>
     <string name="record_tap_delete_play_save">Recording stopped, tap delete, play or save</string>
     <string name="record_playing_stop">Recording playing, tap to stop</string>
 
+    <string name="activity_recording_txt_title">Title of your Story</string>
+    <string name="activity_recording_hint_title">Title</string>
 
 
     <string name="desc_record">Record</string>
     <string name="desc_play_stop">Play/Stop</string>
     <string name="desc_delete">Delete</string>
     <string name="desc_save">Save</string>
+    <string name="desc_panic">Panic</string>
+    <string name="desc_disgust">Disgust</string>
+    <string name="desc_indifference">Indifference</string>
+    <string name="desc_fear">Fear</string>
+    <string name="desc_anger">Anger</string>
+    <string name="desc_sorrow">Sorrow</string>
+    <string name="desc_shame">Shame</string>
+    <string name="desc_frustration">Frustration</string>
+    <string name="desc_hate">Hate</string>
+    <string name="desc_interest">Interest</string>
+    <string name="desc_attraction">Attraction</string>
+    <string name="desc_surprise">Surprise</string>
+    <string name="desc_hope">Hope</string>
+    <string name="desc_gratitude">Gratitude</string>
+    <string name="desc_joy">Joy</string>
+    <string name="desc_relief">Relief</string>
+    <string name="desc_pride">Pride</string>
+    <string name="desc_love">Love</string>
+    <string name="desc_flip">Flip</string>
+    <string name="desc_choose">Choose placeholder</string>
 </resources>

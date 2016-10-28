@@ -1,94 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/appBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context=".activities.FeelingsActivity">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:layout_centerHorizontal="true"
+
+        android:id="@+id/flip_view"
         android:src="@android:drawable/ic_menu_rotate"
-        android:id="@+id/button5"
-        android:onClick="flipViews"
-        android:layout_centerHorizontal="true" />
+        android:contentDescription="@string/desc_flip"
+        android:clickable="true"
+        android:onClick="flipViews"/>
 
     <!-- layout below flip icon, visible at start  -->
+    <include layout="@layout/include_bad_feelings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/flip_view"/>
 
     <!-- layout below flip icon, not visible at start  -->
-
-    <include layout="@layout/include_bad_feelings"/>
+    <include layout="@layout/include_good_feeling"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/flip_view"/>
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_marginBottom="5dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_above="@+id/choosed_views_layout"
+
         android:text="@string/string_story_about"
-        android:textColor="@android:color/white"
         android:id="@+id/textView"
-        android:layout_above="@+id/choosed_views_layout" />
+        android:layout_marginStart="12dp" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/choosed_views_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/continue_button">
+        android:layout_above="@+id/continue_button"
+        android:layout_marginBottom="10dp"
+
+        android:orientation="horizontal"
+        android:id="@+id/choosed_views_layout"
+        android:weightSum="3"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp">
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+
             android:src="@drawable/choose"
+            android:contentDescription="@string/desc_choose"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:tag="choose"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
-
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/choose"
-            android:clickable="true"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:tag="choose"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:cropToPadding="false" />
+            android:tag="choose" />
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+
             android:src="@drawable/choose"
+            android:contentDescription="@string/desc_choose"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:tag="choose"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            android:tag="choose"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+
+            android:src="@drawable/choose"
+            android:contentDescription="@string/desc_choose"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:tag="choose" />
     </LinearLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+
+        android:background="@drawable/pink_button"
         android:text="@string/continue_button"
         android:id="@+id/continue_button"
-        android:onClick="onContinueClick"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:onClick="onContinueClick"/>
 
-    <include layout="@layout/include_good_feeling"
-        android:layout_below="@+id/button5"
-        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>
