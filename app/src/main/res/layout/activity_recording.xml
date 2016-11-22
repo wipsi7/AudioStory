@@ -5,29 +5,27 @@
     android:layout_height="match_parent"
     tools:context="fi.metropolia.audiostory.activities.RecordingActivity">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <ProgressBar  style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+
+        android:id="@+id/progressBar"
         android:max="100"
         android:progress="0"
-        android:progressDrawable="@drawable/circular"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:progressDrawable="@drawable/circular"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tap_record_txt"
-        android:id="@+id/record_txt"
-        android:layout_centerVertical="false"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/recordButton"
         android:layout_marginBottom="20dp"
-        android:fontFamily="sans-serif"
-        android:textSize="14sp" />
+
+        android:text="@string/message_record"
+        android:id="@+id/record_txt"/>
 
     <ImageView
         android:layout_width="48dp"
@@ -97,7 +95,7 @@
 
         android:orientation="vertical"
         android:id="@+id/uploadingLayout"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -115,7 +113,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="40dp"
 
-            android:id="@+id/editText"
+            android:id="@+id/activity_recording_record_title"
             android:hint="@string/activity_recording_hint_title"
             android:textSize="12sp"
             android:maxLines="1"
@@ -127,7 +125,8 @@
 
             android:background="@drawable/pink_button"
             android:text="@string/continue_button"
-            android:id="@+id/record_continue_button" />
+            android:id="@+id/record_continue_button"
+            android:onClick="OnContinueClick"/>
     </LinearLayout>
 
 

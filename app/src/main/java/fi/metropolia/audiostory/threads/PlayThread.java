@@ -3,6 +3,7 @@ package fi.metropolia.audiostory.threads;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.widget.ImageView;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -22,6 +23,7 @@ public class PlayThread extends Thread {
     private boolean playing = false;
     private AudioTrack track;
 
+
     public PlayThread(RawFile rawFile) {
         this.rawFile = rawFile;
         init();
@@ -31,10 +33,14 @@ public class PlayThread extends Thread {
         minBufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
     }
 
+
     @Override
     public void run() {
         startPlaying();
     }
+
+
+
 
     private void startPlaying() {
 
@@ -72,6 +78,7 @@ public class PlayThread extends Thread {
         playing = false;
         track.stop();
         track.release();
+
     }
 
     public boolean isPlaying(){

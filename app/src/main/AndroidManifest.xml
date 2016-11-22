@@ -30,7 +30,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.FeelingsActivity" />
-        <activity android:name=".activities.RecordingActivity"/>
+        <activity android:name=".activities.RecordingActivity" />
+        <activity android:name=".activities.UploadActivity"></activity>
     </application>
 
 </manifest>

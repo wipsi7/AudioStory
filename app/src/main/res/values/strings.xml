@@ -5,13 +5,15 @@
     <string name="share_story_btn">Share my story</string>
     <string name="listen_story_btn">Listen to a story</string>
     <string name="continue_button">Continue</string>
+    <string name="upload_button">Upload</string>
     <string name="string_story_about">This story is about:</string>
     <string name="select_toast">Select up to 3 feelings</string>
-    <string name="tap_record_txt">Tap to record</string>
-    <string name="tap_stop_txt">Recording, tap to stop</string>
-    <string name="tap_continue_txt">Tap to continue recording</string>
-    <string name="record_tap_delete_play_save">Recording stopped, tap delete, play or save</string>
-    <string name="record_playing_stop">Recording playing, tap to stop</string>
+
+
+    <string name="message_record">Tap to record</string>
+    <string name="message_stop_recording">Recording, tap to stop recording</string>
+    <string name="message_delete_play_save">Tap delete, play or save</string>
+    <string name="message_playing_stop">Tap to stop playing</string>
 
     <string name="activity_recording_txt_title">Title of your Story</string>
     <string name="activity_recording_hint_title">Title</string>
@@ -23,6 +25,7 @@
     <string name="desc_save">Save</string>
     <string name="desc_panic">Panic</string>
     <string name="desc_disgust">Disgust</string>
+
     <string name="desc_indifference">Indifference</string>
     <string name="desc_fear">Fear</string>
     <string name="desc_anger">Anger</string>

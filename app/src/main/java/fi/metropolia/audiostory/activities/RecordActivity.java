@@ -84,7 +84,7 @@ public class RecordActivity extends AppCompatActivity {
         PlayThread playThread = null;
         if(rawFile.getFile() != null && rawFile.exists()){
             if(!playThread.isPlaying()){
-                playThread = new PlayThread(rawFile);
+                //playThread = new PlayThread(rawFile);
                 playThread.start();
                 Toast.makeText(this, "Playing", Toast.LENGTH_SHORT).show();
             }

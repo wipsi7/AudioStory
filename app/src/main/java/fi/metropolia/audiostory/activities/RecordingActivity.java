@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,23 +22,29 @@ import java.util.List;
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.Folder;
 import fi.metropolia.audiostory.filestorage.RawFile;
+import fi.metropolia.audiostory.filestorage.RawToWavConverter;
+import fi.metropolia.audiostory.filestorage.WavFile;
 import fi.metropolia.audiostory.threads.PlayThread;
 import fi.metropolia.audiostory.threads.RecordThread;
 
 public class RecordingActivity extends AppCompatActivity {
 
     private static final int RECORD_PERMISSIONS = 24;
-    private ImageView recordView, deleteView, saveView, playStopView;
-    private LinearLayout uploadLayout;
-    private Button continueBtn;
-    private TextView recordTextView;
-    private boolean saveEnabled;
+
+    private ImageView ivRecord, ivDelete, ivSave, ivPlayStop;
+    private LinearLayout llUpload;
+    private Button btnContinue;
+    private TextView tvMessage;
+    private EditText etTitle;
 
 
     private PlayThread playThread = null;
     private RecordThread recordThread = null;
+
+    private RawToWavConverter rawToWavConverter;
     private RawFile rawFile = null;
     private Folder folder = null;
+    private WavFile wavFile = null;
     
     private String[] permissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -105,17 +112,18 @@ public class RecordingActivity extends AppCompatActivity {
     private void init() {
         folder = new Folder(getApplicationContext());
         rawFile = new RawFile(folder);
+        rawToWavConverter = new RawToWavConverter(getApplicationContext());
     }
 
     private void initViews() {
-        playStopView = (ImageView)findViewById(R.id.play_stop_button);
-        recordView = (ImageView)findViewById(R.id.recordButton);
-        recordTextView = (TextView)findViewById(R.id.record_txt);
-        saveView = (ImageView)findViewById(R.id.save_button);
-        deleteView = (ImageView)findViewById(R.id.delete_button);
-        uploadLayout = (LinearLayout)findViewById(R.id.uploadingLayout);
-        continueBtn = (Button)findViewById(R.id.record_continue_button);
-
+        ivPlayStop = (ImageView)findViewById(R.id.play_stop_button);
+        ivRecord = (ImageView)findViewById(R.id.recordButton);
+        tvMessage = (TextView)findViewById(R.id.record_txt);
+        ivSave = (ImageView)findViewById(R.id.save_button);
+        ivDelete = (ImageView)findViewById(R.id.delete_button);
+        llUpload = (LinearLayout)findViewById(R.id.uploadingLayout);
+        btnContinue = (Button)findViewById(R.id.record_continue_button);
+        etTitle = (EditText)findViewById(R.id.activity_recording_record_title);
     }
 
 
@@ -123,87 +131,140 @@ public class RecordingActivity extends AppCompatActivity {
     public void onRecordingClick(View v){
         if(!v.isSelected()){
             v.setSelected(true);
+            startRecording();
+            changeToRecordingState();
+
         }else {
             v.setSelected(false);
+            stopRecording();
+            changetoDeletePlaySaveState();
         }
     }
 
-    private void makePlayVisible() {
-        recordView.setVisibility(View.INVISIBLE);
-        playStopView.setVisibility(View.VISIBLE);
-        deleteView.setVisibility(View.VISIBLE);
-        saveView.setVisibility(View.VISIBLE);
+
+    private void stopRecording() {
+        recordThread.stopRecording();
+
     }
 
+    private void startRecording() {
+
+        rawFile.createNewFile();
+        recordThread = new RecordThread(rawFile);
+        recordThread.start();
+    }
 
     public void onDeleteClick(View v){
+        changeToInitialState();
 
-        setToInitial();
     }
 
 
     public void onSaveClick(View v){
-        setVisibilityonSave();
-        setToInitial();
 
-        saveEnabled = true;
+        changeToSaveState();
+
     }
 
+    public void OnContinueClick(View v){
+        if(etTitle.getText().length() != 0){
+            convWav();
+        }else {
+            Toast.makeText(this, "Enter a title first!", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void onPlayStopClick(View v){
         //play record
         if(!v.isSelected()){
             v.setSelected(true);
-            deleteView.setVisibility(View.INVISIBLE);
-            saveView.setVisibility(View.INVISIBLE);
-
-            recordTextView.setText(R.string.record_playing_stop);
-            playThread.run();
-
+            startPlaying();
+            changeToPlayState();
         }else {
             //stop playing record
             v.setSelected(false);
-            deleteView.setVisibility(View.VISIBLE);
-            saveView.setVisibility(View.VISIBLE
-
-            );
-            recordTextView.setText(R.string.record_tap_delete_play_save);
-            if(playThread.isPlaying()){
-                playThread.stopPlaying();
-            }
-
+            stopPlaying();
+            changetoDeletePlaySaveState();
         }
     }
 
-    /** restores views to initial */
-    private void setToInitial() {
-        recordView.setSelected(false);
-        recordTextView.setText(R.string.tap_record_txt);
-        recordView.setVisibility(View.VISIBLE);
-        deleteView.setVisibility(View.INVISIBLE);
-        saveView.setVisibility(View.INVISIBLE);
-        playStopView.setVisibility(View.INVISIBLE);
+    private void startPlaying() {
+        playThread = new PlayThread(rawFile);
+        playThread.start();
     }
 
-    private void setVisibilityonSave(){
-        uploadLayout.setVisibility(View.VISIBLE);
-        continueBtn.setVisibility(View.VISIBLE);
 
-    }
-
-    /** method called when recording is on Pause */
-    private void setVisibilitiesOnStop(){
-        recordView.setVisibility(View.INVISIBLE);
-        deleteView.setVisibility(View.VISIBLE);
-        saveView.setVisibility(View.VISIBLE);
-    }
-
-    /** method called when recordView is selected  */
-    private void setVisibilitiesOnRecording() {
-        if(saveEnabled){
-            uploadLayout.setVisibility(View.INVISIBLE);
-            continueBtn.setVisibility(View.INVISIBLE);
+    private void stopPlaying(){
+        if(playThread.isPlaying()){
+            playThread.stopPlaying();
         }
+    }
+
+
+    public void convWav(){
+        wavFile = new WavFile(folder, etTitle.getText().toString().replaceAll("\\s+", ""));
+        rawToWavConverter.setFilePaths(rawFile.getRawFilePath(),wavFile.getWavFilePath());
+        rawToWavConverter.convert();
+    }
+
+
+
+    /** Changes message and  restores views to initial */
+    private void changeToInitialState() {
+        tvMessage.setText(R.string.message_record);
+
+        ivRecord.setVisibility(View.VISIBLE);
+        ivDelete.setVisibility(View.INVISIBLE);
+        ivPlayStop.setVisibility(View.INVISIBLE);
+        ivSave.setVisibility(View.INVISIBLE);
+        llUpload.setVisibility(View.INVISIBLE);
+    }
+
+    /** Changes message and sets only delete, play, save views visible **/
+    private void changetoDeletePlaySaveState() {
+        tvMessage.setText(R.string.message_delete_play_save);
+
+        ivRecord.setVisibility(View.INVISIBLE);
+        ivDelete.setVisibility(View.VISIBLE);
+        ivPlayStop.setVisibility(View.VISIBLE);
+        ivSave.setVisibility(View.VISIBLE);
+        llUpload.setVisibility(View.INVISIBLE);
+    }
+
+    /** Changes message and sets only record view visible */
+    private void changeToRecordingState(){
+        tvMessage.setText(R.string.message_stop_recording);
+
+        ivRecord.setVisibility(View.VISIBLE);
+        ivDelete.setVisibility(View.INVISIBLE);
+        ivPlayStop.setVisibility(View.INVISIBLE);
+        ivDelete.setVisibility(View.INVISIBLE);
+        ivSave.setVisibility(View.INVISIBLE);
+        llUpload.setVisibility(View.INVISIBLE);
+    }
+
+    /** Changes message and sets only play view visible */
+    private void changeToPlayState(){
+        tvMessage.setText(R.string.message_playing_stop);
+
+        ivRecord.setVisibility(View.INVISIBLE);
+        ivDelete.setVisibility(View.INVISIBLE);
+        ivPlayStop.setVisibility(View.VISIBLE);
+        ivDelete.setVisibility(View.INVISIBLE);
+        ivSave.setVisibility(View.INVISIBLE);
+        llUpload.setVisibility(View.INVISIBLE);
+
+    }
+
+    private void changeToSaveState(){
+        tvMessage.setText(R.string.message_record);
+
+        ivRecord.setVisibility(View.VISIBLE);
+        ivDelete.setVisibility(View.INVISIBLE);
+        ivPlayStop.setVisibility(View.INVISIBLE);
+        ivDelete.setVisibility(View.INVISIBLE);
+        ivSave.setVisibility(View.INVISIBLE);
+        llUpload.setVisibility(View.VISIBLE);
     }
 
 
