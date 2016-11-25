@@ -18,14 +18,19 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import fi.metropolia.audiostory.Login.LoginRequest;
+import fi.metropolia.audiostory.Login.LoginResponse;
 import fi.metropolia.audiostory.R;
-import fi.metropolia.audiostory.Server.ServerConnection;
-import fi.metropolia.audiostory.interfaces.AsyncResponse;
+import fi.metropolia.audiostory.interfaces.LoginApi;
 import fi.metropolia.audiostory.museum.Artifact;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.Credentials;
 import fi.metropolia.audiostory.nfc.NfcController;
-import fi.metropolia.audiostory.tasks.LoginTask;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,7 +46,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvArtifactTitle;
 
     private Artifact artifact = null;
-    private Credentials currentCredentials, newCredentials = null;
+    private Credentials currentCredentials = null;
+
+    private LoginApi service;
+    private LoginRequest loginRequest;
+    private LoginResponse loginResponse;
+    private Call<LoginResponse> loginResponseCall;
+    private Callback<LoginResponse> loginResponseCallback;
 
 
     @Override
@@ -50,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(DEBUG_TAG, "in mainActivity");
         init();
+        initRetrofit();
     }
+
 
     private void init() {
 
@@ -63,6 +76,44 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
     }
+
+    private void initRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(LoginApi.class);
+        loginRequest = new LoginRequest();
+
+
+        // data coming back from server is handled here
+        loginResponseCallback = new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                loginResponse = response.body();
+
+                // If successfully retrieved API KEY, make buttons visible and set api key
+                if(loginResponse.getApi_key().length() == API_KEY_LENGTH){
+
+                    currentCredentials.setApiKey(loginResponse.getApi_key());
+                    llButtonsContainer.setVisibility(View.VISIBLE);
+
+                }else {
+                    Toast.makeText(getApplicationContext(), "Wrong username or password on Tag", Toast.LENGTH_SHORT).show();
+                    currentCredentials = null;
+                    llButtonsContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -102,19 +153,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    /** Checks if internet is working, if is sets title of artifact. Acquires new API key if credentials are not same */
     private void proceed(ArrayList<String> records) {
         if(isNetworkAvailable()) {
             artifact.setArtifactName(records.get(Constant.ARTIFACT_INDEX));
             tvArtifactTitle.setText(artifact.getArtifactName());
 
 
-            newCredentials = new Credentials(records);
+            Credentials newCredentials = new Credentials(records);
 
             // if same credentials
-            if(currentCredentials != null && currentCredentials.getUserName().equals(newCredentials.getUserName())){
+            if(areSameCredentials(currentCredentials, newCredentials)){
                 Log.d(DEBUG_TAG, "Same credentials");
+                if(!currentCredentials.getCollectionID().equals(newCredentials.getCollectionID())){
+                    Log.d(DEBUG_TAG, "Different Collection ID, updating current ID");
+                    currentCredentials.setCollectionID(newCredentials.getCollectionID());
+                }
             }
             else {
+                Log.d(DEBUG_TAG, "Different credentials");
                 acquireKey(records);
             }
         }else {
@@ -122,37 +180,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private boolean areSameCredentials(Credentials currentCredentials, Credentials newCredentials) {
+        return currentCredentials != null
+                && currentCredentials.getUserName().equals(newCredentials.getUserName())
+                && currentCredentials.getPassword().equals(newCredentials.getPassword());
+    }
+
+
     //gets apiKey, if failed, credentials will equal to null
     private void acquireKey(ArrayList<String> records) {
 
         Log.d(DEBUG_TAG, "Records size is: " + records.size());
 
         currentCredentials = new Credentials(records);
+        loginRequest.setUsername(currentCredentials.getUserName());
+        loginRequest.setPassword(currentCredentials.getPassword());
+        loginResponseCall = service.getApiKey(loginRequest);
 
-        LoginTask loginTask = new LoginTask();
-        loginTask.setOnLoginResult(new AsyncResponse() {
-
-            @Override
-            public void onProcessFinish(ServerConnection result) {
-                int length = result.getApiKey().length();
-
-                // If successfully retrieved API KEY
-                if(length == API_KEY_LENGTH){
-
-                    currentCredentials.setApiKey(result.getApiKey());
-                    llButtonsContainer.setVisibility(View.VISIBLE);
-                        //Todo: go foward
-
-                }
-                else{
-                    Toast.makeText(getBaseContext(), "Wrong username or password", Toast.LENGTH_SHORT).show();
-                    currentCredentials = null;
-                }
-            }
-        });
-        loginTask.execute(currentCredentials.getUserName(), currentCredentials.getPassword());
+        // Starts networking with server Asynchronously
+        loginResponseCall.enqueue(loginResponseCallback);
     }
-
 
 
 
@@ -165,7 +212,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onRecordClick(View v){
-        Intent intent = new Intent(this, FeelingsActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, FeelingsActivity.class);
+        //startActivity(intent);
+
+        Log.d(DEBUG_TAG, "API on buttonclick: " + currentCredentials.getApiKey());
+        Log.d(DEBUG_TAG, "ID on buttonclick: " + currentCredentials.getCollectionID());
+        Log.d(DEBUG_TAG, "user on butonClick " + currentCredentials.getUserName());
+        Log.d(DEBUG_TAG, "Artifact on buttonClick " + artifact.getArtifactName());
+        //TODO create intent with artifact and currentcredentials parameters.
     }
 }

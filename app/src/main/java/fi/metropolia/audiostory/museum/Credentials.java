@@ -27,6 +27,10 @@ public class Credentials{
         return collectionID;
     }
 
+    public void setCollectionID(String collectionID) {
+        this.collectionID = collectionID;
+    }
+
     public String getApiKey() {
         return apiKey;
     }
