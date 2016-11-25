@@ -7,14 +7,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activities.MainActivity">
 
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/main_activity_tv_artifact"
+        android:layout_alignParentTop="false"
+        android:textSize="32sp"
+        android:layout_alignParentStart="false"
+        android:layout_centerInParent="false"
+        android:layout_centerHorizontal="true" />
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+
+        android:id="@+id/main_activity_ll_container"
         android:weightSum="2"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_alignParentBottom="true">
+        android:visibility="invisible">
 
         <Button style="?borderlessButtonStyle"
             android:layout_width="0dp"
@@ -22,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/listen_story_btn"
             android:background="@drawable/pink_button"
-            android:id="@+id/listenBtn"
+            android:id="@+id/main_activity_btn_listen"
             android:layout_marginEnd="5dp" />
 
         <Button style="?borderlessButtonStyle"
@@ -31,8 +44,11 @@
             android:layout_height="wrap_content"
             android:text="@string/share_story_btn"
             android:background="@drawable/pink_button"
-            android:id="@+id/recordBtn"
+            android:id="@+id/main_activity_btn_record"
             android:onClick="onRecordClick"
             android:layout_marginStart="5dp" />
     </LinearLayout>
+
+
+
 </RelativeLayout>

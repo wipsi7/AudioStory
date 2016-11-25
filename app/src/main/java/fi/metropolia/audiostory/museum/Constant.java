@@ -1,5 +1,6 @@
 package fi.metropolia.audiostory.museum;
 
+/** Constants for retrieving data from nfc tag **/
 public final class Constant {
 
     public static final int USERNAME_INDEX = 0;

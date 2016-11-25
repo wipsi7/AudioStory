@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private PendingIntent pendingIntent;
     private NfcController nfcController;
 
+    private LinearLayout llButtonsContainer;
+    private TextView tvArtifactTitle;
+
     private Artifact artifact = null;
     private Credentials currentCredentials, newCredentials = null;
 
@@ -45,6 +50,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(DEBUG_TAG, "in mainActivity");
         init();
+    }
+
+    private void init() {
+
+        llButtonsContainer = (LinearLayout)findViewById(R.id.main_activity_ll_container);
+        tvArtifactTitle = (TextView)findViewById(R.id.main_activity_tv_artifact);
+
+        nfcController = new NfcController(this);
+        artifact = new Artifact();
+
+        Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
     }
 
     @Override
@@ -88,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
     private void proceed(ArrayList<String> records) {
         if(isNetworkAvailable()) {
             artifact.setArtifactName(records.get(Constant.ARTIFACT_INDEX));
+            tvArtifactTitle.setText(artifact.getArtifactName());
+
+
             newCredentials = new Credentials(records);
 
             // if same credentials
@@ -105,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
     //gets apiKey, if failed, credentials will equal to null
     private void acquireKey(ArrayList<String> records) {
 
+        Log.d(DEBUG_TAG, "Records size is: " + records.size());
+
         currentCredentials = new Credentials(records);
 
         LoginTask loginTask = new LoginTask();
@@ -118,7 +140,9 @@ public class MainActivity extends AppCompatActivity {
                 if(length == API_KEY_LENGTH){
 
                     currentCredentials.setApiKey(result.getApiKey());
+                    llButtonsContainer.setVisibility(View.VISIBLE);
                         //Todo: go foward
+
                 }
                 else{
                     Toast.makeText(getBaseContext(), "Wrong username or password", Toast.LENGTH_SHORT).show();
@@ -130,14 +154,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void init() {
 
-        nfcController = new NfcController(this);
-        artifact = new Artifact();
-
-        Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
