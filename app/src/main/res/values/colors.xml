@@ -6,4 +6,5 @@
     <color name="black">#000000</color>
     <color name="active_pink">#fa3f7e</color>
     <color name="passive_pink">#8f3252</color>
+    <color name="material_background">#212121</color>
 </resources>

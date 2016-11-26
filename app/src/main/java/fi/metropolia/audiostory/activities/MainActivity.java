@@ -212,13 +212,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onRecordClick(View v){
-        //Intent intent = new Intent(this, FeelingsActivity.class);
-        //startActivity(intent);
 
-        Log.d(DEBUG_TAG, "API on buttonclick: " + currentCredentials.getApiKey());
-        Log.d(DEBUG_TAG, "ID on buttonclick: " + currentCredentials.getCollectionID());
-        Log.d(DEBUG_TAG, "user on butonClick " + currentCredentials.getUserName());
-        Log.d(DEBUG_TAG, "Artifact on buttonClick " + artifact.getArtifactName());
-        //TODO create intent with artifact and currentcredentials parameters.
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.BUNDLE_USER, currentCredentials.getUserName());
+        bundle.putString(Constant.BUNDLE_PASS, currentCredentials.getPassword());
+        bundle.putString(Constant.BUNDLE_ID, currentCredentials.getCollectionID());
+        bundle.putString(Constant.BUNDLE_API, currentCredentials.getApiKey());
+        bundle.putString(Constant.BUNDLE_ARTIFACT, artifact.getArtifactName());
+
+        Intent i = new Intent(this, LoginActivity.class);
+        i.putExtra(Constant.EXTRA_BUNDLE_DATA, bundle);
+        startActivity(i);
+
+
     }
 }
