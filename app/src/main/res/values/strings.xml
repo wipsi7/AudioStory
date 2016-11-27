@@ -8,6 +8,7 @@
     <string name="upload_button">Upload</string>
     <string name="string_story_about">This story is about:</string>
     <string name="select_toast">Select up to 3 feelings</string>
+    <string name="activity_feelins_select_min">Select at least 1 feeling</string>
 
 
     <string name="message_record">Tap to record</string>
