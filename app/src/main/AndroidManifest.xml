@@ -34,8 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FeelingsActivity"
-            android:exported="true"/>
+        <activity android:name=".activities.FeelingsActivity"/>
         <activity android:name=".activities.RecordingActivity" />
         <activity android:name=".activities.UploadActivity" />
         <activity android:name=".activities.LoginActivity" />

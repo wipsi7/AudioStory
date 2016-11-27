@@ -7,6 +7,15 @@
 
     tools:context="fi.metropolia.audiostory.activities.UploadActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:src="@drawable/museo"
+        android:contentDescription="@string/desc_museo"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"/>
+
 
     <Button
         android:layout_width="match_parent"
