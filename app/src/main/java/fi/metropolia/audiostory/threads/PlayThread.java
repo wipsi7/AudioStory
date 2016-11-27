@@ -3,7 +3,7 @@ package fi.metropolia.audiostory.threads;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.widget.ImageView;
+import android.os.Handler;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -12,11 +12,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import fi.metropolia.audiostory.filestorage.RawFile;
+import fi.metropolia.audiostory.museum.Constant;
 
 /** Thread for playing .raw audio file. Takes input of RawFile class.
  * Playing properties: 44100Hz, 16bit, mono, .raw , streaming*/
 public class PlayThread extends Thread {
 
+    private Handler ui;
     private RawFile rawFile;
 
     private int minBufferSize;
@@ -24,8 +26,9 @@ public class PlayThread extends Thread {
     private AudioTrack track;
 
 
-    public PlayThread(RawFile rawFile) {
+    public PlayThread(RawFile rawFile, Handler ui) {
         this.rawFile = rawFile;
+        this.ui = ui;
         init();
     }
 
@@ -78,6 +81,9 @@ public class PlayThread extends Thread {
         playing = false;
         track.stop();
         track.release();
+
+        ui.sendEmptyMessage(Constant.MESSAGE_PLAY_FINISH);
+
 
     }
 

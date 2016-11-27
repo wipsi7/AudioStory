@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.Folder;
@@ -39,6 +42,7 @@ public class RecordingActivity extends AppCompatActivity {
     private TextView tvMessage;
     private EditText etTitle;
 
+    private Handler uiHandler;
 
     private PlayThread playThread = null;
     private RecordThread recordThread = null;
@@ -76,6 +80,19 @@ public class RecordingActivity extends AppCompatActivity {
         
         init();
         initViews();
+        initHandler();
+    }
+
+    private void initHandler() {
+        uiHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == Constant.MESSAGE_PLAY_FINISH){
+                    ivPlayStop.setSelected(false);
+                    changetoDeletePlaySaveState();
+                }
+            }
+        };
     }
 
     @Override
@@ -199,7 +216,7 @@ public class RecordingActivity extends AppCompatActivity {
     }
 
     private void startPlaying() {
-        playThread = new PlayThread(rawFile);
+        playThread = new PlayThread(rawFile, uiHandler);
         playThread.start();
     }
 
