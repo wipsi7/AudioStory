@@ -23,6 +23,8 @@
     <string name="activity_login_et_hint_user">Username</string>
     <string name="activity_login_et_hint_password">Password</string>
     <string name="activity_login_cb_remember_">Remember Me</string>
+    <string name="activity_login_error_field_emty">Empty field</string>
+    <string name="activity_login_error_wrong_user_or_pass">Wrong username or password</string>
 
     <string name="desc_user_account">User</string>
     <string name="desc_user_password">Password</string>
