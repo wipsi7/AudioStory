@@ -15,4 +15,6 @@ public final class Constant {
     public static final String BUNDLE_ID = "BundleId";
     public static final String BUNDLE_API = "BundleApi";
     public static final String BUNDLE_ARTIFACT = "BundleApi";
+    public static final String BUNDLE_STORY_TITLE = "BundleStoryTitle";
+    public static final String BUNDLE_WAV_PATH = "BundleWavPath";
 }

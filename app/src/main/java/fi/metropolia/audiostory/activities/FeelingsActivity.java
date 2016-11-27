@@ -145,7 +145,7 @@ public class FeelingsActivity extends AppCompatActivity {
 
     public void onContinueClick(View v){
         //TODO start info activity with extras(feelings)
-        Intent intent = new Intent(this, RecordingActivity.class);
+        Intent intent = new Intent(this, UploadActivity.class);
         startActivity(intent);
     }
 }

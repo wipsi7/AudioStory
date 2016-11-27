@@ -1,6 +1,7 @@
 package fi.metropolia.audiostory.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import fi.metropolia.audiostory.filestorage.Folder;
 import fi.metropolia.audiostory.filestorage.RawFile;
 import fi.metropolia.audiostory.filestorage.RawToWavConverter;
 import fi.metropolia.audiostory.filestorage.WavFile;
+import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.threads.PlayThread;
 import fi.metropolia.audiostory.threads.RecordThread;
 
@@ -169,6 +171,14 @@ public class RecordingActivity extends AppCompatActivity {
     public void OnContinueClick(View v){
         if(etTitle.getText().length() != 0){
             convWav();
+            Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
+            b.putString(Constant.BUNDLE_STORY_TITLE, etTitle.getText().toString());
+            b.putString(Constant.BUNDLE_WAV_PATH, wavFile.getWavFilePath());
+
+            Intent i = new Intent(this, FeelingsActivity.class);
+            i.putExtra(Constant.EXTRA_BUNDLE_DATA, b);
+            startActivity(i);
+
         }else {
             Toast.makeText(this, "Enter a title first!", Toast.LENGTH_SHORT).show();
         }
