@@ -22,7 +22,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.Folder;
 import fi.metropolia.audiostory.filestorage.RawFile;
@@ -84,15 +83,17 @@ public class RecordingActivity extends AppCompatActivity {
     }
 
     private void initHandler() {
-        uiHandler = new Handler(){
+        uiHandler = new Handler(new Handler.Callback() {
             @Override
-            public void handleMessage(Message msg) {
+            public boolean handleMessage(Message msg) {
+
                 if(msg.what == Constant.MESSAGE_PLAY_FINISH){
                     ivPlayStop.setSelected(false);
                     changetoDeletePlaySaveState();
                 }
+                return false;
             }
-        };
+        });
     }
 
     @Override
