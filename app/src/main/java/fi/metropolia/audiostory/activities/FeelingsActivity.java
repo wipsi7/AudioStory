@@ -13,21 +13,21 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import fi.metropolia.audiostory.R;
+import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.visual.Feeling;
 
 public class FeelingsActivity extends AppCompatActivity {
 
 
-    private final static  String DEBUG_TAG = "FeelingsActivity";
+    private final static String DEBUG_TAG = "FeelingsActivity";
+    private final static String CHOOSE = "choose";
     private final static  int MAX_SELECTED = 3;
     private LinearLayout goodFeelingLayout;
     private LinearLayout badFeelingLayout;
     private LinearLayout chosedViewsLayout;
     private int selectedCount = 0;
     private ArrayList<Feeling> feelingsList;
-
-
-
+    private ArrayList<String> choosedList;
 
 
     @Override
@@ -48,8 +48,8 @@ public class FeelingsActivity extends AppCompatActivity {
         badFeelingLayout = (LinearLayout)findViewById(R.id.bad_feelings);
         chosedViewsLayout = (LinearLayout)findViewById(R.id.choosed_views_layout);
 
-
         feelingsList = new ArrayList<>();
+        choosedList = new ArrayList<>();
         initList();
     }
 
@@ -82,11 +82,7 @@ public class FeelingsActivity extends AppCompatActivity {
 
                 //changing state to selected
                 v.setSelected(true);
-
                 addToChoosed(v);
-
-
-
             }
 
         } else{
@@ -97,11 +93,7 @@ public class FeelingsActivity extends AppCompatActivity {
 
             removeFromChoosed(v);
 
-
-
         }
-
-
     }
 
     private void removeFromChoosed(View v) {
@@ -109,7 +101,7 @@ public class FeelingsActivity extends AppCompatActivity {
         ImageView imageView = (ImageView) chosedViewsLayout.findViewWithTag(v.getTag());
         if(imageView != null) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.choose));
-            imageView.setTag("choose");
+            imageView.setTag(CHOOSE);
             imageView.setSelected(false);
         }else {
             Log.d(DEBUG_TAG, "Tag not found");
@@ -123,7 +115,6 @@ public class FeelingsActivity extends AppCompatActivity {
         for(int i = 0; i < MAX_SELECTED; i++){
             imageView = (ImageView) chosedViewsLayout.getChildAt(i);
             if(!imageView.isSelected()){
-
                 imageView.setImageDrawable(tempView.getDrawable());
                 imageView.setTag(tempView.getTag());
                 imageView.setSelected(true);
@@ -144,8 +135,34 @@ public class FeelingsActivity extends AppCompatActivity {
 
 
     public void onContinueClick(View v){
-        //TODO start info activity with extras(feelings)
-        Intent intent = new Intent(this, RecordingActivity.class);
-        startActivity(intent);
+        if(selectedCount != 0){
+            String[] selectedStringArray = getSelectedStringArray();
+
+            Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
+            b.putStringArray(Constant.BUNDLE_FEELINGS, selectedStringArray);
+
+            Intent intent = new Intent(this, UploadActivity.class);
+            intent.putExtra(Constant.EXTRA_BUNDLE_DATA, b);
+            startActivity(intent);
+        }else {
+            Toast.makeText(this, R.string.activity_feelins_select_min, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private String[] getSelectedStringArray() {
+        String[] selectedArray = new String[selectedCount];
+        int addIndex = 0;
+        String temp;
+
+
+        for(int i = 0; i < MAX_SELECTED; i++){
+            temp = chosedViewsLayout.getChildAt(i).getTag().toString();
+            if(!temp.equals(CHOOSE)){
+                selectedArray[addIndex] = temp;
+                addIndex++;
+            }
+        }
+        return selectedArray;
     }
 }

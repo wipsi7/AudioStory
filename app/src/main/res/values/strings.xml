@@ -5,10 +5,64 @@
     <string name="share_story_btn">Share my story</string>
     <string name="listen_story_btn">Listen to a story</string>
     <string name="continue_button">Continue</string>
+    <string name="upload_button">Upload</string>
     <string name="string_story_about">This story is about:</string>
     <string name="select_toast">Select up to 3 feelings</string>
-    <string name="tap_record_txt">Tap to record</string>
-    <string name="tap_pause_txt">Recording, tap to pause</string>
-    <string name="tap_continue_txt">Tap to continue recording</string>
-    <string name="enter_title">Enter Title of your Story</string>
+    <string name="activity_feelins_select_min">Select at least 1 feeling</string>
+
+
+    <string name="message_record">Tap to record</string>
+    <string name="message_stop_recording">Recording, tap to stop recording</string>
+    <string name="message_delete_play_save">Tap delete, play or save</string>
+    <string name="message_playing_stop">Tap to stop playing</string>
+
+    <string name="activity_recording_txt_title">Title of your Story</string>
+    <string name="activity_recording_hint_title">Title</string>
+
+    <string name="activity_login_btn_sign">Sign in</string>
+    <string name="activity_login_tv_sign">Sign in to Record</string>
+    <string name="activity_login_et_hint_user">Username</string>
+    <string name="activity_login_et_hint_password">Password</string>
+    <string name="activity_login_cb_remember_">Remember Me</string>
+    <string name="activity_login_error_field_emty">Empty field</string>
+    <string name="activity_login_error_wrong_user_or_pass">Wrong username or password</string>
+
+    <string name="activity_upload_cb_disclaimer">I agree to give Museum of Technology rights to share my story with museum visitors.</string>
+    <string name="activity_upload_tv_feelings_label">Feelings</string>
+    <string name="activity_upload_tv_title_label">Title</string>
+    <string name="activity_upload_btn_upload">Upload</string>
+
+    <string name="desc_user_account">User</string>
+    <string name="desc_user_password">Password</string>
+    <string name="desc_museo">Museo</string>
+
+
+    <string name="desc_record">Record</string>
+    <string name="desc_play_stop">Play/Stop</string>
+    <string name="desc_delete">Delete</string>
+    <string name="desc_save">Save</string>
+    <string name="desc_panic">Panic</string>
+    <string name="desc_disgust">Disgust</string>
+
+    <string name="desc_indifference">Indifference</string>
+    <string name="desc_fear">Fear</string>
+    <string name="desc_anger">Anger</string>
+    <string name="desc_sorrow">Sorrow</string>
+    <string name="desc_shame">Shame</string>
+    <string name="desc_frustration">Frustration</string>
+    <string name="desc_hate">Hate</string>
+    <string name="desc_interest">Interest</string>
+    <string name="desc_attraction">Attraction</string>
+    <string name="desc_surprise">Surprise</string>
+    <string name="desc_hope">Hope</string>
+    <string name="desc_gratitude">Gratitude</string>
+    <string name="desc_joy">Joy</string>
+    <string name="desc_relief">Relief</string>
+    <string name="desc_pride">Pride</string>
+    <string name="desc_love">Love</string>
+    <string name="desc_flip">Flip</string>
+    <string name="desc_choose">Choose placeholder</string>
+    <string name="title_activity_login">Sign in</string>
+
+
 </resources>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="fi.metropolia.audiostory.activities.LoginActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
+
+        <TextView
+            android:text="@string/activity_login_tv_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_activity_tv_sign_in"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_account_circle_white_24px"
+                android:id="@+id/login_activity_iv_user"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/desc_user_account"
+                android:layout_marginEnd="5dp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:id="@+id/login_activiy_et_user"
+                android:hint="@string/activity_login_et_hint_user"
+                android:lines="1"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                app:srcCompat="@drawable/ic_lock_outline_white_24px"
+                android:id="@+id/login_activity_iv_pass"
+                android:contentDescription="@string/desc_user_password"
+                android:layout_marginEnd="5dp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:id="@+id/login_activity_et_password"
+                android:hint="@string/activity_login_et_hint_password"
+                android:lines="1"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_activity_btn_"
+            android:text="@string/activity_login_btn_sign"
+            android:background="@drawable/pink_button"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:onClick="onSignClick" />
+
+        <CheckBox
+            android:text="@string/activity_login_cb_remember_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_activity_cb_remember"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

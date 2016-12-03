@@ -3,108 +3,130 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context="fi.metropolia.audiostory.activities.RecordingActivity">
+
+    <ProgressBar  style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+
+        android:id="@+id/progressBar"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/circular"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tap_record_txt"
-        android:textColor="@android:color/white"
-        android:id="@+id/record_txt"
-        android:textSize="16sp"
-        android:layout_centerInParent="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/recordButton"
+        android:layout_marginBottom="20dp"
+
+        android:text="@string/message_record"
+        android:id="@+id/record_txt"/>
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_centerInParent="true"
+
         android:id="@+id/recordButton"
-        android:clickable="true"
         android:src="@drawable/microphone_button"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
-        android:onClick="onRecordingClick"
-        android:layout_marginTop="20dp" />
+        android:contentDescription="@string/desc_record"
 
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:id="@+id/pauseButton"
         android:clickable="true"
-        android:src="@drawable/pause_button"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
-        android:onClick="onPausedClick"
-        android:visibility="invisible"
-        android:layout_marginTop="20dp" />
+        android:onClick="onRecordingClick"/>
+
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_centerInParent="true"
+
+        android:id="@+id/play_stop_button"
+        android:src="@drawable/play_stop_button"
+        android:contentDescription="@string/desc_play_stop"
+
+        android:clickable="true"
+        android:onClick="onPlayStopClick"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/record_txt"
+        android:layout_marginTop="40dp"
+        android:layout_toStartOf="@+id/recordButton"
+        android:layout_marginEnd="25dp"
+
         android:id="@+id/delete_button"
         android:src="@drawable/delete_button"
+        android:contentDescription="@string/desc_delete"
+
         android:clickable="true"
         android:onClick="onDeleteClick"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
-        android:layout_marginTop="40dp"
-        android:layout_toLeftOf="@+id/recordButton"
-        android:layout_marginRight="25dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:id="@+id/save_button"
-        android:src="@drawable/save_button"
-        android:clickable="true"
-        android:onClick="onSaveClick"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/record_txt"
         android:layout_marginTop="40dp"
-        android:layout_toRightOf="@+id/recordButton"
-        android:layout_marginLeft="25dp"
-        android:visibility="invisible" />
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@+id/recordButton"
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/continue_button"
-        android:visibility="invisible"
-        android:id="@+id/record_continue_button"
-        android:layout_alignParentBottom="true" />
+        android:id="@+id/save_button"
+        android:src="@drawable/save_button"
+        android:contentDescription="@string/desc_save"
+
+        android:clickable="true"
+        android:onClick="onSaveClick"
+        android:visibility="invisible"/>
+
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/uploadingLayout"
-        android:visibility="invisible"
-        android:layout_above="@+id/record_continue_button"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="40dp">
+        android:layout_alignParentBottom="true"
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/play_button"
-            android:src="@drawable/play_button"
-            android:clickable="true"
-            android:onClick="onPlayClick"
-            android:layout_gravity="center_vertical" />
+        android:orientation="vertical"
+        android:id="@+id/uploadingLayout"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+
+            android:text="@string/activity_recording_txt_title"
+            android:textSize="14sp" />
 
         <EditText
-            android:hint="@string/enter_title"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:layout_marginLeft="20dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+
+            android:id="@+id/activity_recording_record_title"
+            android:hint="@string/activity_recording_hint_title"
             android:textSize="12sp"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textColorHint="?android:attr/textColorHint"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/pink_button"
+            android:text="@string/continue_button"
+            android:id="@+id/record_continue_button"
+            android:onClick="OnContinueClick"/>
     </LinearLayout>
 
 
