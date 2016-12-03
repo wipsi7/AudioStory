@@ -27,6 +27,11 @@
     <string name="activity_login_error_field_emty">Empty field</string>
     <string name="activity_login_error_wrong_user_or_pass">Wrong username or password</string>
 
+    <string name="activity_upload_cb_disclaimer">I agree to give Museum of Technology rights to share my story with museum visitors.</string>
+    <string name="activity_upload_tv_feelings_label">Feelings</string>
+    <string name="activity_upload_tv_title_label">Title</string>
+    <string name="activity_upload_btn_upload">Upload</string>
+
     <string name="desc_user_account">User</string>
     <string name="desc_user_password">Password</string>
     <string name="desc_museo">Museo</string>

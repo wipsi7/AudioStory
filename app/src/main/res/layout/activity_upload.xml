@@ -17,14 +17,65 @@
         android:scaleType="centerCrop"/>
 
 
-    <Button
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_alignParentBottom="true">
 
-        android:background="@drawable/pink_button"
-        android:text="@string/continue_button"
-        android:id="@+id/activity_upload_btn_upload"
-        android:onClick="onUploadClick"/>
+        <TextView
+            android:text="@string/activity_upload_tv_feelings_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:id="@+id/upload_activity_tv_feelings_label"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/upload_activity_tv_feelings"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:text="@string/activity_upload_tv_title_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:id="@+id/upload_activity_tv_title_label"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/upload_activity_tv_title"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/white" />
+
+        <CheckBox
+            android:text="@string/activity_upload_cb_disclaimer"
+            android:layout_width="match_parent"
+            android:id="@+id/upload_activity_cb_disclaimer"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_marginBottom="30dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+
+            android:background="@drawable/pink_button"
+            android:text="@string/activity_upload_btn_upload"
+            android:id="@+id/upload_activity_btn_upload"
+            android:onClick="onUploadClick"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

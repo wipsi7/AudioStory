@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -28,6 +31,10 @@ public class UploadActivity extends AppCompatActivity {
 
     private static final String DEBUG_TAG = "UploadActivity";
 
+    private TextView tvFeelings, tvStoryTitle;
+    private Button btnUpload;
+    private CheckBox cbDisclaimer;
+
     private UploadData uploadData;
 
     @Override
@@ -36,6 +43,31 @@ public class UploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_upload);
 
         init();
+        initViews();
+    }
+
+    private void initViews() {
+        tvFeelings = (TextView)findViewById(R.id.upload_activity_tv_feelings);
+        tvStoryTitle = (TextView)findViewById(R.id.upload_activity_tv_title);
+        btnUpload = (Button)findViewById(R.id.upload_activity_btn_upload);
+        cbDisclaimer = (CheckBox)findViewById(R.id.upload_activity_cb_disclaimer);
+
+        btnUpload.setEnabled(false);
+
+        tvFeelings.setText(uploadData.getTags());
+        tvStoryTitle.setText(uploadData.getTitle());
+
+        cbDisclaimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox cb = (CheckBox)v;
+                if(cb.isChecked()){
+                    btnUpload.setEnabled(true);
+                }else {
+                    btnUpload.setEnabled(false);
+                }
+            }
+        });
     }
 
     private void init() {
