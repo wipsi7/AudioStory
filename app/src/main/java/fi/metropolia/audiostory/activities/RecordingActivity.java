@@ -136,14 +136,14 @@ public class RecordingActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        ivPlayStop = (ImageView)findViewById(R.id.play_stop_button);
-        ivRecord = (ImageView)findViewById(R.id.recordButton);
-        tvMessage = (TextView)findViewById(R.id.record_txt);
-        ivSave = (ImageView)findViewById(R.id.save_button);
-        ivDelete = (ImageView)findViewById(R.id.delete_button);
-        llUpload = (LinearLayout)findViewById(R.id.uploadingLayout);
-        btnContinue = (Button)findViewById(R.id.record_continue_button);
-        etTitle = (EditText)findViewById(R.id.activity_recording_record_title);
+        ivPlayStop = (ImageView)findViewById(R.id.recording_activity_btn_play_stop);
+        ivRecord = (ImageView)findViewById(R.id.recording_activity_btn_record);
+        tvMessage = (TextView)findViewById(R.id.recording_activity_tv_info);
+        ivSave = (ImageView)findViewById(R.id.recording_activity_btn_save);
+        ivDelete = (ImageView)findViewById(R.id.recording_activity_btn_delete);
+        llUpload = (LinearLayout)findViewById(R.id.recording_activity_ll_upload);
+        btnContinue = (Button)findViewById(R.id.recording_activity_btn_continue);
+        etTitle = (EditText)findViewById(R.id.recording_activity_et_title);
     }
 
 
