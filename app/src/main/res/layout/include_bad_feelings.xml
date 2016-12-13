@@ -24,7 +24,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/panic_button"
-            android:contentDescription="@string/desc_panic"
+            android:contentDescription="@string/bad_feelings_desc_panic"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -39,7 +39,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/disgust_button"
-            android:contentDescription="@string/desc_disgust"
+            android:contentDescription="@string/bad_feelings_desc_disgust"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -53,7 +53,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/indiffrence_button"
-            android:contentDescription="@string/desc_indifference"
+            android:contentDescription="@string/bad_feelings_desc_indifference"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -77,7 +77,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/fear_button"
-            android:contentDescription="@string/desc_fear"
+            android:contentDescription="@string/bad_feelings_desc_fear"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -92,7 +92,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/anger_button"
-            android:contentDescription="@string/desc_anger"
+            android:contentDescription="@string/bad_feelings_desc_anger"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -106,7 +106,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/sorrow_button"
-            android:contentDescription="@string/desc_sorrow"
+            android:contentDescription="@string/bad_feelings_desc_sorrow"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -131,7 +131,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/shame_button"
-            android:contentDescription="@string/desc_shame"
+            android:contentDescription="@string/bad_feelings_desc_shame"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -145,7 +145,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/frustration_button"
-            android:contentDescription="@string/desc_frustration"
+            android:contentDescription="@string/bad_feelings_desc_frustration"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
@@ -159,7 +159,7 @@
             android:layout_margin="3dp"
 
             android:src="@drawable/hate_button"
-            android:contentDescription="@string/desc_hate"
+            android:contentDescription="@string/bad_feelings_desc_hate"
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"

@@ -36,7 +36,7 @@ public class RecordingActivity extends AppCompatActivity {
     private static final int RECORD_PERMISSIONS = 24;
 
     private ImageView ivRecord, ivDelete, ivSave, ivPlayStop;
-    private LinearLayout llUpload;
+    private LinearLayout llContinue;
     private Button btnContinue;
     private TextView tvMessage;
     private EditText etTitle;
@@ -136,14 +136,14 @@ public class RecordingActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        ivPlayStop = (ImageView)findViewById(R.id.recording_activity_btn_play_stop);
-        ivRecord = (ImageView)findViewById(R.id.recording_activity_btn_record);
-        tvMessage = (TextView)findViewById(R.id.recording_activity_tv_info);
-        ivSave = (ImageView)findViewById(R.id.recording_activity_btn_save);
-        ivDelete = (ImageView)findViewById(R.id.recording_activity_btn_delete);
-        llUpload = (LinearLayout)findViewById(R.id.recording_activity_ll_upload);
-        btnContinue = (Button)findViewById(R.id.recording_activity_btn_continue);
-        etTitle = (EditText)findViewById(R.id.recording_activity_et_title);
+        ivPlayStop = (ImageView)findViewById(R.id.iv_recording_play_stop);
+        ivRecord = (ImageView)findViewById(R.id.iv_recording_record);
+        tvMessage = (TextView)findViewById(R.id.tv_recording_info);
+        ivSave = (ImageView)findViewById(R.id.iv_recording_save);
+        ivDelete = (ImageView)findViewById(R.id.iv_recording_delete);
+        llContinue = (LinearLayout)findViewById(R.id.ll_recording_continue);
+        btnContinue = (Button)findViewById(R.id.btn_recording_continue);
+        etTitle = (EditText)findViewById(R.id.et_recording_title);
     }
 
 
@@ -239,60 +239,60 @@ public class RecordingActivity extends AppCompatActivity {
 
     /** Changes message and  restores views to initial */
     private void changeToInitialState() {
-        tvMessage.setText(R.string.message_record);
+        tvMessage.setText(R.string.recording_tv_tap_record);
 
         ivRecord.setVisibility(View.VISIBLE);
         ivDelete.setVisibility(View.INVISIBLE);
         ivPlayStop.setVisibility(View.INVISIBLE);
         ivSave.setVisibility(View.INVISIBLE);
-        llUpload.setVisibility(View.INVISIBLE);
+        llContinue.setVisibility(View.INVISIBLE);
     }
 
     /** Changes message and sets only delete, play, save views visible **/
     private void changetoDeletePlaySaveState() {
-        tvMessage.setText(R.string.message_delete_play_save);
+        tvMessage.setText(R.string.recording_tv_tap_delete_play_save);
 
         ivRecord.setVisibility(View.INVISIBLE);
         ivDelete.setVisibility(View.VISIBLE);
         ivPlayStop.setVisibility(View.VISIBLE);
         ivSave.setVisibility(View.VISIBLE);
-        llUpload.setVisibility(View.INVISIBLE);
+        llContinue.setVisibility(View.INVISIBLE);
     }
 
     /** Changes message and sets only record view visible */
     private void changeToRecordingState(){
-        tvMessage.setText(R.string.message_stop_recording);
+        tvMessage.setText(R.string.recording_tv_tap_stop);
 
         ivRecord.setVisibility(View.VISIBLE);
         ivDelete.setVisibility(View.INVISIBLE);
         ivPlayStop.setVisibility(View.INVISIBLE);
         ivDelete.setVisibility(View.INVISIBLE);
         ivSave.setVisibility(View.INVISIBLE);
-        llUpload.setVisibility(View.INVISIBLE);
+        llContinue.setVisibility(View.INVISIBLE);
     }
 
     /** Changes message and sets only play view visible */
     private void changeToPlayState(){
-        tvMessage.setText(R.string.message_playing_stop);
+        tvMessage.setText(R.string.recording_tv_playing_stop);
 
         ivRecord.setVisibility(View.INVISIBLE);
         ivDelete.setVisibility(View.INVISIBLE);
         ivPlayStop.setVisibility(View.VISIBLE);
         ivDelete.setVisibility(View.INVISIBLE);
         ivSave.setVisibility(View.INVISIBLE);
-        llUpload.setVisibility(View.INVISIBLE);
+        llContinue.setVisibility(View.INVISIBLE);
 
     }
 
     private void changeToSaveState(){
-        tvMessage.setText(R.string.message_record);
+        tvMessage.setText(R.string.recording_tv_tap_record);
 
         ivRecord.setVisibility(View.VISIBLE);
         ivDelete.setVisibility(View.INVISIBLE);
         ivPlayStop.setVisibility(View.INVISIBLE);
         ivDelete.setVisibility(View.INVISIBLE);
         ivSave.setVisibility(View.INVISIBLE);
-        llUpload.setVisibility(View.VISIBLE);
+        llContinue.setVisibility(View.VISIBLE);
     }
 
 

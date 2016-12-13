@@ -47,10 +47,10 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        tvFeelings = (TextView)findViewById(R.id.upload_activity_tv_feelings);
-        tvStoryTitle = (TextView)findViewById(R.id.upload_activity_tv_title);
-        btnUpload = (Button)findViewById(R.id.upload_activity_btn_upload);
-        cbDisclaimer = (CheckBox)findViewById(R.id.upload_activity_cb_disclaimer);
+        tvFeelings = (TextView)findViewById(R.id.tv_upload_feelings);
+        tvStoryTitle = (TextView)findViewById(R.id.tv_upload_title);
+        btnUpload = (Button)findViewById(R.id.btn_upload_upload);
+        cbDisclaimer = (CheckBox)findViewById(R.id.cb_upload_disclaimer);
 
         btnUpload.setEnabled(false);
 

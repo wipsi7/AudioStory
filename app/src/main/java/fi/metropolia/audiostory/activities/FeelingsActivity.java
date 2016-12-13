@@ -46,7 +46,7 @@ public class FeelingsActivity extends AppCompatActivity {
     private void init() {
         goodFeelingLayout = (LinearLayout)findViewById(R.id.good_feelings);
         badFeelingLayout = (LinearLayout)findViewById(R.id.bad_feelings);
-        chosedViewsLayout = (LinearLayout)findViewById(R.id.feeling_activity_ll_choose);
+        chosedViewsLayout = (LinearLayout)findViewById(R.id.ll_feelings_choose);
 
         feelingsList = new ArrayList<>();
         choosedList = new ArrayList<>();
@@ -128,7 +128,7 @@ public class FeelingsActivity extends AppCompatActivity {
         if( selectedCount < MAX_SELECTED){
             return false;
         }else {
-            Toast.makeText(this, R.string.select_toast, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.feelings_toast_select_max, Toast.LENGTH_SHORT).show();
             return true;
         }
     }
@@ -145,7 +145,7 @@ public class FeelingsActivity extends AppCompatActivity {
             intent.putExtra(Constant.EXTRA_BUNDLE_DATA, b);
             startActivity(intent);
         }else {
-            Toast.makeText(this, R.string.activity_feelins_select_min, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.feelings_toast_select_min, Toast.LENGTH_SHORT).show();
         }
 
     }

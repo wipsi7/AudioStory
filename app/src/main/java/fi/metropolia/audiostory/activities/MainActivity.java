@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        llButtonsContainer = (LinearLayout)findViewById(R.id.main_activity_ll_container);
-        tvArtifactTitle = (TextView)findViewById(R.id.main_activity_tv_artifact);
+        llButtonsContainer = (LinearLayout)findViewById(R.id.ll_main_buttons_container);
+        tvArtifactTitle = (TextView)findViewById(R.id.tv_main_artifact);
 
         nfcController = new NfcController(this);
         artifact = new Artifact();

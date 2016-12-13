@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/upload_activity"
+    android:id="@+id/activity_upload"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
 
         android:src="@drawable/museo"
-        android:contentDescription="@string/desc_museo"
+        android:contentDescription="@string/upload_desc_museo"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:id="@+id/upload_activity_iv_image" />
+        android:id="@+id/iv_upload_banner" />
 
 
     <LinearLayout
@@ -26,46 +26,46 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/upload_activity_ll_upload">
+        android:id="@+id/ll_upload_container">
 
         <TextView
-            android:text="@string/activity_upload_tv_feelings_label"
+            android:text="@string/upload_tv_feelings_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="true"
-            android:id="@+id/upload_activity_tv_feelings_label"
+            android:id="@+id/tv_upload_feelings_label"
             android:textColor="@android:color/white" />
 
         <TextView
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/upload_activity_tv_feelings"
+            android:id="@+id/tv_upload_feelings"
             android:layout_marginBottom="20dp"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:text="@string/activity_upload_tv_title_label"
+            android:text="@string/upload_tv_title_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="true"
-            android:id="@+id/upload_activity_tv_title_label"
+            android:id="@+id/tv_upload_title_label"
             android:textColor="@android:color/white" />
 
         <TextView
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/upload_activity_tv_title"
+            android:id="@+id/tv_upload_title"
             android:layout_marginBottom="20dp"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
 
         <CheckBox
-            android:text="@string/activity_upload_cb_disclaimer"
+            android:text="@string/upload_cb_disclaimer"
             android:layout_width="match_parent"
-            android:id="@+id/upload_activity_cb_disclaimer"
+            android:id="@+id/cb_upload_disclaimer"
             android:layout_height="wrap_content"
             android:checked="false"
             android:layout_marginBottom="30dp" />
@@ -75,8 +75,8 @@
             android:layout_height="wrap_content"
 
             android:background="@drawable/pink_button"
-            android:text="@string/activity_upload_btn_upload"
-            android:id="@+id/upload_activity_btn_upload"
+            android:text="@string/upload_btn_upload"
+            android:id="@+id/btn_upload_upload"
             android:onClick="onUploadClick"/>
 
     </LinearLayout>

@@ -46,9 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        etUser = (EditText)findViewById(R.id.login_activiy_et_user);
-        etPass = (EditText)findViewById(R.id.login_activity_et_password);
-        cbRemember = (CheckBox)findViewById(R.id.login_activity_cb_remember);
+        etUser = (EditText)findViewById(R.id.et_login_user);
+        etPass = (EditText)findViewById(R.id.et_login_pass);
+        cbRemember = (CheckBox)findViewById(R.id.cb_login_remember);
     }
 
 
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
         else {
-            Toast.makeText(getApplicationContext(),R.string.activity_login_error_wrong_user_or_pass, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.login_toast_wrong_user_or_pass, Toast.LENGTH_LONG).show();
             return false;
         }
     }
@@ -91,10 +91,10 @@ public class LoginActivity extends AppCompatActivity {
         boolean isUserEmpty = etUser.getText().toString().isEmpty();
         boolean isPassEmpty = etPass.getText().toString().isEmpty();
         if(isUserEmpty){
-            etUser.setError(getString(R.string.activity_login_error_field_emty));
+            etUser.setError(getString(R.string.login_error_field_emty));
         }
         if(isPassEmpty){
-            etPass.setError(getString(R.string.activity_login_error_field_emty));
+            etPass.setError(getString(R.string.login_error_field_emty));
         }
         return !(isPassEmpty || isUserEmpty);
     }
