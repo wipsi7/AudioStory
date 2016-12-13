@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.FeelingsActivity">
+    tools:context=".activities.FeelingsActivity"
+    android:id="@+id/feelings_activity">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
 
-        android:id="@+id/flip_view"
+        android:id="@+id/feelings_activity_iv_flip"
         android:src="@android:drawable/ic_menu_rotate"
         android:contentDescription="@string/desc_flip"
         android:clickable="true"
@@ -20,32 +21,32 @@
     <include layout="@layout/include_bad_feelings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/flip_view"/>
+        android:layout_below="@+id/feelings_activity_iv_flip"/>
 
     <!-- layout below flip icon, not visible at start  -->
     <include layout="@layout/include_good_feeling"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_below="@+id/flip_view"/>
+        android:layout_below="@+id/feelings_activity_iv_flip"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_above="@+id/choosed_views_layout"
+        android:layout_above="@+id/feeling_activity_ll_choose"
 
         android:text="@string/string_story_about"
-        android:id="@+id/textView"
-        android:layout_marginStart="12dp" />
+        android:layout_marginStart="12dp"
+        android:id="@+id/feelings_activity_tv_story_about" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/continue_button"
+        android:layout_above="@+id/feelings_activity_btn_continue"
         android:layout_marginBottom="10dp"
 
         android:orientation="horizontal"
-        android:id="@+id/choosed_views_layout"
+        android:id="@+id/feeling_activity_ll_choose"
         android:weightSum="3"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp">
@@ -61,7 +62,8 @@
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:tag="choose" />
+            android:tag="choose"
+            android:id="@+id/feelings_activity_iv_choosed_one" />
 
         <ImageView
             android:layout_width="0dp"
@@ -73,7 +75,8 @@
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:tag="choose"/>
+            android:tag="choose"
+            android:id="@+id/feelings_activity_iv_choosed_two" />
 
         <ImageView
             android:layout_width="0dp"
@@ -86,7 +89,8 @@
             android:clickable="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:tag="choose" />
+            android:tag="choose"
+            android:id="@+id/feelings_activity_iv_choosed_three" />
     </LinearLayout>
 
     <Button
@@ -97,7 +101,7 @@
 
         android:background="@drawable/pink_button"
         android:text="@string/continue_button"
-        android:id="@+id/continue_button"
+        android:id="@+id/feelings_activity_btn_continue"
         android:onClick="onContinueClick"/>
 
 

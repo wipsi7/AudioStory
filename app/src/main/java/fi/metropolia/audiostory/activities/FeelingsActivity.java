@@ -46,7 +46,7 @@ public class FeelingsActivity extends AppCompatActivity {
     private void init() {
         goodFeelingLayout = (LinearLayout)findViewById(R.id.good_feelings);
         badFeelingLayout = (LinearLayout)findViewById(R.id.bad_feelings);
-        chosedViewsLayout = (LinearLayout)findViewById(R.id.choosed_views_layout);
+        chosedViewsLayout = (LinearLayout)findViewById(R.id.feeling_activity_ll_choose);
 
         feelingsList = new ArrayList<>();
         choosedList = new ArrayList<>();

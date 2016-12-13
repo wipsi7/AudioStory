@@ -32,6 +32,9 @@
     <string name="activity_upload_tv_title_label">Title</string>
     <string name="activity_upload_btn_upload">Upload</string>
 
+    <string name="desc_logo">Logo</string>
+    <string name="desc_spalsh">splash</string>
+
     <string name="desc_user_account">User</string>
     <string name="desc_user_password">Password</string>
     <string name="desc_museo">Museo</string>

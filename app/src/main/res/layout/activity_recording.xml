@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fi.metropolia.audiostory.activities.RecordingActivity">
+    tools:context="fi.metropolia.audiostory.activities.RecordingActivity"
+    android:id="@+id/recording_activity">
 
     <ProgressBar  style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="200dp"
@@ -12,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
 
-        android:id="@+id/progressBar"
+        android:id="@+id/recording_activity_pb_circle_progress"
         android:max="100"
         android:progress="0"
         android:progressDrawable="@drawable/circular"/>
@@ -21,18 +22,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/recordButton"
+        android:layout_above="@+id/recording_activity_btn_record"
         android:layout_marginBottom="20dp"
 
         android:text="@string/message_record"
-        android:id="@+id/record_txt"/>
+        android:id="@+id/recording_activity_tv_info"/>
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerInParent="true"
 
-        android:id="@+id/recordButton"
+        android:id="@+id/recording_activity_btn_record"
         android:src="@drawable/microphone_button"
         android:contentDescription="@string/desc_record"
 
@@ -45,7 +46,7 @@
         android:layout_height="48dp"
         android:layout_centerInParent="true"
 
-        android:id="@+id/play_stop_button"
+        android:id="@+id/recording_activity_btn_play_stop"
         android:src="@drawable/play_stop_button"
         android:contentDescription="@string/desc_play_stop"
 
@@ -57,12 +58,12 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
+        android:layout_below="@+id/recording_activity_tv_info"
         android:layout_marginTop="40dp"
-        android:layout_toStartOf="@+id/recordButton"
+        android:layout_toStartOf="@+id/recording_activity_btn_record"
         android:layout_marginEnd="25dp"
 
-        android:id="@+id/delete_button"
+        android:id="@+id/recording_activity_btn_delete"
         android:src="@drawable/delete_button"
         android:contentDescription="@string/desc_delete"
 
@@ -74,12 +75,12 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/record_txt"
+        android:layout_below="@+id/recording_activity_tv_info"
         android:layout_marginTop="40dp"
         android:layout_marginStart="25dp"
-        android:layout_toEndOf="@+id/recordButton"
+        android:layout_toEndOf="@+id/recording_activity_btn_record"
 
-        android:id="@+id/save_button"
+        android:id="@+id/recording_activity_btn_save"
         android:src="@drawable/save_button"
         android:contentDescription="@string/desc_save"
 
@@ -94,7 +95,7 @@
         android:layout_alignParentBottom="true"
 
         android:orientation="vertical"
-        android:id="@+id/uploadingLayout"
+        android:id="@+id/recording_activity_ll_upload"
         android:visibility="invisible">
 
         <TextView
@@ -103,7 +104,8 @@
             android:layout_marginStart="20dp"
 
             android:text="@string/activity_recording_txt_title"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:id="@+id/recording_activity_tv_title" />
 
         <EditText
             android:layout_width="match_parent"
@@ -113,7 +115,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="40dp"
 
-            android:id="@+id/activity_recording_record_title"
+            android:id="@+id/recording_activity_et_title"
             android:hint="@string/activity_recording_hint_title"
             android:textSize="12sp"
             android:maxLines="1"
@@ -125,7 +127,7 @@
 
             android:background="@drawable/pink_button"
             android:text="@string/continue_button"
-            android:id="@+id/record_continue_button"
+            android:id="@+id/recording_activity_btn_continue"
             android:onClick="OnContinueClick"/>
     </LinearLayout>
 

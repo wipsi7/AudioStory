@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_upload"
+    android:id="@+id/upload_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -14,7 +14,8 @@
         android:src="@drawable/museo"
         android:contentDescription="@string/desc_museo"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:id="@+id/upload_activity_iv_image" />
 
 
     <LinearLayout
@@ -24,7 +25,8 @@
         android:layout_marginBottom="5dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/upload_activity_ll_upload">
 
         <TextView
             android:text="@string/activity_upload_tv_feelings_label"
@@ -40,7 +42,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/upload_activity_tv_feelings"
             android:layout_marginBottom="20dp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:text="@string/activity_upload_tv_title_label"
@@ -56,7 +59,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/upload_activity_tv_title"
             android:layout_marginBottom="20dp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
 
         <CheckBox
             android:text="@string/activity_upload_cb_disclaimer"
@@ -69,7 +73,6 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
 
             android:background="@drawable/pink_button"
             android:text="@string/activity_upload_btn_upload"
