@@ -37,6 +37,7 @@
             android:text="@string/main_btn_listen_story"
             android:background="@drawable/pink_button"
             android:id="@+id/btn_main_listen"
+            android:onClick="onListenClick"
             android:layout_marginEnd="5dp" />
 
         <Button style="?borderlessButtonStyle"

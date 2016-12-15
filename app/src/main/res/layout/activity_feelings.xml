@@ -35,9 +35,10 @@
         android:layout_marginBottom="5dp"
         android:layout_above="@+id/ll_feelings_choose"
 
-        android:text="@string/feelings_tv_story_about"
+        android:text="Story placeholder"
         android:layout_marginStart="12dp"
-        android:id="@+id/tv_feelings_story_about" />
+        android:id="@+id/tv_feelings_story_about"
+        tools:ignore="HardcodedText" />
 
     <LinearLayout
         android:layout_width="match_parent"

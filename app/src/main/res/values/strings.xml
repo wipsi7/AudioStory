@@ -10,6 +10,7 @@
     <string name="main_btn_listen_story">Listen to a story</string>
 
     <string name="feelings_tv_story_about">This story is about:</string>
+    <string name="feelings_tv_story_listen">I want to listen stories about:</string>
     <string name="feelings_toast_select_max">Select up to 3 feelings</string>
     <string name="feelings_toast_select_min">Select at least 1 feeling</string>
     <string name="feelings_desc_flip">Flip</string>
@@ -61,7 +62,6 @@
     <string name="good_feelings_desc_relief">Relief</string>
     <string name="good_feelings_desc_pride">Pride</string>
     <string name="good_feelings_desc_love">Love</string>
-
 
 
 </resources>
