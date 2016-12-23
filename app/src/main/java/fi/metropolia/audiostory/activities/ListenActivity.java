@@ -65,6 +65,8 @@ public class ListenActivity extends AppCompatActivity {
             public void onResponse(Call<SearchResponse[][]> call, Response<SearchResponse[][]> response) {
                 Log.d(DEBUG_TAG, "Succeed");
                 ListeningList listeningList = new ListeningList(response.body(), tags);
+                //TODO create UI for play
+                //TODO get playList and implement in listview
             }
 
             @Override
