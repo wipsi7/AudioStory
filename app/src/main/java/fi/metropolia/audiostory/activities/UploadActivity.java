@@ -1,11 +1,14 @@
 package fi.metropolia.audiostory.activities;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import java.io.File;
 
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.interfaces.UploadApi;
+import fi.metropolia.audiostory.museum.ColorPicker;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.upload.UploadData;
 import fi.metropolia.audiostory.upload.UploadResponse;
@@ -36,6 +40,7 @@ public class UploadActivity extends AppCompatActivity {
     private CheckBox cbDisclaimer;
 
     private UploadData uploadData;
+    private String[] tags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +49,37 @@ public class UploadActivity extends AppCompatActivity {
 
         init();
         initViews();
+
+    }
+
+    private void initVisualFeelings(String[] tags) {
+
+
+        ColorPicker picicker = new ColorPicker();
+        LinearLayout llVisualLayout = (LinearLayout)findViewById(R.id.ll_upload_visual_feelings);
+        int childViewCount = llVisualLayout.getChildCount();
+        int tagsCount = tags.length;
+
+
+        //makes all childViews gone of VisualLayout
+        for(int i = 0; i < childViewCount; i++){
+            llVisualLayout.getChildAt(i).setVisibility(View.GONE);
+        }
+
+        //makes VisualLayout child visibles by depenting number of tags and assign feeling color
+        for(int i = 0; i < tagsCount; i++){
+            String color = tags[i];
+            color = picicker.getMatched(color);
+            llVisualLayout.getChildAt(i).setBackgroundColor(Color.parseColor(color));
+            llVisualLayout.getChildAt(i).setVisibility(View.VISIBLE);
+        }
     }
 
     private void initViews() {
-        tvFeelings = (TextView)findViewById(R.id.upload_activity_tv_feelings);
-        tvStoryTitle = (TextView)findViewById(R.id.upload_activity_tv_title);
-        btnUpload = (Button)findViewById(R.id.upload_activity_btn_upload);
-        cbDisclaimer = (CheckBox)findViewById(R.id.upload_activity_cb_disclaimer);
+        tvFeelings = (TextView)findViewById(R.id.tv_upload_feelings);
+        tvStoryTitle = (TextView)findViewById(R.id.tv_upload_title);
+        btnUpload = (Button)findViewById(R.id.btn_upload_upload);
+        cbDisclaimer = (CheckBox)findViewById(R.id.cb_upload_disclaimer);
 
         btnUpload.setEnabled(false);
 
@@ -76,7 +105,10 @@ public class UploadActivity extends AppCompatActivity {
         uploadData.setApiKey(b.getString(Constant.BUNDLE_API));
         uploadData.setCollectionId(b.getString(Constant.BUNDLE_ID));
         uploadData.setArtifact(b.getString(Constant.BUNDLE_ARTIFACT));
-        uploadData.setTags(b.getStringArray(Constant.BUNDLE_FEELINGS));
+
+        tags = b.getStringArray(Constant.BUNDLE_FEELINGS);
+        initVisualFeelings(tags);
+        uploadData.setTags(tags);
         uploadData.setTitle(b.getString(Constant.BUNDLE_STORY_TITLE));
 
         String path = b.getString(Constant.BUNDLE_WAV_PATH);
@@ -133,6 +165,8 @@ public class UploadActivity extends AppCompatActivity {
                 UploadResponse uploadResponse = response.body();
                 Toast.makeText(getApplicationContext(), uploadResponse.getResponse(), Toast.LENGTH_SHORT).show();
                 Log.d(DEBUG_TAG, uploadResponse.getResponse());
+
+                finishUp();
             }
 
             @Override
@@ -142,4 +176,13 @@ public class UploadActivity extends AppCompatActivity {
         });
 
     }
+
+    /** Called on successfull upload */
+    private void finishUp() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,12 +23,13 @@ public class FeelingsActivity extends AppCompatActivity {
     private final static String DEBUG_TAG = "FeelingsActivity";
     private final static String CHOOSE = "choose";
     private final static  int MAX_SELECTED = 3;
-    private LinearLayout goodFeelingLayout;
-    private LinearLayout badFeelingLayout;
-    private LinearLayout chosedViewsLayout;
+
+    private LinearLayout llGoodFeeling, llBadFeeling, llChosed;
+    private TextView tvStoryAbout;
     private int selectedCount = 0;
     private ArrayList<Feeling> feelingsList;
     private ArrayList<String> choosedList;
+    private Bundle b;
 
 
     @Override
@@ -35,18 +37,39 @@ public class FeelingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feelings);
 
+        initviews();
+        init();
+
+
+
+    }
+
+    private void initviews() {
+        llGoodFeeling = (LinearLayout)findViewById(R.id.good_feelings);
+        llBadFeeling = (LinearLayout)findViewById(R.id.bad_feelings);
+        llChosed = (LinearLayout)findViewById(R.id.ll_feelings_choose);
+        tvStoryAbout = (TextView)findViewById(R.id.tv_feelings_story_about);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        init();
+
     }
 
     private void init() {
-        goodFeelingLayout = (LinearLayout)findViewById(R.id.good_feelings);
-        badFeelingLayout = (LinearLayout)findViewById(R.id.bad_feelings);
-        chosedViewsLayout = (LinearLayout)findViewById(R.id.feeling_activity_ll_choose);
+
+        b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
+        int type = b.getInt(Constant.BUNDLE_TYPE);
+        switch(type){
+            case Constant.BUNDLE_RECORD:
+                tvStoryAbout.setText(R.string.feelings_tv_story_about);
+                break;
+
+            case Constant.BUNDLE_LISTEN:
+                tvStoryAbout.setText(R.string.feelings_tv_story_listen);
+                break;
+        }
 
         feelingsList = new ArrayList<>();
         choosedList = new ArrayList<>();
@@ -54,9 +77,9 @@ public class FeelingsActivity extends AppCompatActivity {
     }
 
     private void initList() {
-        for(int row_index = 0; row_index < goodFeelingLayout.getChildCount(); row_index++){
-            LinearLayout tempGoodFeelingRow = (LinearLayout) goodFeelingLayout.getChildAt(row_index);
-            LinearLayout tempBadFeelingRow = (LinearLayout) badFeelingLayout.getChildAt(row_index);
+        for(int row_index = 0; row_index < llGoodFeeling.getChildCount(); row_index++){
+            LinearLayout tempGoodFeelingRow = (LinearLayout) llGoodFeeling.getChildAt(row_index);
+            LinearLayout tempBadFeelingRow = (LinearLayout) llBadFeeling.getChildAt(row_index);
             for(int view_index = 0; view_index < tempGoodFeelingRow.getChildCount(); view_index++){
                 Feeling feeling = new Feeling(this, (ImageView) tempGoodFeelingRow.getChildAt(view_index), (ImageView) tempBadFeelingRow.getChildAt(view_index));
                 feelingsList.add(feeling);
@@ -98,7 +121,7 @@ public class FeelingsActivity extends AppCompatActivity {
 
     private void removeFromChoosed(View v) {
 
-        ImageView imageView = (ImageView) chosedViewsLayout.findViewWithTag(v.getTag());
+        ImageView imageView = (ImageView) llChosed.findViewWithTag(v.getTag());
         if(imageView != null) {
             imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.choose));
             imageView.setTag(CHOOSE);
@@ -113,7 +136,7 @@ public class FeelingsActivity extends AppCompatActivity {
         ImageView imageView;
 
         for(int i = 0; i < MAX_SELECTED; i++){
-            imageView = (ImageView) chosedViewsLayout.getChildAt(i);
+            imageView = (ImageView) llChosed.getChildAt(i);
             if(!imageView.isSelected()){
                 imageView.setImageDrawable(tempView.getDrawable());
                 imageView.setTag(tempView.getTag());
@@ -128,24 +151,38 @@ public class FeelingsActivity extends AppCompatActivity {
         if( selectedCount < MAX_SELECTED){
             return false;
         }else {
-            Toast.makeText(this, R.string.select_toast, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.feelings_toast_select_max, Toast.LENGTH_SHORT).show();
             return true;
         }
     }
 
 
+    /** Method called on continue button click**/
     public void onContinueClick(View v){
         if(selectedCount != 0){
             String[] selectedStringArray = getSelectedStringArray();
 
-            Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
+
             b.putStringArray(Constant.BUNDLE_FEELINGS, selectedStringArray);
 
-            Intent intent = new Intent(this, UploadActivity.class);
-            intent.putExtra(Constant.EXTRA_BUNDLE_DATA, b);
-            startActivity(intent);
+            int type = b.getInt(Constant.BUNDLE_TYPE);
+            switch(type){
+                case Constant.BUNDLE_RECORD:
+                    Intent recordIntent = new Intent(this, UploadActivity.class);
+                    recordIntent.putExtra(Constant.EXTRA_BUNDLE_DATA, b);
+                    startActivity(recordIntent);
+                    break;
+
+                case Constant.BUNDLE_LISTEN:
+                    Intent listenIntent = new Intent(this, ListenActivity.class);
+                    listenIntent.putExtra(Constant.EXTRA_BUNDLE_DATA, b);
+                    startActivity(listenIntent);
+                    break;
+            }
+
+
         }else {
-            Toast.makeText(this, R.string.activity_feelins_select_min, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.feelings_toast_select_min, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -157,7 +194,7 @@ public class FeelingsActivity extends AppCompatActivity {
 
 
         for(int i = 0; i < MAX_SELECTED; i++){
-            temp = chosedViewsLayout.getChildAt(i).getTag().toString();
+            temp = llChosed.getChildAt(i).getTag().toString();
             if(!temp.equals(CHOOSE)){
                 selectedArray[addIndex] = temp;
                 addIndex++;

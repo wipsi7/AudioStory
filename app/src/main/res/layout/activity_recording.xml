@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="fi.metropolia.audiostory.activities.RecordingActivity"
-    android:id="@+id/recording_activity">
+    android:id="@+id/activity_recording">
 
     <ProgressBar  style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="200dp"
@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
 
-        android:id="@+id/recording_activity_pb_circle_progress"
+        android:id="@+id/pb_recording_circle_progress"
         android:max="100"
         android:progress="0"
         android:progressDrawable="@drawable/circular"/>
@@ -22,20 +22,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/recording_activity_btn_record"
+        android:layout_above="@+id/iv_recording_record"
         android:layout_marginBottom="20dp"
 
-        android:text="@string/message_record"
-        android:id="@+id/recording_activity_tv_info"/>
+        android:text="@string/recording_tv_tap_record"
+        android:id="@+id/tv_recording_info"/>
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerInParent="true"
 
-        android:id="@+id/recording_activity_btn_record"
+        android:id="@+id/iv_recording_record"
         android:src="@drawable/microphone_button"
-        android:contentDescription="@string/desc_record"
+        android:contentDescription="@string/recording_desc_record"
 
         android:clickable="true"
         android:onClick="onRecordingClick"/>
@@ -46,9 +46,9 @@
         android:layout_height="48dp"
         android:layout_centerInParent="true"
 
-        android:id="@+id/recording_activity_btn_play_stop"
+        android:id="@+id/iv_recording_play_stop"
         android:src="@drawable/play_stop_button"
-        android:contentDescription="@string/desc_play_stop"
+        android:contentDescription="@string/recording_desc_play_stop"
 
         android:clickable="true"
         android:onClick="onPlayStopClick"
@@ -58,14 +58,14 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/recording_activity_tv_info"
+        android:layout_below="@+id/tv_recording_info"
         android:layout_marginTop="40dp"
-        android:layout_toStartOf="@+id/recording_activity_btn_record"
+        android:layout_toStartOf="@+id/iv_recording_record"
         android:layout_marginEnd="25dp"
 
-        android:id="@+id/recording_activity_btn_delete"
+        android:id="@+id/iv_recording_delete"
         android:src="@drawable/delete_button"
-        android:contentDescription="@string/desc_delete"
+        android:contentDescription="@string/recording_desc_delete"
 
         android:clickable="true"
         android:onClick="onDeleteClick"
@@ -75,14 +75,14 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/recording_activity_tv_info"
+        android:layout_below="@+id/tv_recording_info"
         android:layout_marginTop="40dp"
         android:layout_marginStart="25dp"
-        android:layout_toEndOf="@+id/recording_activity_btn_record"
+        android:layout_toEndOf="@+id/iv_recording_record"
 
-        android:id="@+id/recording_activity_btn_save"
+        android:id="@+id/iv_recording_save"
         android:src="@drawable/save_button"
-        android:contentDescription="@string/desc_save"
+        android:contentDescription="@string/recording_desc_save"
 
         android:clickable="true"
         android:onClick="onSaveClick"
@@ -95,7 +95,7 @@
         android:layout_alignParentBottom="true"
 
         android:orientation="vertical"
-        android:id="@+id/recording_activity_ll_upload"
+        android:id="@+id/ll_recording_continue"
         android:visibility="invisible">
 
         <TextView
@@ -103,9 +103,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
 
-            android:text="@string/activity_recording_txt_title"
+            android:text="@string/recording_tv_story_title"
             android:textSize="14sp"
-            android:id="@+id/recording_activity_tv_title" />
+            android:id="@+id/tv_recording_title_label" />
 
         <EditText
             android:layout_width="match_parent"
@@ -115,8 +115,8 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="40dp"
 
-            android:id="@+id/recording_activity_et_title"
-            android:hint="@string/activity_recording_hint_title"
+            android:id="@+id/et_recording_title"
+            android:hint="@string/recording_hint_title"
             android:textSize="12sp"
             android:maxLines="1"
             android:textColorHint="?android:attr/textColorHint"/>
@@ -126,8 +126,8 @@
             android:layout_height="wrap_content"
 
             android:background="@drawable/pink_button"
-            android:text="@string/continue_button"
-            android:id="@+id/recording_activity_btn_continue"
+            android:text="@string/all_btn_continue"
+            android:id="@+id/btn_recording_continue"
             android:onClick="OnContinueClick"/>
     </LinearLayout>
 

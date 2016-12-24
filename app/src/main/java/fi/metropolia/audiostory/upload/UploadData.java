@@ -64,8 +64,8 @@ public class UploadData {
 
     public void setTags(String[] tags) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < tags.length; i++){
-            stringBuilder.append(tags[i]);
+        for (String tag : tags) {
+            stringBuilder.append(tag);
             stringBuilder.append(' ');
         }
 

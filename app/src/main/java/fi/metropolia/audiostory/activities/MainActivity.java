@@ -9,6 +9,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static String PACKAGE_NAME = "metropolia.audiostory";
     private static final int API_KEY_LENGTH = 128;
 
+
     private PendingIntent pendingIntent;
     private NfcController nfcController;
 
@@ -67,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        llButtonsContainer = (LinearLayout)findViewById(R.id.main_activity_ll_container);
-        tvArtifactTitle = (TextView)findViewById(R.id.main_activity_tv_artifact);
+        llButtonsContainer = (LinearLayout)findViewById(R.id.ll_main_buttons_container);
+        tvArtifactTitle = (TextView)findViewById(R.id.tv_main_artifact);
 
         nfcController = new NfcController(this);
         artifact = new Artifact();
@@ -212,18 +214,33 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onRecordClick(View v){
+        Bundle bundle = createBundle(Constant.BUNDLE_RECORD);
 
+        Intent i = new Intent(this, LoginActivity.class);
+        i.putExtra(Constant.EXTRA_BUNDLE_DATA, bundle);
+        startActivity(i);
+    }
+
+    public void onListenClick(View v){
+        Bundle bundle = createBundle(Constant.BUNDLE_LISTEN);
+
+        Intent i = new Intent(this, FeelingsActivity.class);
+        i.putExtra(Constant.EXTRA_BUNDLE_DATA, bundle);
+        startActivity(i);
+    }
+
+    @NonNull
+    private Bundle createBundle(int type) {
         Bundle bundle = new Bundle();
+        bundle.putInt(Constant.BUNDLE_TYPE, type);
         bundle.putString(Constant.BUNDLE_USER, currentCredentials.getUserName());
         bundle.putString(Constant.BUNDLE_PASS, currentCredentials.getPassword());
         bundle.putString(Constant.BUNDLE_ID, currentCredentials.getCollectionID());
         bundle.putString(Constant.BUNDLE_API, currentCredentials.getApiKey());
         bundle.putString(Constant.BUNDLE_ARTIFACT, artifact.getArtifactName());
 
-        Intent i = new Intent(this, LoginActivity.class);
-        i.putExtra(Constant.EXTRA_BUNDLE_DATA, bundle);
-        startActivity(i);
-
-
+        return bundle;
     }
+
+
 }

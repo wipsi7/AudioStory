@@ -18,6 +18,10 @@ public final class Constant {
     public static final String BUNDLE_STORY_TITLE = "BundleStoryTitle";
     public static final String BUNDLE_WAV_PATH = "BundleWavPath";
     public static final String BUNDLE_FEELINGS = "BundleFeelings";
+    public static final String BUNDLE_TYPE = "BundleType";
+    public static final int BUNDLE_RECORD = 1343252;
+    public static final int BUNDLE_LISTEN = 1232523;
+
 
     public static final int MESSAGE_PLAY_FINISH = 34531;
 }

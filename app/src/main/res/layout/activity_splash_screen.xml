@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="fi.metropolia.audiostory.activities.SplashScreenActivity"
-    android:id="@+id/splash_screen_activity">
+    android:id="@+id/activity_splash_screen">
 
     <ImageView
         android:layout_width="120dp"
@@ -13,29 +13,29 @@
         android:src="@drawable/logo"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:id="@+id/splash_screen_activity_iv_logo"
-        android:layout_above="@+id/splash_screen_activity_app_name"
+        android:id="@+id/iv_splash_screen_logo"
+        android:layout_above="@+id/tv_splash_screen_app_name"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
-        android:contentDescription="@string/desc_logo" />
+        android:contentDescription="@string/splash_screen_desc_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/splash_screen_app_name"
+        android:text="@string/splash_screen_tv_app_name"
         android:textSize="40sp"
         android:textColor="@color/active_pink"
-        android:layout_above="@+id/splash_screen_activity_fl_splash"
+        android:layout_above="@+id/fl_splash_screen_splash"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
-        android:id="@+id/splash_screen_activity_app_name"
+        android:id="@+id/tv_splash_screen_app_name"
         android:layout_marginBottom="30dp" />
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:id="@+id/splash_screen_activity_fl_splash">
+        android:id="@+id/fl_splash_screen_splash">
 
         <ImageView
             android:layout_width="match_parent"
@@ -43,8 +43,8 @@
             android:src="@drawable/splash"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:id="@+id/splash_screen_activity_iv_splash"
-            android:contentDescription="@string/desc_spalsh" />
+            android:id="@+id/iv_splash_screen_splash"
+            android:contentDescription="@string/splash_screen_desc_splash" />
     </FrameLayout>
 
 </RelativeLayout>
