@@ -117,7 +117,7 @@ public class ListeningAdapter extends BaseAdapter{
             viewHolder.llVisualFeelings.getChildAt(i).setVisibility(View.GONE);
         }
 
-        //makes VisualLayout child visibles by depenting number of tags and assign feeling color
+        //makes VisualLayout child visible by depending number of tags and assign feeling color
         for(int i = 0; i < tagsCount; i++){
             String color = tags[i];
             color = colorPicker.getMatched(color);

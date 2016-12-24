@@ -3,6 +3,8 @@ package fi.metropolia.audiostory.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import fi.metropolia.audiostory.adapters.ListeningAdapter;
 import fi.metropolia.audiostory.interfaces.SearchApi;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.ListeningList;
+import fi.metropolia.audiostory.museum.StoryPlayer;
 import fi.metropolia.audiostory.search.SearchResponse;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -77,13 +80,21 @@ public class ListenActivity extends AppCompatActivity {
             public void onResponse(Call<SearchResponse[][]> call, Response<SearchResponse[][]> response) {
                 Log.d(DEBUG_TAG, "Succeed");
                 ListeningList listeningList = new ListeningList(response.body(), tags);
-                //TODO create UI for play
-                //TODO get playList and implement in listview
+
                 filteredList = new ArrayList<SearchResponse>();
                 filteredList = listeningList.getList();
 
+                final StoryPlayer storyPlayer = new StoryPlayer(getApplicationContext(),filteredList);
+
                 ListeningAdapter listeningAdapter = new ListeningAdapter(getApplicationContext(), filteredList);
                 lvList.setAdapter(listeningAdapter);
+                lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        storyPlayer.setPosition(position);
+                        storyPlayer.setView(view);
+                    }
+                });
             }
 
             @Override
