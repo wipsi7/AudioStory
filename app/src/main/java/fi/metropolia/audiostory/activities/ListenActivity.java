@@ -3,8 +3,12 @@ package fi.metropolia.audiostory.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import fi.metropolia.audiostory.R;
+import fi.metropolia.audiostory.adapters.ListeningAdapter;
 import fi.metropolia.audiostory.interfaces.SearchApi;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.ListeningList;
@@ -24,6 +28,9 @@ public class ListenActivity extends AppCompatActivity {
 
     private String key, id, artifactName;
     private String[] tags;
+    private ArrayList<SearchResponse> filteredList;
+
+    private ListView lvList;
 
 
     @Override
@@ -31,8 +38,13 @@ public class ListenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listen);
 
+        initViews();
         initFields();
         initRetrofit();
+    }
+
+    private void initViews() {
+        lvList = (ListView)findViewById(R.id.listening_listview);
     }
 
     private void initFields() {
@@ -67,6 +79,11 @@ public class ListenActivity extends AppCompatActivity {
                 ListeningList listeningList = new ListeningList(response.body(), tags);
                 //TODO create UI for play
                 //TODO get playList and implement in listview
+                filteredList = new ArrayList<SearchResponse>();
+                filteredList = listeningList.getList();
+
+                ListeningAdapter listeningAdapter = new ListeningAdapter(getApplicationContext(), filteredList);
+                lvList.setAdapter(listeningAdapter);
             }
 
             @Override
