@@ -32,6 +32,7 @@ import fi.metropolia.audiostory.interfaces.LoginApi;
 import fi.metropolia.audiostory.museum.Artifact;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.Credentials;
+import fi.metropolia.audiostory.museum.MemoryC;
 import fi.metropolia.audiostory.nfc.NfcController;
 import fi.metropolia.audiostory.search.ImageResponse;
 import okhttp3.OkHttpClient;
@@ -259,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(this, LoginActivity.class);
         i.putExtra(Constant.EXTRA_BUNDLE_DATA, bundle);
+       // i.putExtra(Constant.EXTRA_IMAGE, bitmapArtifact);
         startActivity(i);
     }
 
@@ -305,6 +307,10 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
+
+            MemoryC memoryC = new MemoryC();
+            memoryC.addBitmapToMemoryCache(Constant.EXTRA_IMAGE, result);
+
             llButtonsContainer.setVisibility(View.VISIBLE);
         }
     }

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.interfaces.UploadApi;
 import fi.metropolia.audiostory.museum.ColorPicker;
 import fi.metropolia.audiostory.museum.Constant;
+import fi.metropolia.audiostory.museum.MemoryC;
 import fi.metropolia.audiostory.upload.UploadData;
 import fi.metropolia.audiostory.upload.UploadResponse;
 import okhttp3.MediaType;
@@ -38,6 +40,7 @@ public class UploadActivity extends AppCompatActivity {
     private TextView tvFeelings, tvStoryTitle;
     private Button btnUpload;
     private CheckBox cbDisclaimer;
+    private ImageView ivArtifact;
 
     private UploadData uploadData;
     private String[] tags;
@@ -80,6 +83,7 @@ public class UploadActivity extends AppCompatActivity {
         tvStoryTitle = (TextView)findViewById(R.id.tv_upload_title);
         btnUpload = (Button)findViewById(R.id.btn_upload_upload);
         cbDisclaimer = (CheckBox)findViewById(R.id.cb_upload_disclaimer);
+        ivArtifact = (ImageView)findViewById(R.id.iv_upload_banner);
 
         btnUpload.setEnabled(false);
 
@@ -100,6 +104,11 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     private void init() {
+        MemoryC memoryC = new MemoryC();
+
+        //Bitmap bitmap = memoryC.getBitmapFromMemCache(Constant.EXTRA_IMAGE);
+        //TODO get bitmap and assign it to tvBanner
+
         Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
         uploadData = new UploadData();
         uploadData.setApiKey(b.getString(Constant.BUNDLE_API));
