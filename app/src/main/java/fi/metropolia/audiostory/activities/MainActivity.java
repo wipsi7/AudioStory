@@ -3,30 +3,39 @@ package fi.metropolia.audiostory.activities;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import fi.metropolia.audiostory.Login.LoginRequest;
 import fi.metropolia.audiostory.Login.LoginResponse;
 import fi.metropolia.audiostory.R;
+import fi.metropolia.audiostory.interfaces.ImageApi;
 import fi.metropolia.audiostory.interfaces.LoginApi;
 import fi.metropolia.audiostory.museum.Artifact;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.Credentials;
 import fi.metropolia.audiostory.nfc.NfcController;
+import fi.metropolia.audiostory.search.ImageResponse;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,9 +89,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
+
+        final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
                 .build();
 
         service = retrofit.create(LoginApi.class);
@@ -97,10 +112,36 @@ public class MainActivity extends AppCompatActivity {
 
                 // If successfully retrieved API KEY, make buttons visible and set api key
                 if(loginResponse.getApi_key().length() == API_KEY_LENGTH){
-
                     currentCredentials.setApiKey(loginResponse.getApi_key());
-                    llButtonsContainer.setVisibility(View.VISIBLE);
 
+                    ImageApi imageApi = retrofit.create(ImageApi.class);
+                    Call<ImageResponse[][]> imageResponseCall = imageApi.getImageLink(
+                            currentCredentials.getApiKey(),
+                            currentCredentials.getCollectionID(),
+                            "image",
+                            "true"
+                    );
+
+                    imageResponseCall.enqueue(new Callback<ImageResponse[][]>() {
+                        @Override
+                        public void onResponse(Call<ImageResponse[][]> call, Response<ImageResponse[][]> response) {
+                            ImageResponse[][] imageResponse = response.body();
+                            if(imageResponse.length == 1){
+
+                                new DownloadImageTask((ImageView) findViewById(R.id.iv_main_artifact_image))
+                                        .execute(imageResponse[0][0].getDownloadLink());
+
+
+                            }else {
+                                Log.e(DEBUG_TAG, "More than one image detected");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ImageResponse[][]> call, Throwable t) {
+
+                        }
+                    });
                 }else {
                     Toast.makeText(getApplicationContext(), "Wrong username or password on Tag", Toast.LENGTH_SHORT).show();
                     currentCredentials = null;
@@ -242,5 +283,29 @@ public class MainActivity extends AppCompatActivity {
         return bundle;
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+            llButtonsContainer.setVisibility(View.VISIBLE);
+        }
+    }
 }

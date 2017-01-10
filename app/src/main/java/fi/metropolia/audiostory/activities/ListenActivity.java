@@ -1,10 +1,12 @@
 package fi.metropolia.audiostory.activities;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class ListenActivity extends AppCompatActivity {
     private ArrayList<SearchResponse> filteredList;
 
     private ListView lvList;
+    private  StoryPlayer storyPlayer;
+    private int oldPosition;
 
 
     @Override
@@ -44,6 +48,19 @@ public class ListenActivity extends AppCompatActivity {
         initViews();
         initFields();
         initRetrofit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        storyPlayer.release();
+        storyPlayer = null;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        storyPlayer = new StoryPlayer(getApplicationContext(), filteredList);
     }
 
     private void initViews() {
@@ -84,15 +101,32 @@ public class ListenActivity extends AppCompatActivity {
                 filteredList = new ArrayList<SearchResponse>();
                 filteredList = listeningList.getList();
 
-                final StoryPlayer storyPlayer = new StoryPlayer(getApplicationContext(),filteredList);
+                 storyPlayer = new StoryPlayer(getApplicationContext(),filteredList);
 
                 ListeningAdapter listeningAdapter = new ListeningAdapter(getApplicationContext(), filteredList);
                 lvList.setAdapter(listeningAdapter);
                 lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        storyPlayer.setPosition(position);
-                        storyPlayer.setView(view);
+
+                        ConstraintLayout layout = (ConstraintLayout) view;
+                        ImageView iv = (ImageView)layout.findViewById(R.id.iv_item_playstop);
+
+                        if(oldPosition != position && storyPlayer.isPlaying()){
+                            storyPlayer.stop();
+                            storyPlayer.setPosition(position);
+                            storyPlayer.setView(iv);
+                            storyPlayer.start();
+                        }else if(!iv.isSelected()) {
+
+                            storyPlayer.setPosition(position);
+                            storyPlayer.setView(iv);
+                            storyPlayer.start();
+                        }else {
+                            storyPlayer.stop();
+                        }
+
+                        oldPosition = position;
                     }
                 });
             }

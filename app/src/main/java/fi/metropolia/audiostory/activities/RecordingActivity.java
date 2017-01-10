@@ -34,6 +34,7 @@ import fi.metropolia.audiostory.threads.RecordThread;
 public class RecordingActivity extends AppCompatActivity {
 
     private static final int RECORD_PERMISSIONS = 24;
+    private static final int MAX_DURATION = 10000;
 
     private ImageView ivRecord, ivDelete, ivSave, ivPlayStop;
     private LinearLayout llContinue;
@@ -42,6 +43,9 @@ public class RecordingActivity extends AppCompatActivity {
     private EditText etTitle;
 
     private Handler uiHandler;
+    private Handler maxDurationHandler;
+
+    private Runnable durationRunnable;
 
     private PlayThread playThread = null;
     private RecordThread recordThread = null;
@@ -148,22 +152,37 @@ public class RecordingActivity extends AppCompatActivity {
 
 
 
-    public void onRecordingClick(View v){
+    public void onRecordingClick(final View v){
         if(!v.isSelected()){
             v.setSelected(true);
             startRecording();
             changeToRecordingState();
 
+            maxDurationHandler = new Handler();
+
+            durationRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if(recordThread.isRecording())
+                        stopRecording(v);
+                }
+            };
+
+            maxDurationHandler.postDelayed(durationRunnable, MAX_DURATION);
+
         }else {
-            v.setSelected(false);
-            stopRecording();
-            changetoDeletePlaySaveState();
+
+            stopRecording(v);
+            maxDurationHandler.removeCallbacks(durationRunnable);
+
         }
     }
 
 
-    private void stopRecording() {
+    private void stopRecording(View v) {
+        v.setSelected(false);
         recordThread.stopRecording();
+        changetoDeletePlaySaveState();
 
     }
 
