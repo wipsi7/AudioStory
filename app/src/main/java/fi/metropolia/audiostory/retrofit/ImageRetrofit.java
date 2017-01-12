@@ -37,13 +37,23 @@ public class ImageRetrofit {
         this.responseListener = responseListener;
     }
 
-    public ImageRetrofit(Context context, String apiKey, String collectionId){
+    public ImageRetrofit(Context context){
         this.context = context;
+
+        initRetrofitCall();
+    }
+
+    public void setKeyAndId(String apiKey, String collectionId) {
         this.apiKey = apiKey;
         this.collectionId = collectionId;
+    }
 
-        initImageresponseCallback();
+    public void setCollectionId(String collectionId){
+        this.collectionId = collectionId;
+    }
 
+
+    private void initRetrofitCall() {
 /*        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -56,11 +66,13 @@ public class ImageRetrofit {
                 .build();
 
         imageApi = retrofit.create(ImageApi.class);
-        imageResponseCall = imageApi.getImageLink(apiKey, collectionId, "image", "true");
+
+
+        initImageresponseCallback();
     }
 
 
-    private Callback<ImageResponse[][]> initImageresponseCallback(){
+    private void initImageresponseCallback(){
         imageResponseCallback = new Callback<ImageResponse[][]>() {
             @Override
             public void onResponse(Call<ImageResponse[][]> call, Response<ImageResponse[][]> response) {
@@ -76,14 +88,21 @@ public class ImageRetrofit {
 
             @Override
             public void onFailure(Call<ImageResponse[][]> call, Throwable t) {
-                Log.d(DEBUG_TAG, t.getMessage());
+                Log.d(DEBUG_TAG, "ERROR: " + t.getMessage());
             }
         };
 
-        return imageResponseCallback;
     }
 
     public void start(){
+        imageResponseCall = imageApi.getImageLink(apiKey, collectionId, "image", "true");
+
+        if(imageResponseCall.isExecuted()){
+            Log.d(DEBUG_TAG, "imageResponseCall already executed, cloning");
+            imageResponseCall = imageResponseCall.clone();
+        }
+
+
         imageResponseCall.enqueue(imageResponseCallback);
     }
 

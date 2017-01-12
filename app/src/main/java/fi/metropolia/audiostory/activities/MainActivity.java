@@ -4,8 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -21,30 +19,22 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import fi.metropolia.audiostory.Login.LoginRequest;
 import fi.metropolia.audiostory.Login.LoginResponse;
 import fi.metropolia.audiostory.R;
-import fi.metropolia.audiostory.interfaces.LoginApi;
 import fi.metropolia.audiostory.museum.Artifact;
+import fi.metropolia.audiostory.museum.Connectivity;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.Credentials;
 import fi.metropolia.audiostory.nfc.NfcController;
 import fi.metropolia.audiostory.retrofit.ImageRetrofit;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import fi.metropolia.audiostory.retrofit.LoginRetrofit;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    private static String DEBUG_TAG = "MainActivity";
-    private static String PACKAGE_NAME = "metropolia.audiostory";
+    private static final String DEBUG_TAG = "MainActivity";
+    private static final String PACKAGE_NAME = "metropolia.audiostory";
     private static final int API_KEY_LENGTH = 128;
-
 
     private PendingIntent pendingIntent;
     private NfcController nfcController;
@@ -53,15 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvArtifactTitle;
     private ImageView iv_main_artifact_image;
 
+    private LoginRetrofit loginRetrofit;
+    private ImageRetrofit imageRetrofit;
+
     private Artifact artifact = null;
     private Credentials currentCredentials = null;
-
-    private LoginApi service;
-    private LoginRequest loginRequest;
-    private LoginResponse loginResponse;
-    private Call<LoginResponse> loginResponseCall;
-    private Callback<LoginResponse> loginResponseCallback;
-
 
 
     @Override
@@ -71,7 +57,42 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         init();
-        initRetrofit();
+        initLoginRetrofit();
+        initImageRetrofit();
+    }
+
+    private void initImageRetrofit() {
+        imageRetrofit = new ImageRetrofit(getApplicationContext());
+        imageRetrofit.setResponseListener(new ImageRetrofit.ResponseListener() {
+            @Override
+            public void onResponse(Bitmap bm) {
+                iv_main_artifact_image.setImageBitmap(bm);
+                llButtonsContainer.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    //gets apiKey, if failed, credentials will equal to null
+    private void initLoginRetrofit() {
+        loginRetrofit = new LoginRetrofit(getApplicationContext());
+        loginRetrofit.setResponseListener(new LoginRetrofit.ResponseListener() {
+
+            @Override
+            public void onResponse(LoginResponse loginResponse) {
+                // If successfully retrieved API KEY, make buttons visible and set api key
+                if(loginResponse.getApi_key().length() == API_KEY_LENGTH){
+                    currentCredentials.setApiKey(loginResponse.getApi_key());
+
+                    imageRetrofit.setKeyAndId(currentCredentials.getApiKey(),currentCredentials.getCollectionID());
+                    imageRetrofit.start();
+                }else {
+
+                    Toast.makeText(getApplicationContext(), "Wrong username or password on Tag", Toast.LENGTH_SHORT).show();
+                    currentCredentials = null;
+                    llButtonsContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
     private void initViews() {
@@ -88,57 +109,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
     }
-
-    private void initRetrofit() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-
-        service = retrofit.create(LoginApi.class);
-        loginRequest = new LoginRequest();
-
-        // data coming back from server is handled here
-        loginResponseCallback = new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                loginResponse = response.body();
-
-                // If successfully retrieved API KEY, make buttons visible and set api key
-                if(loginResponse.getApi_key().length() == API_KEY_LENGTH){
-                    currentCredentials.setApiKey(loginResponse.getApi_key());
-
-                    ImageRetrofit imageRetrofit = new ImageRetrofit(getApplicationContext(), currentCredentials.getApiKey(), currentCredentials.getCollectionID());
-                    imageRetrofit.setResponseListener(new ImageRetrofit.ResponseListener() {
-                        @Override
-                        public void onResponse(Bitmap bm) {
-                            iv_main_artifact_image.setImageBitmap(bm);
-                            llButtonsContainer.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    imageRetrofit.start();
-                }else {
-                    Toast.makeText(getApplicationContext(), "Wrong username or password on Tag", Toast.LENGTH_SHORT).show();
-                    currentCredentials = null;
-                    llButtonsContainer.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-
-    }
-
 
 
     @Override
@@ -182,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     /** Checks if internet is working, if is sets title of artifact. Acquires new API key if credentials are not same */
     private void proceed(ArrayList<String> records) {
-        if(isNetworkAvailable()) {
+        if(Connectivity.isNetworkAvailable(getSystemService(Context.CONNECTIVITY_SERVICE))) {
             artifact.setArtifactName(records.get(Constant.ARTIFACT_INDEX));
             tvArtifactTitle.setText(artifact.getArtifactName());
 
@@ -195,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
                 if(!currentCredentials.getCollectionID().equals(newCredentials.getCollectionID())){
                     Log.d(DEBUG_TAG, "Different Collection ID, updating current ID");
                     currentCredentials.setCollectionID(newCredentials.getCollectionID());
+                    imageRetrofit.setCollectionId(currentCredentials.getCollectionID());
+                    imageRetrofit.start();
                 }
             }
             else {
@@ -213,27 +185,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //gets apiKey, if failed, credentials will equal to null
+
     private void acquireKey(ArrayList<String> records) {
 
         Log.d(DEBUG_TAG, "Records size is: " + records.size());
-
         currentCredentials = new Credentials(records);
-        loginRequest.setUsername(currentCredentials.getUserName());
-        loginRequest.setPassword(currentCredentials.getPassword());
-        loginResponseCall = service.getApiKey(loginRequest);
 
-        // Starts networking with server Asynchronously
-        loginResponseCall.enqueue(loginResponseCallback);
-    }
+        loginRetrofit.setLoginCredentials(currentCredentials.getUserName(), currentCredentials.getPassword());
+        loginRetrofit.start();
 
-
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 
@@ -242,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(this, LoginActivity.class);
         i.putExtra(Constant.EXTRA_BUNDLE_DATA, bundle);
-       // i.putExtra(Constant.EXTRA_IMAGE, bitmapArtifact);
         startActivity(i);
     }
 
@@ -266,9 +225,5 @@ public class MainActivity extends AppCompatActivity {
 
         return bundle;
     }
-
-
-
-
 
 }
