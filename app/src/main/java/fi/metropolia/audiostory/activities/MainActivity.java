@@ -4,13 +4,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,20 +19,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import fi.metropolia.audiostory.Login.LoginRequest;
 import fi.metropolia.audiostory.Login.LoginResponse;
 import fi.metropolia.audiostory.R;
-import fi.metropolia.audiostory.interfaces.ImageApi;
 import fi.metropolia.audiostory.interfaces.LoginApi;
 import fi.metropolia.audiostory.museum.Artifact;
 import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.Credentials;
-import fi.metropolia.audiostory.museum.MemoryC;
 import fi.metropolia.audiostory.nfc.NfcController;
-import fi.metropolia.audiostory.search.ImageResponse;
+import fi.metropolia.audiostory.retrofit.ImageRetrofit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -56,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayout llButtonsContainer;
     private TextView tvArtifactTitle;
+    private ImageView iv_main_artifact_image;
 
     private Artifact artifact = null;
     private Credentials currentCredentials = null;
@@ -67,21 +63,25 @@ public class MainActivity extends AppCompatActivity {
     private Callback<LoginResponse> loginResponseCallback;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(DEBUG_TAG, "in mainActivity");
+
+        initViews();
         init();
         initRetrofit();
     }
 
-
-    private void init() {
-
+    private void initViews() {
+        iv_main_artifact_image = (ImageView) findViewById(R.id.iv_main_artifact_image);
         llButtonsContainer = (LinearLayout)findViewById(R.id.ll_main_buttons_container);
         tvArtifactTitle = (TextView)findViewById(R.id.tv_main_artifact);
+    }
 
+
+    private void init() {
         nfcController = new NfcController(this);
         artifact = new Artifact();
 
@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         service = retrofit.create(LoginApi.class);
         loginRequest = new LoginRequest();
 
-
         // data coming back from server is handled here
         loginResponseCallback = new Callback<LoginResponse>() {
             @Override
@@ -115,34 +114,15 @@ public class MainActivity extends AppCompatActivity {
                 if(loginResponse.getApi_key().length() == API_KEY_LENGTH){
                     currentCredentials.setApiKey(loginResponse.getApi_key());
 
-                    ImageApi imageApi = retrofit.create(ImageApi.class);
-                    Call<ImageResponse[][]> imageResponseCall = imageApi.getImageLink(
-                            currentCredentials.getApiKey(),
-                            currentCredentials.getCollectionID(),
-                            "image",
-                            "true"
-                    );
-
-                    imageResponseCall.enqueue(new Callback<ImageResponse[][]>() {
+                    ImageRetrofit imageRetrofit = new ImageRetrofit(getApplicationContext(), currentCredentials.getApiKey(), currentCredentials.getCollectionID());
+                    imageRetrofit.setResponseListener(new ImageRetrofit.ResponseListener() {
                         @Override
-                        public void onResponse(Call<ImageResponse[][]> call, Response<ImageResponse[][]> response) {
-                            ImageResponse[][] imageResponse = response.body();
-                            if(imageResponse.length == 1){
-
-                                new DownloadImageTask((ImageView) findViewById(R.id.iv_main_artifact_image))
-                                        .execute(imageResponse[0][0].getDownloadLink());
-
-
-                            }else {
-                                Log.e(DEBUG_TAG, "More than one image detected");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ImageResponse[][]> call, Throwable t) {
-
+                        public void onResponse(Bitmap bm) {
+                            iv_main_artifact_image.setImageBitmap(bm);
+                            llButtonsContainer.setVisibility(View.VISIBLE);
                         }
                     });
+                    imageRetrofit.start();
                 }else {
                     Toast.makeText(getApplicationContext(), "Wrong username or password on Tag", Toast.LENGTH_SHORT).show();
                     currentCredentials = null;
@@ -155,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
+
+
     }
 
 
@@ -285,33 +267,8 @@ public class MainActivity extends AppCompatActivity {
         return bundle;
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
 
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
 
-            MemoryC memoryC = new MemoryC();
-            memoryC.addBitmapToMemoryCache(Constant.EXTRA_IMAGE, result);
-
-            llButtonsContainer.setVisibility(View.VISIBLE);
-        }
-    }
 }

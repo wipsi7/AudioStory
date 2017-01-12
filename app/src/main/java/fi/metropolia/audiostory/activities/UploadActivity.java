@@ -19,7 +19,6 @@ import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.interfaces.UploadApi;
 import fi.metropolia.audiostory.museum.ColorPicker;
 import fi.metropolia.audiostory.museum.Constant;
-import fi.metropolia.audiostory.museum.MemoryC;
 import fi.metropolia.audiostory.upload.UploadData;
 import fi.metropolia.audiostory.upload.UploadResponse;
 import okhttp3.MediaType;
@@ -104,7 +103,7 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     private void init() {
-        MemoryC memoryC = new MemoryC();
+
 
         //Bitmap bitmap = memoryC.getBitmapFromMemCache(Constant.EXTRA_IMAGE);
         //TODO get bitmap and assign it to tvBanner
