@@ -26,5 +26,5 @@ public final class Constant {
     public static final int MESSAGE_PLAY_FINISH = 34531;
 
     /** File names **/
-    public static final String CACHE_FILE = "cacheImageFilegbcgfggghtfhtgzfzc.jpg";
+    public static final String CACHE_FILE = "cacheImageFile.jpg";
 }

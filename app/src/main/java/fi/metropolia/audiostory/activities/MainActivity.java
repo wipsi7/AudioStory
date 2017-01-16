@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import fi.metropolia.audiostory.Login.LoginResponse;
 import fi.metropolia.audiostory.R;
+import fi.metropolia.audiostory.filestorage.ImageStorage;
 import fi.metropolia.audiostory.museum.Artifact;
 import fi.metropolia.audiostory.museum.Connectivity;
 import fi.metropolia.audiostory.museum.Constant;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private LoginRetrofit loginRetrofit;
     private ImageRetrofit imageRetrofit;
 
+    private ImageStorage imageStorage;
     private Artifact artifact = null;
     private Credentials currentCredentials = null;
 
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         initImageRetrofit();
     }
 
+    /** Deals with image returned from server**/
     private void initImageRetrofit() {
         imageRetrofit = new ImageRetrofit(getApplicationContext());
         imageRetrofit.setResponseListener(new ImageRetrofit.ResponseListener() {
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Bitmap bm) {
                 iv_main_artifact_image.setImageBitmap(bm);
                 llButtonsContainer.setVisibility(View.VISIBLE);
+
+                imageStorage.store(bm);
             }
         });
     }
@@ -105,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         nfcController = new NfcController(this);
         artifact = new Artifact();
+        imageStorage = new ImageStorage(this);
 
         Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);

@@ -1,6 +1,7 @@
 package fi.metropolia.audiostory.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import fi.metropolia.audiostory.R;
+import fi.metropolia.audiostory.filestorage.ImageStorage;
 import fi.metropolia.audiostory.interfaces.UploadApi;
 import fi.metropolia.audiostory.museum.ColorPicker;
 import fi.metropolia.audiostory.museum.Constant;
@@ -83,6 +85,13 @@ public class UploadActivity extends AppCompatActivity {
         btnUpload = (Button)findViewById(R.id.btn_upload_upload);
         cbDisclaimer = (CheckBox)findViewById(R.id.cb_upload_disclaimer);
         ivArtifact = (ImageView)findViewById(R.id.iv_upload_banner);
+
+        ImageStorage imageStorage = new ImageStorage(this);
+        Bitmap bmArtifact = imageStorage.loadImage();
+        if(bmArtifact != null){
+            ivArtifact.setImageBitmap(bmArtifact);
+        }
+
 
         btnUpload.setEnabled(false);
 

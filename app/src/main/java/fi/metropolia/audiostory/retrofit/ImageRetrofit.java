@@ -124,32 +124,7 @@ public class ImageRetrofit {
 
         protected void onPostExecute(Bitmap result) {
 
-/*
 
-
-            File temp = new File(Constant.BUNDLE_WAV_PATH);
-
-            FileOutputStream fileOutputStream = null;
-            File cacheDir = context.getCacheDir();
-            File file = new File(cacheDir, Constant.CACHE_FILE);
-
-            try {
-                fileOutputStream = new FileOutputStream(file);
-            } catch (FileNotFoundException e) {
-                Log.d(DEBUG_TAG, e.getMessage());
-            }
-
-            if(temp.exists()){
-                Log.d(DEBUG_TAG, "File exists" );
-            } else{
-                Log.d(DEBUG_TAG, "File does not exists" );
-//                result.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-            }
-
-            if(cacheDir.isDirectory()){
-                Log.d(DEBUG_TAG,"Files in cache directory are:" + Arrays.toString(cacheDir.list()));
-            }
-*/
             Log.d(DEBUG_TAG, "Image Task Completed");
             responseListener.onResponse(result);
         }
