@@ -42,7 +42,7 @@
         style="@style/AVLoadingIndicatorView.Large"
         android:visibility="invisible"
         app:indicatorName="BallSpinFadeLoaderIndicator"
-        app:indicatorColor="@android:color/white"
+        app:indicatorColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         if(Connectivity.isNetworkAvailable(getSystemService(Context.CONNECTIVITY_SERVICE))) {
             artifact.setArtifactName(records.get(Constant.ARTIFACT_INDEX));
             tvArtifactTitle.setText(artifact.getArtifactName());
-            indicatorView.smoothToShow();
+
 
 
             Credentials newCredentials = new Credentials(records);
@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(DEBUG_TAG, "Same credentials");
                 if(!currentCredentials.getCollectionID().equals(newCredentials.getCollectionID())){
                     Log.d(DEBUG_TAG, "Different Collection ID, updating current ID");
+                    indicatorView.smoothToShow();
                     currentCredentials.setCollectionID(newCredentials.getCollectionID());
                     imageRetrofit.setCollectionId(currentCredentials.getCollectionID());
                     imageRetrofit.start();
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 Log.d(DEBUG_TAG, "Different credentials");
+                indicatorView.smoothToShow();
                 acquireKey(records);
             }
         }else {
