@@ -23,6 +23,7 @@ public class RecordThread extends Thread {
     private RawFile rawFile;
 
 
+
     public RecordThread(RawFile rawFile){
         this.rawFile = rawFile;
     }
@@ -43,7 +44,6 @@ public class RecordThread extends Thread {
 
     private void startRecording() {
         recordingRunning = true;
-
         try {
             OutputStream outputStream = new FileOutputStream(rawFile.getFile());
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
@@ -76,6 +76,7 @@ public class RecordThread extends Thread {
             }
 
             audioRecord.stop();
+
             dataOutputStream.close();
 
 
