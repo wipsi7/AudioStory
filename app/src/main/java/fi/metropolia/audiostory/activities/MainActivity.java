@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.util.ArrayList;
 
 import fi.metropolia.audiostory.Login.LoginResponse;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout llButtonsContainer;
     private TextView tvArtifactTitle;
     private ImageView iv_main_artifact_image;
+    private AVLoadingIndicatorView indicatorView;
 
     private LoginRetrofit loginRetrofit;
     private ImageRetrofit imageRetrofit;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         imageRetrofit.setResponseListener(new ImageRetrofit.ResponseListener() {
             @Override
             public void onResponse(Bitmap bm) {
+                indicatorView.hide();
                 iv_main_artifact_image.setImageBitmap(bm);
                 llButtonsContainer.setVisibility(View.VISIBLE);
 
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(LoginResponse loginResponse) {
+                indicatorView.hide();
                 // If successfully retrieved API KEY, make buttons visible and set api key
                 if(loginResponse.getApi_key().length() == API_KEY_LENGTH){
                     currentCredentials.setApiKey(loginResponse.getApi_key());
@@ -104,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         iv_main_artifact_image = (ImageView) findViewById(R.id.iv_main_artifact_image);
         llButtonsContainer = (LinearLayout)findViewById(R.id.ll_main_buttons_container);
         tvArtifactTitle = (TextView)findViewById(R.id.tv_main_artifact);
+        indicatorView = (AVLoadingIndicatorView)findViewById(R.id.avi_main_indicator);
     }
 
 
@@ -161,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         if(Connectivity.isNetworkAvailable(getSystemService(Context.CONNECTIVITY_SERVICE))) {
             artifact.setArtifactName(records.get(Constant.ARTIFACT_INDEX));
             tvArtifactTitle.setText(artifact.getArtifactName());
+            indicatorView.smoothToShow();
 
 
             Credentials newCredentials = new Credentials(records);
