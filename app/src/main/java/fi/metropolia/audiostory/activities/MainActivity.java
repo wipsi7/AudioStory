@@ -31,6 +31,7 @@ import fi.metropolia.audiostory.museum.Credentials;
 import fi.metropolia.audiostory.nfc.NfcController;
 import fi.metropolia.audiostory.retrofit.ImageRetrofit;
 import fi.metropolia.audiostory.retrofit.LoginRetrofit;
+import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvArtifactTitle;
     private ImageView iv_main_artifact_image;
     private AVLoadingIndicatorView indicatorView;
+    private GifImageView gifImageView;
 
     private LoginRetrofit loginRetrofit;
     private ImageRetrofit imageRetrofit;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Bitmap bm) {
                 indicatorView.hide();
+                tvArtifactTitle.setText(artifact.getArtifactName());
                 iv_main_artifact_image.setImageBitmap(bm);
                 llButtonsContainer.setVisibility(View.VISIBLE);
 
@@ -89,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(LoginResponse loginResponse) {
                 indicatorView.hide();
+                tvArtifactTitle.setText(artifact.getArtifactName());
+
                 // If successfully retrieved API KEY, make buttons visible and set api key
                 if(loginResponse.getApi_key().length() == API_KEY_LENGTH){
                     currentCredentials.setApiKey(loginResponse.getApi_key());
@@ -110,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         llButtonsContainer = (LinearLayout)findViewById(R.id.ll_main_buttons_container);
         tvArtifactTitle = (TextView)findViewById(R.id.tv_main_artifact);
         indicatorView = (AVLoadingIndicatorView)findViewById(R.id.avi_main_indicator);
+        gifImageView = (GifImageView)findViewById(R.id.gif_main_nfc);
     }
 
 
@@ -166,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
     private void proceed(ArrayList<String> records) {
         if(Connectivity.isNetworkAvailable(getSystemService(Context.CONNECTIVITY_SERVICE))) {
             artifact.setArtifactName(records.get(Constant.ARTIFACT_INDEX));
-            tvArtifactTitle.setText(artifact.getArtifactName());
+
 
 
 
@@ -177,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(DEBUG_TAG, "Same credentials");
                 if(!currentCredentials.getCollectionID().equals(newCredentials.getCollectionID())){
                     Log.d(DEBUG_TAG, "Different Collection ID, updating current ID");
-                    indicatorView.smoothToShow();
+                    startLoading();
                     currentCredentials.setCollectionID(newCredentials.getCollectionID());
                     imageRetrofit.setCollectionId(currentCredentials.getCollectionID());
                     imageRetrofit.start();
@@ -185,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 Log.d(DEBUG_TAG, "Different credentials");
-                indicatorView.smoothToShow();
+                startLoading();
                 acquireKey(records);
             }
         }else {
@@ -239,6 +245,12 @@ public class MainActivity extends AppCompatActivity {
         bundle.putString(Constant.BUNDLE_ARTIFACT, artifact.getArtifactName());
 
         return bundle;
+    }
+
+    public void startLoading(){
+        tvArtifactTitle.setText("Please wait...");
+        indicatorView.smoothToShow();
+        gifImageView.setVisibility(View.INVISIBLE);
     }
 
 }
