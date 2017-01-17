@@ -38,7 +38,7 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gif_main_nfc"
-        android:src="@drawable/nfc_no_background"
+        android:src="@drawable/nfc_transparent"
         android:layout_width="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/iv_main_artifact_image"
         app:layout_constraintRight_toRightOf="parent"
