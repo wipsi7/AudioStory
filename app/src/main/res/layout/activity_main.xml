@@ -37,22 +37,23 @@
         app:layout_constraintVertical_bias="0.0"
         android:text="@string/main_tv_tag" />
 
-<!--    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gif_main_nfc"
-        android:src="@drawable/nfc_transparent_white"
+    <VideoView
+        android:id="@+id/main_video_nfc"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+
         app:layout_constraintLeft_toLeftOf="@+id/iv_main_artifact_image"
         app:layout_constraintRight_toRightOf="parent"
-        android:adjustViewBounds="true"
-
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintVertical_bias="1.0"
-        android:cropToPadding="false"
-        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_main_artifact"
-        android:layout_height="0dp"
-        android:layout_marginTop="56dp" />-->
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="1.0"
+
+        android:cropToPadding="false"
+        android:scaleType="fitCenter"
+
+
+        android:layout_marginTop="56dp" />
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi_main_indicator"

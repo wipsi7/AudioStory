@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -16,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
+import fi.metropolia.audiostory.Helper;
 import fi.metropolia.audiostory.Login.LoginResponse;
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.ImageStorage;
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvArtifactTitle;
     private ImageView iv_main_artifact_image;
     private AVLoadingIndicatorView indicatorView;
-/*    private GifImageView gifImageView;*/
+    private VideoView videoContainer;
 
     private LoginRetrofit loginRetrofit;
     private ImageRetrofit imageRetrofit;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageStorage imageStorage;
     private Artifact artifact = null;
     private Credentials currentCredentials = null;
+    private Uri videoUri;
 
 
     @Override
@@ -65,6 +70,35 @@ public class MainActivity extends AppCompatActivity {
         init();
         initLoginRetrofit();
         initImageRetrofit();
+        initVideo();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(nfcController.isNfcAvailable()){
+            nfcController.getNfcAdapter().enableForegroundDispatch(this, pendingIntent, nfcController.getIntentFilterArray(), nfcController.getTechListArray());
+        }else {
+            finish();
+        }
+    }
+
+    private void initVideo() {
+         videoUri = Helper.resourceToUri(getApplicationContext(), R.raw.nfc);
+
+
+        videoContainer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.start();
+            }
+        });
+
+        startVideoPlaying();
+
+
     }
 
     /** Deals with image returned from server**/
@@ -114,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         llButtonsContainer = (LinearLayout)findViewById(R.id.ll_main_buttons_container);
         tvArtifactTitle = (TextView)findViewById(R.id.tv_main_artifact);
         indicatorView = (AVLoadingIndicatorView)findViewById(R.id.avi_main_indicator);
-/*        gifImageView = (GifImageView)findViewById(R.id.gif_main_nfc);*/
+        videoContainer = (VideoView)findViewById(R.id.main_video_nfc);
 
     }
 
@@ -129,15 +163,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(nfcController.isNfcAvailable()){
-            nfcController.getNfcAdapter().enableForegroundDispatch(this, pendingIntent, nfcController.getIntentFilterArray(), nfcController.getTechListArray());
-        }else {
-            finish();
-        }
-    }
+
 
     @Override
     protected void onPause() {
@@ -250,7 +276,18 @@ public class MainActivity extends AppCompatActivity {
     public void startLoading(){
         tvArtifactTitle.setText(R.string.main_tv_wait);
         indicatorView.smoothToShow();
-        /*gifImageView.setVisibility(View.INVISIBLE);*/
+        videoContainer.stopPlayback();
+        videoContainer.setVisibility(View.INVISIBLE);
+    }
+
+    private void startVideoPlaying(){
+
+        if(videoContainer.getVisibility() != View.VISIBLE){
+            videoContainer.setVisibility(View.VISIBLE);
+        }
+
+        videoContainer.setVideoURI(videoUri);
+        videoContainer.start();
     }
 
 }
