@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,14 +8,16 @@
     android:id="@+id/activity_main">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:srcCompat="@android:color/transparent"
         android:id="@+id/iv_main_artifact_image"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:layout_alignParentBottom="false"
-        android:layout_above="@+id/ll_main_buttons_container" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ll_main_buttons_container"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
 
@@ -23,44 +25,64 @@
         android:layout_height="wrap_content"
 
         android:id="@+id/tv_main_artifact"
-        android:layout_alignParentTop="false"
         android:textSize="32sp"
-        android:layout_alignParentStart="false"
-        android:layout_centerInParent="false"
-        android:layout_centerHorizontal="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        tools:text="wawdw"
+        app:layout_constraintLeft_toLeftOf="@+id/iv_main_artifact_image"
+        app:layout_constraintRight_toRightOf="@+id/iv_main_artifact_image"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="@+id/iv_main_artifact_image"
+        android:layout_marginTop="50dp" />
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi_main_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+
+        style="@style/AVLoadingIndicatorView.Large"
+        android:visibility="invisible"
+        app:indicatorName="BallSpinFadeLoaderIndicator"
+        app:indicatorColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-
         android:id="@+id/ll_main_buttons_container"
+        android:visibility="invisible"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:weightSum="2"
-        android:visibility="invisible">
+        android:orientation="horizontal">
 
-        <Button style="?borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
+        <Button
+            style="?borderlessButtonStyle"
             android:text="@string/main_btn_listen_story"
             android:background="@drawable/pink_button"
             android:id="@+id/btn_main_listen"
             android:onClick="onListenClick"
-            android:layout_marginEnd="5dp" />
-
-        <Button style="?borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp" />
+
+        <Button
+            style="?borderlessButtonStyle"
             android:text="@string/main_btn_share_story"
             android:background="@drawable/pink_button"
             android:id="@+id/btn_main_record"
             android:onClick="onRecordClick"
-            android:layout_marginStart="5dp" />
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp" />
     </LinearLayout>
 
 
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
