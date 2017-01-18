@@ -122,10 +122,6 @@ public class UploadActivity extends AppCompatActivity {
 
     private void init() {
 
-
-        //Bitmap bitmap = memoryC.getBitmapFromMemCache(Constant.EXTRA_IMAGE);
-        //TODO get bitmap and assign it to tvBanner
-
         Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
         uploadData = new UploadData();
         uploadData.setApiKey(b.getString(Constant.BUNDLE_API));

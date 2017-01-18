@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/appBackground"
     tools:context=".activities.MainActivity"
     android:id="@+id/activity_main">
 
@@ -17,7 +18,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/ll_main_buttons_container"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:ignore="ContentDescription" />
 
     <TextView
 
@@ -27,17 +29,35 @@
         android:id="@+id/tv_main_artifact"
         android:textSize="32sp"
 
-        tools:text="wawdw"
         app:layout_constraintLeft_toLeftOf="@+id/iv_main_artifact_image"
         app:layout_constraintRight_toRightOf="@+id/iv_main_artifact_image"
         android:textColor="@android:color/white"
         app:layout_constraintTop_toTopOf="@+id/iv_main_artifact_image"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="30dp"
+        app:layout_constraintVertical_bias="0.0"
+        android:text="@string/main_tv_tag" />
+
+<!--    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gif_main_nfc"
+        android:src="@drawable/nfc_transparent_white"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/iv_main_artifact_image"
+        app:layout_constraintRight_toRightOf="parent"
+        android:adjustViewBounds="true"
+
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="1.0"
+        android:cropToPadding="false"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_main_artifact"
+        android:layout_height="0dp"
+        android:layout_marginTop="56dp" />-->
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi_main_indicator"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
 
         style="@style/AVLoadingIndicatorView.Large"
         android:visibility="invisible"
