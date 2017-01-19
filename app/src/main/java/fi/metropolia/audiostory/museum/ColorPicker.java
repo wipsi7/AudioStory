@@ -54,8 +54,9 @@ public class ColorPicker {
 
 
 
-    public String getMatched(String color){
-        color = color.toLowerCase();
-        return colorsList.get(color);
+    /** Returns color hex as String */
+    public String getMatched(String colorFeeling){
+        colorFeeling = colorFeeling.toLowerCase();
+        return colorsList.get(colorFeeling);
     }
 }

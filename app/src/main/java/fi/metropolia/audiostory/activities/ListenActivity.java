@@ -1,12 +1,10 @@
 package fi.metropolia.audiostory.activities;
 
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -18,8 +16,6 @@ import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.museum.ListeningList;
 import fi.metropolia.audiostory.museum.StoryPlayer;
 import fi.metropolia.audiostory.search.SearchResponse;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,9 +29,10 @@ public class ListenActivity extends AppCompatActivity {
 
     private String key, id, artifactName;
     private String[] tags;
-    private ArrayList<SearchResponse> filteredList;
+    private ArrayList<SearchResponse> filteredArrayList;
 
     private ListView lvList;
+    private ListeningAdapter listeningAdapter;
     private  StoryPlayer storyPlayer;
     private int oldPosition;
 
@@ -46,7 +43,7 @@ public class ListenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listen);
 
         initViews();
-        initFields();
+        initRequestFieldsForRetrofit();
         initRetrofit();
     }
 
@@ -60,14 +57,14 @@ public class ListenActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        storyPlayer = new StoryPlayer(getApplicationContext(), filteredList);
+        storyPlayer = new StoryPlayer(getApplicationContext(), filteredArrayList);
     }
 
     private void initViews() {
         lvList = (ListView)findViewById(R.id.listening_listview);
     }
 
-    private void initFields() {
+    private void initRequestFieldsForRetrofit() {
         Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
         key = b.getString(Constant.BUNDLE_API);
         id = b.getString(Constant.BUNDLE_ID);
@@ -77,39 +74,41 @@ public class ListenActivity extends AppCompatActivity {
 
 
     private void initRetrofit(){
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+/*        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
+        httpClient.addInterceptor(logging);*/
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
+/*                .client(httpClient.build())*/
                 .build();
 
         SearchApi service = retrofit.create(SearchApi.class);
-
         Call<SearchResponse[][]> responseCall = service.getDataList(key, id, artifactName, "true");
 
         responseCall.enqueue(new Callback<SearchResponse[][]>() {
             @Override
             public void onResponse(Call<SearchResponse[][]> call, Response<SearchResponse[][]> response) {
-                Log.d(DEBUG_TAG, "Succeed");
+                Log.d(DEBUG_TAG, "Successfully retrieved full list");
                 ListeningList listeningList = new ListeningList(response.body(), tags);
+                filteredArrayList = listeningList.returnFilteredList();
 
-                filteredList = new ArrayList<SearchResponse>();
-                filteredList = listeningList.getList();
+                Log.i(DEBUG_TAG, "FilteredArrayList size: " + filteredArrayList.size());
 
-                 storyPlayer = new StoryPlayer(getApplicationContext(),filteredList);
+                storyPlayer = new StoryPlayer(getApplicationContext(), filteredArrayList);
 
-                ListeningAdapter listeningAdapter = new ListeningAdapter(getApplicationContext(), filteredList);
+                listeningAdapter = new ListeningAdapter(getApplicationContext(), filteredArrayList);
                 lvList.setAdapter(listeningAdapter);
                 lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d(DEBUG_TAG, "onItemClick called, position is " + position + " and id is " + id);
+                        Log.d(DEBUG_TAG, "count of child's in parent " + parent.getChildCount());
+                        Log.d(DEBUG_TAG, "listeningAdapter" + listeningAdapter.getCount());
 
-                        ConstraintLayout layout = (ConstraintLayout) view;
+                        /*ConstraintLayout layout = (ConstraintLayout) view;
                         ImageView iv = (ImageView)layout.findViewById(R.id.iv_item_playstop);
 
                         if(oldPosition != position && storyPlayer.isPlaying()){
@@ -126,7 +125,7 @@ public class ListenActivity extends AppCompatActivity {
                             storyPlayer.stop();
                         }
 
-                        oldPosition = position;
+                        oldPosition = position;*/
                     }
                 });
             }

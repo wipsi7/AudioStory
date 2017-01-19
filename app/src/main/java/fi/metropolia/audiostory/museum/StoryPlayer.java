@@ -55,8 +55,6 @@ public class StoryPlayer {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 iv.setSelected(true);
-
-
                 player.start();
 
             }
