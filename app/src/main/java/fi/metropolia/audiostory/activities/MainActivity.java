@@ -39,7 +39,7 @@ import fi.metropolia.audiostory.retrofit.LoginRetrofit;
 public class MainActivity extends AppCompatActivity {
 
 
-    private static final String DEBUG_TAG = "MainActivity";
+    private static final String DEBUG_TAG = "audiostory.MainActivity";
     private static final String PACKAGE_NAME = "metropolia.audiostory";
     private static final int API_KEY_LENGTH = 128;
 
@@ -65,19 +65,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.w(DEBUG_TAG, "In onCreate");
 
         initViews();
         init();
         initLoginRetrofit();
         initImageRetrofit();
         initVideo();
+    }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.w(DEBUG_TAG, "In onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.w(DEBUG_TAG, "In onResume");
         if(nfcController.isNfcAvailable()){
             nfcController.getNfcAdapter().enableForegroundDispatch(this, pendingIntent, nfcController.getIntentFilterArray(), nfcController.getTechListArray());
         }else {
@@ -85,10 +91,96 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.w(DEBUG_TAG, "In onRestart");
+        if(videoContainer.getVisibility() == View.VISIBLE){
+            startVideoPlaying();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.w(DEBUG_TAG, "In onStop");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.w(DEBUG_TAG, "In onPause");
+        nfcController.getNfcAdapter().disableForegroundDispatch(this);
+        videoContainer.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.w(DEBUG_TAG, "In onDestroy");
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.w(DEBUG_TAG, "In onSaveInstanceState");
+
+    }
+
+    @Override
+    public void onStateNotSaved() {
+        super.onStateNotSaved();
+        Log.w(DEBUG_TAG, "In onStateNotSaved");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.w(DEBUG_TAG, "In onRestoreInstanceState");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.w(DEBUG_TAG, "In onNewIntent");
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            videoContainer.stopPlayback();
+            videoContainer.setVisibility(View.INVISIBLE);
+
+            NdefMessage[] msgs = nfcController.retrieveNdefMessage(intent);
+
+            if(msgs != null){
+                // Currently only one Ndef message is sent
+                NdefRecord[] ndefRecords = msgs[0].getRecords();
+                if(ndefRecords.length == 5) {
+                    ArrayList<String>  records = nfcController.readRecords(ndefRecords);
+                    if(records.get(4).equals(PACKAGE_NAME)) {
+                        Log.d(DEBUG_TAG, "Correct package");
+                        proceed(records);
+                    }
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Log.w(DEBUG_TAG, "In onAttachedToWindow");
+        startVideoPlaying();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.w(DEBUG_TAG, "In onBackPressed");
+    }
+
+
     private void initVideo() {
-         videoUri = Helper.resourceToUri(getApplicationContext(), R.raw.nfc);
-
-
+        videoUri = Helper.resourceToUri(getApplicationContext(), R.raw.nfc);
         videoContainer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -96,9 +188,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        startVideoPlaying();
-
-
+        videoContainer.setSaveEnabled(true);
     }
 
     /** Deals with image returned from server**/
@@ -161,37 +251,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
     }
-
-
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        nfcController.getNfcAdapter().disableForegroundDispatch(this);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-            NdefMessage[] msgs = nfcController.retrieveNdefMessage(intent);
-
-            if(msgs != null){
-                // Currently only one Ndef message is sent
-                NdefRecord[] ndefRecords = msgs[0].getRecords();
-                if(ndefRecords.length == 5) {
-                    ArrayList<String>  records = nfcController.readRecords(ndefRecords);
-                    if(records.get(4).equals(PACKAGE_NAME)) {
-                        Log.d(DEBUG_TAG, "Correct package");
-                        proceed(records);
-                    }
-                }
-            }
-        }
-    }
-
 
 
     /** Checks if internet is working, if is sets title of artifact. Acquires new API key if credentials are not same */
@@ -273,11 +332,9 @@ public class MainActivity extends AppCompatActivity {
         return bundle;
     }
 
-    public void startLoading(){
+    private void startLoading(){
         tvArtifactTitle.setText(R.string.main_tv_wait);
         indicatorView.smoothToShow();
-        videoContainer.stopPlayback();
-        videoContainer.setVisibility(View.INVISIBLE);
     }
 
     private void startVideoPlaying(){

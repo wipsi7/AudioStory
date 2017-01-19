@@ -8,6 +8,9 @@ public final class Constant {
     public static final int COLLECTION_ID_INDEX = 2;
     public static final int ARTIFACT_INDEX = 3;
 
+    /** Constants for video playback */
+    public static final String VIDEO_CURRENT_POSITION = "VideoCurrentPosition";
+
     /** Constants for passing and retrieving data from bundle */
     public static final String EXTRA_BUNDLE_DATA = "ExtraBundleData";
     public static final String BUNDLE_USER = "BundleUser";
