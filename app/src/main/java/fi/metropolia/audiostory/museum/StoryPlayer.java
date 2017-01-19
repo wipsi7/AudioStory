@@ -31,6 +31,8 @@ public class StoryPlayer {
     private MediaPlayer.OnCompletionListener completionListener;
     private MediaPlayer.OnPreparedListener preparedListener;
 
+    private boolean preperad, preparing;
+
     public StoryPlayer(Context context, ArrayList<SearchResponse> stories){
 
         this.context = context;
@@ -54,6 +56,8 @@ public class StoryPlayer {
         preparedListener = new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                preperad = true;
+                preparing = false;
                 iv.setSelected(true);
                 player.start();
 
@@ -86,6 +90,7 @@ public class StoryPlayer {
         player.setOnCompletionListener(completionListener);
         player.setOnPreparedListener(preparedListener);
 
+        preparing = true;
         player.prepareAsync();
     }
 
@@ -101,10 +106,21 @@ public class StoryPlayer {
         iv.setSelected(false);
         player.stop();
         player.reset();
+        preperad = false;
     }
 
 
     public boolean isPlaying(){
-        return player.isPlaying();
+        if(preperad){
+            if(player.isPlaying()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isPreparing(){
+        return preparing;
     }
 }

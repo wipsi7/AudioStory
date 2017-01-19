@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -103,29 +104,34 @@ public class ListenActivity extends AppCompatActivity {
                 lvList.setAdapter(listeningAdapter);
                 lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemClick(AdapterView<?> parent, View row, int position, long id) {
                         Log.d(DEBUG_TAG, "onItemClick called, position is " + position + " and id is " + id);
                         Log.d(DEBUG_TAG, "count of child's in parent " + parent.getChildCount());
                         Log.d(DEBUG_TAG, "listeningAdapter" + listeningAdapter.getCount());
 
-                        /*ConstraintLayout layout = (ConstraintLayout) view;
-                        ImageView iv = (ImageView)layout.findViewById(R.id.iv_item_playstop);
+                        ImageView playStopImageView = (ImageView)row.findViewById(R.id.iv_item_playstop);
 
                         if(oldPosition != position && storyPlayer.isPlaying()){
+                            Log.d(DEBUG_TAG, "Click on new row while playing, changing play");
                             storyPlayer.stop();
                             storyPlayer.setPosition(position);
-                            storyPlayer.setView(iv);
+                            storyPlayer.setView(playStopImageView);
                             storyPlayer.start();
-                        }else if(!iv.isSelected()) {
-
+                        }
+                        else if(oldPosition == position && storyPlayer.isPlaying()){
+                            Log.d(DEBUG_TAG, "Click on same row while playing");
+                                storyPlayer.stop();
+                        }
+                        else if(!storyPlayer.isPlaying() && !storyPlayer.isPreparing()) {
+                            Log.d(DEBUG_TAG, "Click on row that is not playing");
                             storyPlayer.setPosition(position);
-                            storyPlayer.setView(iv);
+                            storyPlayer.setView(playStopImageView);
                             storyPlayer.start();
                         }else {
-                            storyPlayer.stop();
+                            Log.d(DEBUG_TAG, "Player is not yet prepared, do nothing");
                         }
 
-                        oldPosition = position;*/
+                        oldPosition = position;
                     }
                 });
             }
