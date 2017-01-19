@@ -24,13 +24,13 @@ public class ListeningAdapter extends BaseAdapter{
     private Context mContext;
     private List<SearchResponse> list;
     private ViewHolder viewHolder;
+    private ColorPicker colorPicker;
 
     public ListeningAdapter(Context mContext, List<SearchResponse> list){
         this.mContext = mContext;
         this.list = list;
-
+        colorPicker = new ColorPicker();
     }
-
 
 
     @Override
@@ -38,91 +38,87 @@ public class ListeningAdapter extends BaseAdapter{
         return list.size();
     }
 
+
+    //not used
     @Override
     public Object getItem(int position) {
+        Log.w(DEBUG_TAG, "called Object getItem(int position): " + position );
         return list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
+        Log.w(DEBUG_TAG, "called getItemId(int position): " + position );
         return position;
     }
 
 
     private static class ViewHolder{
-        private LinearLayout llVisualFeelings;
+        private LinearLayout llTagsColorContainer;
         private TextView tvFeelings;
         private ImageView ivPlayStop;
         private TextView tvTitle;
         private TextView tvLength;
-        private int position;
 
         ViewHolder(View v){
-            llVisualFeelings = (LinearLayout)v.findViewById(R.id.ll_item_visual_feelings);
+            llTagsColorContainer = (LinearLayout) v.findViewById(R.id.ll_item_visual_feelings);
             tvFeelings = (TextView)v.findViewById(R.id.tv_item_feelings);
             ivPlayStop = (ImageView)v.findViewById(R.id.iv_item_playstop);
             tvTitle = (TextView)v.findViewById(R.id.tv_item_title);
             tvLength = (TextView)v.findViewById(R.id.tv_item_length);
-
         }
 
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(DEBUG_TAG, "getView called, position is " + position);
+        View row = convertView;
 
-
-
-        if(convertView == null){
+        if(row == null){
             LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_item, parent, false);
+            row = inflater.inflate(R.layout.list_item, parent, false);
+            viewHolder = new ViewHolder(row);
+            row.setTag(viewHolder); // Saves viewHolder
 
-            viewHolder = new ViewHolder(convertView);
-
-            Log.d(DEBUG_TAG, "Creating new row, row id is " + position );
-        }else{
-            viewHolder = (ViewHolder)convertView.getTag();
-            Log.d(DEBUG_TAG, "Reusing old row, row id is" + position);
+            Log.d(DEBUG_TAG, "Creating new row" );
+        } else{
+            viewHolder = (ViewHolder)row.getTag();
+            Log.d(DEBUG_TAG, "Reusing old row");
         }
-
-        viewHolder.position = position;
         viewHolder.ivPlayStop.setImageResource(R.drawable.play_stop_button);
-        viewHolder.tvFeelings.setText(list.get(position).getTags());
-        processTags(list.get(position).getTags());
+        viewHolder.tvFeelings.setText(list.get(position).getFeelingsTags());
+        processFeelingsTags(list.get(position).getFeelingsTags());
         viewHolder.tvTitle.setText(list.get(position).getTitle());
         viewHolder.tvLength.setText("03:21:00");
 
-
-        return convertView;
+        return row;
     }
 
-    private void processTags(String tags) {
+    /** Split String tag into separate tags */
+    private void processFeelingsTags(String tags) {
         String[] splitTags = tags.split(" ");
         initVisualFeelings(splitTags);
     }
 
 
+    /** sets colors of feelings for llTagsColorContainer childs */
     private void initVisualFeelings(String[] tags) {
 
-
-        ColorPicker colorPicker = new ColorPicker();
-
-        int childViewCount = viewHolder.llVisualFeelings.getChildCount();
+        int childViewCount = viewHolder.llTagsColorContainer.getChildCount();
         int tagsCount = tags.length;
-
 
         //makes all childViews gone of VisualLayout
         for(int i = 0; i < childViewCount; i++){
-            viewHolder.llVisualFeelings.getChildAt(i).setVisibility(View.GONE);
+            viewHolder.llTagsColorContainer.getChildAt(i).setVisibility(View.GONE);
         }
 
         //makes VisualLayout child visible by depending number of tags and assign feeling color
         for(int i = 0; i < tagsCount; i++){
-            String color = tags[i];
-            color = colorPicker.getMatched(color);
-            viewHolder.llVisualFeelings.getChildAt(i).setBackgroundColor(Color.parseColor(color));
-            viewHolder.llVisualFeelings.getChildAt(i).setVisibility(View.VISIBLE);
+            String feeling = tags[i];
+            String feelingColor = colorPicker.getMatched(feeling);
+            viewHolder.llTagsColorContainer.getChildAt(i).setBackgroundColor(Color.parseColor(feelingColor));
+            viewHolder.llTagsColorContainer.getChildAt(i).setVisibility(View.VISIBLE);
         }
     }
 }

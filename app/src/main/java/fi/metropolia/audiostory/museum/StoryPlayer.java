@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -23,13 +25,16 @@ public class StoryPlayer {
     private static final String DEBUG_TAG = "StoryPlayer";
     private Context context;
     private ArrayList<SearchResponse> stories;
-    private ImageView iv;
+    private ImageView ivPlayStop;
+    private AVLoadingIndicatorView aviLoadingPlay;
     private TextView tvTime;
     private int position;
     private MediaPlayer player;
 
     private MediaPlayer.OnCompletionListener completionListener;
     private MediaPlayer.OnPreparedListener preparedListener;
+
+    private boolean preperad, preparing;
 
     public StoryPlayer(Context context, ArrayList<SearchResponse> stories){
 
@@ -46,7 +51,7 @@ public class StoryPlayer {
         completionListener = new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                iv.setSelected(false);
+                ivPlayStop.setSelected(false);
                 player.reset();
             }
         };
@@ -54,9 +59,10 @@ public class StoryPlayer {
         preparedListener = new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                iv.setSelected(true);
-
-
+                preperad = true;
+                preparing = false;
+                stopLoadingAnim();
+                ivPlayStop.setSelected(true);
                 player.start();
 
             }
@@ -66,10 +72,22 @@ public class StoryPlayer {
 
     public void setView(View v){
 
-        iv = (ImageView)v.findViewById(R.id.iv_item_playstop);
+        ivPlayStop = (ImageView)v.findViewById(R.id.iv_item_playstop);
         tvTime = (TextView)v.findViewById(R.id.tv_item_length);
+        aviLoadingPlay = (AVLoadingIndicatorView)v.findViewById(R.id.avi_item_loading_play);
 
     }
+
+    private void startLoadingAnim(){
+        ivPlayStop.setVisibility(View.INVISIBLE);
+        aviLoadingPlay.show();
+    }
+
+    private void stopLoadingAnim(){
+        aviLoadingPlay.hide();
+        ivPlayStop.setVisibility(View.VISIBLE);
+    }
+
 
     public void  setPosition(int position){
         this.position = position;
@@ -77,6 +95,8 @@ public class StoryPlayer {
 
 
     public void start(){
+        preparing = true;
+        startLoadingAnim();
 
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -88,25 +108,37 @@ public class StoryPlayer {
         player.setOnCompletionListener(completionListener);
         player.setOnPreparedListener(preparedListener);
 
+
         player.prepareAsync();
     }
 
     public void release(){
-        if(iv != null){
-            iv.setSelected(false);
+        if(ivPlayStop != null){
+            ivPlayStop.setSelected(false);
         }
         player.reset();
         player.release();
     }
 
     public void stop(){
-        iv.setSelected(false);
+        ivPlayStop.setSelected(false);
         player.stop();
         player.reset();
+        preperad = false;
     }
 
 
     public boolean isPlaying(){
-        return player.isPlaying();
+        if(preperad){
+            if(player.isPlaying()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isPreparing(){
+        return preparing;
     }
 }

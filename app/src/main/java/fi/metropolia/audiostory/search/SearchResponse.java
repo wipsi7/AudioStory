@@ -58,7 +58,7 @@ public class SearchResponse {
         return title;
     }
 
-    public String getTags() {
+    public String getFeelingsTags() {
         return tags;
     }
 

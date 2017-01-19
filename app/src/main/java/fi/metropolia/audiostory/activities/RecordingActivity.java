@@ -3,6 +3,7 @@ package fi.metropolia.audiostory.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -84,6 +85,8 @@ public class RecordingActivity extends AppCompatActivity {
         init();
         initViews();
         initHandler();
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     private void initHandler() {
