@@ -90,7 +90,7 @@ public class ListeningAdapter extends BaseAdapter{
         viewHolder.tvFeelings.setText(list.get(position).getFeelingsTags());
         processFeelingsTags(list.get(position).getFeelingsTags());
         viewHolder.tvTitle.setText(list.get(position).getTitle());
-        viewHolder.tvLength.setText("03:21:00");
+        viewHolder.tvLength.setText(list.get(position).getStoryDuration());
 
         return row;
     }

@@ -54,6 +54,10 @@ public class SearchResponse {
     @Expose
     private String downloadLink;
 
+    @SerializedName("Length (sec)")
+    @Expose
+    private String storyDuration;
+
     public String getTitle() {
         return title;
     }
@@ -64,5 +68,9 @@ public class SearchResponse {
 
     public String getDownloadLink() {
         return downloadLink;
+    }
+
+    public String getStoryDuration() {
+        return storyDuration;
     }
 }
