@@ -1,5 +1,6 @@
 package fi.metropolia.audiostory.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -42,6 +43,8 @@ public class UploadActivity extends AppCompatActivity {
     private Button btnUpload;
     private CheckBox cbDisclaimer;
     private ImageView ivArtifact;
+    private ProgressDialog progressDialog;
+
 
     private UploadData uploadData;
     private String[] tags;
@@ -53,6 +56,7 @@ public class UploadActivity extends AppCompatActivity {
 
         init();
         initViews();
+
 
     }
 
@@ -85,6 +89,11 @@ public class UploadActivity extends AppCompatActivity {
         btnUpload = (Button)findViewById(R.id.btn_upload_upload);
         cbDisclaimer = (CheckBox)findViewById(R.id.cb_upload_disclaimer);
         ivArtifact = (ImageView)findViewById(R.id.iv_upload_banner);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("Uploading ...");
+
+
 
         ImageStorage imageStorage = new ImageStorage(this);
         Bitmap bmArtifact = imageStorage.loadImage();
@@ -113,10 +122,6 @@ public class UploadActivity extends AppCompatActivity {
 
     private void init() {
 
-
-        //Bitmap bitmap = memoryC.getBitmapFromMemCache(Constant.EXTRA_IMAGE);
-        //TODO get bitmap and assign it to tvBanner
-
         Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
         uploadData = new UploadData();
         uploadData.setApiKey(b.getString(Constant.BUNDLE_API));
@@ -143,6 +148,8 @@ public class UploadActivity extends AppCompatActivity {
         Log.d(DEBUG_TAG, "Collection ID is: " + uploadData.getCollectionId());
         Log.d(DEBUG_TAG, "File path is " + uploadData.getUploadFile().getAbsolutePath());
 
+
+        progressDialog.show();
         upload();
     }
 
@@ -180,7 +187,7 @@ public class UploadActivity extends AppCompatActivity {
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
 
                 UploadResponse uploadResponse = response.body();
-                Toast.makeText(getApplicationContext(), uploadResponse.getResponse(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), uploadResponse.getResponse(), Toast.LENGTH_LONG).show();
                 Log.d(DEBUG_TAG, uploadResponse.getResponse());
 
                 finishUp();
@@ -196,6 +203,7 @@ public class UploadActivity extends AppCompatActivity {
 
     /** Called on successfull upload */
     private void finishUp() {
+        progressDialog.dismiss();
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
