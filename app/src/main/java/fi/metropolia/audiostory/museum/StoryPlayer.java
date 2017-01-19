@@ -25,7 +25,8 @@ public class StoryPlayer {
     private static final String DEBUG_TAG = "StoryPlayer";
     private Context context;
     private ArrayList<SearchResponse> stories;
-    private ImageView iv;
+    private ImageView ivPlayStop;
+    private AVLoadingIndicatorView aviLoadingPlay;
     private TextView tvTime;
     private int position;
     private MediaPlayer player;
@@ -42,8 +43,6 @@ public class StoryPlayer {
 
         initPlayer();
 
-        AVLoadingIndicatorView avLoadingIndicatorView = new AVLoadingIndicatorView(context);
-
     }
 
     private void initPlayer(){
@@ -52,7 +51,7 @@ public class StoryPlayer {
         completionListener = new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                iv.setSelected(false);
+                ivPlayStop.setSelected(false);
                 player.reset();
             }
         };
@@ -62,7 +61,8 @@ public class StoryPlayer {
             public void onPrepared(MediaPlayer mp) {
                 preperad = true;
                 preparing = false;
-                iv.setSelected(true);
+                stopLoadingAnim();
+                ivPlayStop.setSelected(true);
                 player.start();
 
             }
@@ -72,10 +72,22 @@ public class StoryPlayer {
 
     public void setView(View v){
 
-        iv = (ImageView)v.findViewById(R.id.iv_item_playstop);
+        ivPlayStop = (ImageView)v.findViewById(R.id.iv_item_playstop);
         tvTime = (TextView)v.findViewById(R.id.tv_item_length);
+        aviLoadingPlay = (AVLoadingIndicatorView)v.findViewById(R.id.avi_item_loading_play);
 
     }
+
+    private void startLoadingAnim(){
+        ivPlayStop.setVisibility(View.INVISIBLE);
+        aviLoadingPlay.show();
+    }
+
+    private void stopLoadingAnim(){
+        aviLoadingPlay.hide();
+        ivPlayStop.setVisibility(View.VISIBLE);
+    }
+
 
     public void  setPosition(int position){
         this.position = position;
@@ -83,6 +95,8 @@ public class StoryPlayer {
 
 
     public void start(){
+        preparing = true;
+        startLoadingAnim();
 
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -94,20 +108,20 @@ public class StoryPlayer {
         player.setOnCompletionListener(completionListener);
         player.setOnPreparedListener(preparedListener);
 
-        preparing = true;
+
         player.prepareAsync();
     }
 
     public void release(){
-        if(iv != null){
-            iv.setSelected(false);
+        if(ivPlayStop != null){
+            ivPlayStop.setSelected(false);
         }
         player.reset();
         player.release();
     }
 
     public void stop(){
-        iv.setSelected(false);
+        ivPlayStop.setSelected(false);
         player.stop();
         player.reset();
         preperad = false;
