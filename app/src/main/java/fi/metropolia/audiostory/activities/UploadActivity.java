@@ -127,6 +127,7 @@ public class UploadActivity extends AppCompatActivity {
         uploadData.setApiKey(b.getString(Constant.BUNDLE_API));
         uploadData.setCollectionId(b.getString(Constant.BUNDLE_ID));
         uploadData.setArtifact(b.getString(Constant.BUNDLE_ARTIFACT));
+        uploadData.setDuration(b.getString(Constant.BUNDLE_DURATION));
 
         tags = b.getStringArray(Constant.BUNDLE_FEELINGS);
         initVisualFeelings(tags);
@@ -138,7 +139,6 @@ public class UploadActivity extends AppCompatActivity {
         File file = new File(path);
         uploadData.setUploadFile(file);
         uploadData.setOriginalFileName(file.getName());
-
 
     }
 
@@ -168,6 +168,7 @@ public class UploadActivity extends AppCompatActivity {
         RequestBody title = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getTitle());
         RequestBody category = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getCategory());
         RequestBody originalFileName = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getOriginalFileName());
+        RequestBody storyDuration = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getDuration());
 
         MultipartBody.Part fileBody =
                 MultipartBody.Part.createFormData("userfile", uploadData.getUploadFile().getName(), file);
@@ -180,7 +181,7 @@ public class UploadActivity extends AppCompatActivity {
 
         UploadApi uploadApi = retrofit.create(UploadApi.class);
 
-        Call<UploadResponse> call = uploadApi.upload(key,resourcetype, collection, artifact,tags, title, category, originalFileName, fileBody);
+        Call<UploadResponse> call = uploadApi.upload(key,resourcetype, collection, artifact,tags, title, category, originalFileName,storyDuration , fileBody);
 
         call.enqueue(new Callback<UploadResponse>() {
             @Override

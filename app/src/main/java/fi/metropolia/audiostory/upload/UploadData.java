@@ -14,6 +14,7 @@ public class UploadData {
     private String tags;
     private String title;
     private String originalFileName;
+    private String duration;
 
     public UploadData(){
 
@@ -94,5 +95,13 @@ public class UploadData {
 
     public void setUploadFile(File uploadFile) {
         this.uploadFile = uploadFile;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

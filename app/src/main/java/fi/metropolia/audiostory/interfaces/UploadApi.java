@@ -26,5 +26,6 @@ public interface UploadApi {
             @Part("field8") RequestBody title,
             @Part("field75") RequestBody category,
             @Part("originalfilename") RequestBody originalFileName,
+            @Part("field79") RequestBody storyDuration,
             @Part MultipartBody.Part file);
 }
