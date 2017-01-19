@@ -7,8 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,7 @@ public class ListenActivity extends AppCompatActivity {
     private ArrayList<SearchResponse> filteredArrayList;
 
     private ListView lvList;
+    private AVLoadingIndicatorView avLoadingIndicatorView;
     private ListeningAdapter listeningAdapter;
     private  StoryPlayer storyPlayer;
     private int oldPosition;
@@ -53,6 +55,7 @@ public class ListenActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -68,6 +71,7 @@ public class ListenActivity extends AppCompatActivity {
 
     private void initViews() {
         lvList = (ListView)findViewById(R.id.listening_listview);
+        avLoadingIndicatorView = (AVLoadingIndicatorView)findViewById(R.id.listening_avi_loading_list);
     }
 
     private void initRequestFieldsForRetrofit() {
@@ -97,6 +101,7 @@ public class ListenActivity extends AppCompatActivity {
         responseCall.enqueue(new Callback<SearchResponse[][]>() {
             @Override
             public void onResponse(Call<SearchResponse[][]> call, Response<SearchResponse[][]> response) {
+                avLoadingIndicatorView.hide();
                 Log.d(DEBUG_TAG, "Successfully retrieved full list");
                 ListeningList listeningList = new ListeningList(response.body(), tags);
                 filteredArrayList = listeningList.returnFilteredList();
@@ -114,13 +119,12 @@ public class ListenActivity extends AppCompatActivity {
                         Log.d(DEBUG_TAG, "count of child's in parent " + parent.getChildCount());
                         Log.d(DEBUG_TAG, "listeningAdapter" + listeningAdapter.getCount());
 
-                        ImageView playStopImageView = (ImageView)row.findViewById(R.id.iv_item_playstop);
 
                         if(oldPosition != position && storyPlayer.isPlaying()){
                             Log.d(DEBUG_TAG, "Click on new row while playing, changing play");
                             storyPlayer.stop();
                             storyPlayer.setPosition(position);
-                            storyPlayer.setView(playStopImageView);
+                            storyPlayer.setView(row);
                             storyPlayer.start();
                         }
                         else if(oldPosition == position && storyPlayer.isPlaying()){
@@ -130,7 +134,7 @@ public class ListenActivity extends AppCompatActivity {
                         else if(!storyPlayer.isPlaying() && !storyPlayer.isPreparing()) {
                             Log.d(DEBUG_TAG, "Click on row that is not playing");
                             storyPlayer.setPosition(position);
-                            storyPlayer.setView(playStopImageView);
+                            storyPlayer.setView(row);
                             storyPlayer.start();
                         }else {
                             Log.d(DEBUG_TAG, "Player is not yet prepared, do nothing");

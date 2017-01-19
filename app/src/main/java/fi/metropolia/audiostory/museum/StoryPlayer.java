@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -39,6 +41,8 @@ public class StoryPlayer {
         this.stories = stories;
 
         initPlayer();
+
+        AVLoadingIndicatorView avLoadingIndicatorView = new AVLoadingIndicatorView(context);
 
     }
 
