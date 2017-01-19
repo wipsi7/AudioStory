@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -115,9 +116,9 @@ public class ListenActivity extends AppCompatActivity {
                 lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View row, int position, long id) {
-                        Log.d(DEBUG_TAG, "onItemClick called, position is " + position + " and id is " + id);
+                        /*Log.d(DEBUG_TAG, "onItemClick called, position is " + position + " and id is " + id);
                         Log.d(DEBUG_TAG, "count of child's in parent " + parent.getChildCount());
-                        Log.d(DEBUG_TAG, "listeningAdapter" + listeningAdapter.getCount());
+                        Log.d(DEBUG_TAG, "listeningAdapter" + listeningAdapter.getCount());*/
 
 
                         if(oldPosition != position && storyPlayer.isPlaying()){
@@ -138,6 +139,7 @@ public class ListenActivity extends AppCompatActivity {
                             storyPlayer.start();
                         }else {
                             Log.d(DEBUG_TAG, "Player is not yet prepared, do nothing");
+                            Toast.makeText(getApplicationContext(), "Please wait while loading", Toast.LENGTH_SHORT).show();
                         }
 
                         oldPosition = position;
