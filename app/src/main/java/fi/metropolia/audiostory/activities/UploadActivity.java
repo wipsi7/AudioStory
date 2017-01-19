@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -57,7 +59,8 @@ public class UploadActivity extends AppCompatActivity {
         init();
         initViews();
 
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     private void initVisualFeelings(String[] tags) {
@@ -127,6 +130,7 @@ public class UploadActivity extends AppCompatActivity {
         uploadData.setApiKey(b.getString(Constant.BUNDLE_API));
         uploadData.setCollectionId(b.getString(Constant.BUNDLE_ID));
         uploadData.setArtifact(b.getString(Constant.BUNDLE_ARTIFACT));
+        uploadData.setDuration(b.getString(Constant.BUNDLE_DURATION));
 
         tags = b.getStringArray(Constant.BUNDLE_FEELINGS);
         initVisualFeelings(tags);
@@ -138,7 +142,6 @@ public class UploadActivity extends AppCompatActivity {
         File file = new File(path);
         uploadData.setUploadFile(file);
         uploadData.setOriginalFileName(file.getName());
-
 
     }
 
@@ -168,6 +171,7 @@ public class UploadActivity extends AppCompatActivity {
         RequestBody title = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getTitle());
         RequestBody category = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getCategory());
         RequestBody originalFileName = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getOriginalFileName());
+        RequestBody storyDuration = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getDuration());
 
         MultipartBody.Part fileBody =
                 MultipartBody.Part.createFormData("userfile", uploadData.getUploadFile().getName(), file);
@@ -180,7 +184,7 @@ public class UploadActivity extends AppCompatActivity {
 
         UploadApi uploadApi = retrofit.create(UploadApi.class);
 
-        Call<UploadResponse> call = uploadApi.upload(key,resourcetype, collection, artifact,tags, title, category, originalFileName, fileBody);
+        Call<UploadResponse> call = uploadApi.upload(key,resourcetype, collection, artifact,tags, title, category, originalFileName,storyDuration , fileBody);
 
         call.enqueue(new Callback<UploadResponse>() {
             @Override

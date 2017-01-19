@@ -98,6 +98,8 @@
         android:id="@+id/tv_item_title"
         tools:ignore="HardcodedText"
         android:layout_marginEnd="8dp"
+        android:textColor="@android:color/white"
+        android:textAllCaps="true"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginStart="32dp"
         app:layout_constraintLeft_toRightOf="@+id/item_framelayout"

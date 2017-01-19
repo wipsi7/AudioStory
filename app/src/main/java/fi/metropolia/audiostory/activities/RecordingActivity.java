@@ -8,12 +8,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,13 +39,15 @@ import fi.metropolia.audiostory.threads.RecordThread;
 public class RecordingActivity extends AppCompatActivity {
 
     private static final int RECORD_PERMISSIONS = 24;
-    private static final int MAX_DURATION = 10000;
+    private static final int MAX_DURATION = 180000;
+    private static final String DEBUG_TAG = "RecordingActivity";
 
     private ImageView ivRecord, ivDelete, ivSave, ivPlayStop;
     private LinearLayout llContinue;
     private Button btnContinue;
     private TextView tvMessage;
     private EditText etTitle;
+    private Chronometer chronometer;
 
     private Handler uiHandler;
     private Handler maxDurationHandler;
@@ -55,6 +61,9 @@ public class RecordingActivity extends AppCompatActivity {
     private RawFile rawFile = null;
     private Folder folder = null;
     private WavFile wavFile = null;
+
+    private String stringRecordingTime;
+
     
     private String[] permissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -85,9 +94,11 @@ public class RecordingActivity extends AppCompatActivity {
         init();
         initViews();
         initHandler();
-
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
     }
+
 
     private void initHandler() {
         uiHandler = new Handler(new Handler.Callback() {
@@ -151,6 +162,7 @@ public class RecordingActivity extends AppCompatActivity {
         llContinue = (LinearLayout)findViewById(R.id.ll_recording_continue);
         btnContinue = (Button)findViewById(R.id.btn_recording_continue);
         etTitle = (EditText)findViewById(R.id.et_recording_title);
+        chronometer = (Chronometer)findViewById(R.id.cm_recording_timer);
     }
 
 
@@ -186,14 +198,19 @@ public class RecordingActivity extends AppCompatActivity {
         v.setSelected(false);
         recordThread.stopRecording();
         changetoDeletePlaySaveState();
-
+        chronometer.stop();
+        stringRecordingTime = chronometer.getText().toString();
+        Log.d(DEBUG_TAG, "Time Elapsed" + stringRecordingTime);
     }
 
     private void startRecording() {
 
         rawFile.createNewFile();
         recordThread = new RecordThread(rawFile);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
         recordThread.start();
+
     }
 
     public void onDeleteClick(View v){
@@ -214,6 +231,7 @@ public class RecordingActivity extends AppCompatActivity {
             Bundle b = getIntent().getBundleExtra(Constant.EXTRA_BUNDLE_DATA);
             b.putString(Constant.BUNDLE_STORY_TITLE, etTitle.getText().toString());
             b.putString(Constant.BUNDLE_WAV_PATH, wavFile.getWavFilePath());
+            b.putString(Constant.BUNDLE_DURATION, stringRecordingTime);
 
             Intent i = new Intent(this, FeelingsActivity.class);
             i.putExtra(Constant.EXTRA_BUNDLE_DATA, b);
