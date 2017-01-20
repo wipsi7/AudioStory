@@ -9,7 +9,7 @@
     <string name="main_btn_share_story">Share my story</string>
     <string name="main_btn_listen_story">Listen to a story</string>
     <string name="main_tv_tag">Approach a NFC Tag</string>
-    <string name="main_tv_wait">"Please wait..."</string>
+    <string name="main_tv_wait">Please wait…</string>
 
     <string name="feelings_tv_story_about">This story is about:</string>
     <string name="feelings_tv_story_listen">I want to listen stories about:</string>
@@ -20,7 +20,7 @@
 
     <string name="recording_tv_tap_record">Tap to record</string>
     <string name="recording_tv_tap_stop">Recording, tap to stop recording</string>
-    <string name="recording_tv_tap_delete_play_save">Tap delete, play or save</string>
+    <string name="recording_tv_tap_delete_play_save">Tap delete, play or upload</string>
     <string name="recording_tv_playing_stop">Tap to stop playing</string>
     <string name="recording_tv_story_title">Title of your Story</string>
     <string name="recording_hint_title">Title</string>
@@ -28,6 +28,7 @@
     <string name="recording_desc_play_stop">Play/Stop</string>
     <string name="recording_desc_delete">Delete</string>
     <string name="recording_desc_save">Save</string>
+    <string name="recording_max">3 min</string>
 
     <string name="login_btn_sign">Sign in</string>
     <string name="login_tv_sign">Sign in to Record</string>
