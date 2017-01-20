@@ -1,6 +1,7 @@
 package fi.metropolia.audiostory.activities;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -16,11 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +51,8 @@ public class RecordingActivity extends AppCompatActivity {
     private TextView tvMessage;
     private EditText etTitle;
     private Chronometer chronometer;
+    private ProgressBar recordingProgress;
+    private ObjectAnimator animator;
 
     private Handler uiHandler;
     private Handler maxDurationHandler;
@@ -61,6 +66,7 @@ public class RecordingActivity extends AppCompatActivity {
     private RawFile rawFile = null;
     private Folder folder = null;
     private WavFile wavFile = null;
+
 
     private String stringRecordingTime;
 
@@ -90,13 +96,21 @@ public class RecordingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recording);
-        
-        init();
-        initViews();
-        initHandler();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        init();
+        initViews();
+        initHandler();
+        setupAnimator();
+
+
+    }
+
+    private void setupAnimator() {
+        animator = ObjectAnimator.ofInt(recordingProgress, "progress", 0 , recordingProgress.getMax());
+        animator.setDuration(MAX_DURATION);
+        animator.setInterpolator(new LinearInterpolator());
     }
 
 
@@ -163,6 +177,7 @@ public class RecordingActivity extends AppCompatActivity {
         btnContinue = (Button)findViewById(R.id.btn_recording_continue);
         etTitle = (EditText)findViewById(R.id.et_recording_title);
         chronometer = (Chronometer)findViewById(R.id.cm_recording_timer);
+        recordingProgress = (ProgressBar)findViewById(R.id.pb_recording_progress);
     }
 
 
@@ -197,9 +212,10 @@ public class RecordingActivity extends AppCompatActivity {
     private void stopRecording(View v) {
         v.setSelected(false);
         recordThread.stopRecording();
+        stopTimer();
         changetoDeletePlaySaveState();
-        chronometer.stop();
         stringRecordingTime = chronometer.getText().toString();
+
         Log.d(DEBUG_TAG, "Time Elapsed" + stringRecordingTime);
     }
 
@@ -207,15 +223,33 @@ public class RecordingActivity extends AppCompatActivity {
 
         rawFile.createNewFile();
         recordThread = new RecordThread(rawFile);
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        chronometer.start();
+        startTimer();
         recordThread.start();
 
     }
 
+    private void startTimer() {
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+        setupAnimator();
+        animator.start();
+    }
+
+    private void stopTimer(){
+        chronometer.stop();
+        recordingProgress.clearAnimation();
+        animator.cancel();
+
+    }
+
+    private void resetTimer(){
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        recordingProgress.setProgress(100);
+    }
+
     public void onDeleteClick(View v){
         changeToInitialState();
-
+        resetTimer();
     }
 
 
@@ -246,11 +280,13 @@ public class RecordingActivity extends AppCompatActivity {
         //play record
         if(!v.isSelected()){
             v.setSelected(true);
+            startTimer();
             startPlaying();
             changeToPlayState();
         }else {
             //stop playing record
             v.setSelected(false);
+            stopTimer();
             stopPlaying();
             changetoDeletePlaySaveState();
         }

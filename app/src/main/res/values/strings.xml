@@ -28,6 +28,7 @@
     <string name="recording_desc_play_stop">Play/Stop</string>
     <string name="recording_desc_delete">Delete</string>
     <string name="recording_desc_save">Save</string>
+    <string name="recording_max">3 min</string>
 
     <string name="login_btn_sign">Sign in</string>
     <string name="login_tv_sign">Sign in to Record</string>
