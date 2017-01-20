@@ -9,7 +9,7 @@
     <string name="main_btn_share_story">Share my story</string>
     <string name="main_btn_listen_story">Listen to a story</string>
     <string name="main_tv_tag">Approach a NFC Tag</string>
-    <string name="main_tv_wait">Please wait...</string>
+    <string name="main_tv_wait">Please wait…</string>
 
     <string name="feelings_tv_story_about">This story is about:</string>
     <string name="feelings_tv_story_listen">I want to listen stories about:</string>
