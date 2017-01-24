@@ -46,6 +46,7 @@
     <string name="upload_btn_upload">Upload</string>
     <string name="upload_desc_museo">Museo</string>
 
+    <string name="listening_tv_empty">No stories found</string>
     <string name="bad_feelings_desc_panic">Panic</string>
     <string name="bad_feelings_desc_disgust">Disgust</string>
     <string name="bad_feelings_desc_indifference">Indifference</string>
