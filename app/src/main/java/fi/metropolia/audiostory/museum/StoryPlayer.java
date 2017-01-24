@@ -30,6 +30,7 @@ public class StoryPlayer {
     private TextView tvTime;
     private int position;
     private MediaPlayer player;
+    private boolean animRunning;
 
     private MediaPlayer.OnCompletionListener completionListener;
     private MediaPlayer.OnPreparedListener preparedListener;
@@ -81,11 +82,13 @@ public class StoryPlayer {
     private void startLoadingAnim(){
         ivPlayStop.setVisibility(View.INVISIBLE);
         aviLoadingPlay.show();
+        animRunning = true;
     }
 
     private void stopLoadingAnim(){
         aviLoadingPlay.hide();
         ivPlayStop.setVisibility(View.VISIBLE);
+        animRunning = false;
     }
 
 
@@ -112,9 +115,13 @@ public class StoryPlayer {
         player.prepareAsync();
     }
 
+    /** releases storyplayer and resets playstop imageview*/
     public void release(){
         if(ivPlayStop != null){
             ivPlayStop.setSelected(false);
+        }
+        if(animRunning){
+            stopLoadingAnim();
         }
         player.reset();
         player.release();

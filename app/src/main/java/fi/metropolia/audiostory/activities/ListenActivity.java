@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wang.avi.AVLoadingIndicatorView;
@@ -32,11 +33,14 @@ public class ListenActivity extends AppCompatActivity {
 
     private static final String DEBUG_TAG = "ListenActivity";
 
-    private String key, id, artifactName;
+    private boolean returnLink;
+
+    private String key, id, artifactName, story;
     private String[] tags;
     private ArrayList<SearchResponse> filteredArrayList;
 
     private ListView lvList;
+    private TextView tvEmpty;
     private AVLoadingIndicatorView avLoadingIndicatorView;
     private ListeningAdapter listeningAdapter;
     private  StoryPlayer storyPlayer;
@@ -60,8 +64,13 @@ public class ListenActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        storyPlayer.release();
-        storyPlayer = null;
+        if(storyPlayer != null){
+            storyPlayer.release();
+            storyPlayer = null;
+        }
+
+
+
     }
 
     @Override
@@ -72,6 +81,7 @@ public class ListenActivity extends AppCompatActivity {
 
     private void initViews() {
         lvList = (ListView)findViewById(R.id.listening_listview);
+        tvEmpty = (TextView)findViewById(R.id.listening_tv_empty);
         avLoadingIndicatorView = (AVLoadingIndicatorView)findViewById(R.id.listening_avi_loading_list);
     }
 
@@ -81,6 +91,8 @@ public class ListenActivity extends AppCompatActivity {
         id = b.getString(Constant.BUNDLE_ID);
         artifactName = b.getString(Constant.BUNDLE_ARTIFACT);
         tags = b.getStringArray(Constant.BUNDLE_FEELINGS);
+        returnLink = true;
+        story = "story";
     }
 
 
@@ -97,7 +109,7 @@ public class ListenActivity extends AppCompatActivity {
                 .build();
 
         SearchApi service = retrofit.create(SearchApi.class);
-        Call<SearchResponse[][]> responseCall = service.getDataList(key, id, artifactName, "true");
+        Call<SearchResponse[][]> responseCall = service.getDataList(key, id, story, returnLink);
 
         responseCall.enqueue(new Callback<SearchResponse[][]>() {
             @Override
@@ -113,6 +125,7 @@ public class ListenActivity extends AppCompatActivity {
 
                 listeningAdapter = new ListeningAdapter(getApplicationContext(), filteredArrayList);
                 lvList.setAdapter(listeningAdapter);
+                lvList.setEmptyView(tvEmpty);
                 lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View row, int position, long id) {
