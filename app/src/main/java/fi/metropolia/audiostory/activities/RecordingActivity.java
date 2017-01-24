@@ -122,6 +122,7 @@ public class RecordingActivity extends AppCompatActivity {
                 if(msg.what == Constant.MESSAGE_PLAY_FINISH){
                     ivPlayStop.setSelected(false);
                     changetoDeletePlaySaveState();
+                    stopTimer();
                 }
                 return false;
             }
