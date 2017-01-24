@@ -32,7 +32,9 @@ public class ListenActivity extends AppCompatActivity {
 
     private static final String DEBUG_TAG = "ListenActivity";
 
-    private String key, id, artifactName;
+    private boolean returnLink;
+
+    private String key, id, artifactName, story;
     private String[] tags;
     private ArrayList<SearchResponse> filteredArrayList;
 
@@ -81,6 +83,8 @@ public class ListenActivity extends AppCompatActivity {
         id = b.getString(Constant.BUNDLE_ID);
         artifactName = b.getString(Constant.BUNDLE_ARTIFACT);
         tags = b.getStringArray(Constant.BUNDLE_FEELINGS);
+        returnLink = true;
+        story = "story";
     }
 
 
@@ -97,7 +101,7 @@ public class ListenActivity extends AppCompatActivity {
                 .build();
 
         SearchApi service = retrofit.create(SearchApi.class);
-        Call<SearchResponse[][]> responseCall = service.getDataList(key, id, artifactName, "true");
+        Call<SearchResponse[][]> responseCall = service.getDataList(key, id, story, returnLink);
 
         responseCall.enqueue(new Callback<SearchResponse[][]>() {
             @Override

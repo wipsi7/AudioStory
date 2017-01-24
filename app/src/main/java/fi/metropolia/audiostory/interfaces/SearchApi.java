@@ -12,8 +12,8 @@ public interface SearchApi {
     Call<SearchResponse[][]> getDataList(
             @Query("key") String apiKey,
             @Query("collection") String collection,
-            @Query("source") String artifactName,
-            @Query("link") String linkRequired
+            @Query("search") String story,
+            @Query("link") boolean linkRequired
     );
 
 }
