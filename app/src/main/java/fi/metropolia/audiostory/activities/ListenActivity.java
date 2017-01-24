@@ -64,8 +64,13 @@ public class ListenActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        storyPlayer.release();
-        storyPlayer = null;
+        if(storyPlayer != null){
+            storyPlayer.release();
+            storyPlayer = null;
+        }
+
+
+
     }
 
     @Override
