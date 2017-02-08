@@ -13,13 +13,13 @@
         android:layout_height="0dp"
         app:srcCompat="@android:color/transparent"
         android:id="@+id/iv_main_artifact_image"
-        android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/ll_main_buttons_container"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        android:adjustViewBounds="true" />
 
     <TextView
 
@@ -33,7 +33,7 @@
         app:layout_constraintRight_toRightOf="@+id/iv_main_artifact_image"
         android:textColor="@android:color/white"
         app:layout_constraintTop_toTopOf="@+id/iv_main_artifact_image"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="42dp"
         app:layout_constraintVertical_bias="0.0"
         android:text="@string/main_tv_tag" />
 
@@ -53,7 +53,7 @@
         android:scaleType="fitCenter"
 
 
-        android:layout_marginTop="56dp" />
+        />
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi_main_indicator"
