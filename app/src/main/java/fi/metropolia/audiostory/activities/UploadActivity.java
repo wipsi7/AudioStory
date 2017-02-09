@@ -139,9 +139,15 @@ public class UploadActivity extends AppCompatActivity {
 
         String path = b.getString(Constant.BUNDLE_WAV_PATH);
 
-        File file = new File(path);
-        uploadData.setUploadFile(file);
-        uploadData.setOriginalFileName(file.getName());
+        if(path != null){
+            File file = new File(path);
+            uploadData.setUploadFile(file);
+            uploadData.setOriginalFileName(file.getName());
+        }else {
+            Log.e(DEBUG_TAG, "Error: file path is null" );
+            Toast.makeText(getApplicationContext(), "Error happened, check log for cause", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 
