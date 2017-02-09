@@ -49,6 +49,11 @@ public class RawToWavConverter {
                 public void onSuccess(String message) {
                     Log.d(DEBUG_TAG, "SUCCESSFULLY CONVERTED RAW TO WAV");
                 }
+
+                @Override
+                public void onFailure(String message) {
+                    Log.d(DEBUG_TAG, "FAILED CONVERTING RAW TO WAV");
+                }
             });
         } catch (FFmpegCommandAlreadyRunningException e) {
             e.printStackTrace();

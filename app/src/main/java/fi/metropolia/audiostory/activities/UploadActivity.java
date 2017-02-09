@@ -150,8 +150,6 @@ public class UploadActivity extends AppCompatActivity {
         Log.d(DEBUG_TAG, "API is: " + uploadData.getApiKey());
         Log.d(DEBUG_TAG, "Collection ID is: " + uploadData.getCollectionId());
         Log.d(DEBUG_TAG, "File path is " + uploadData.getUploadFile().getAbsolutePath());
-
-
         progressDialog.show();
         upload();
     }
@@ -200,6 +198,8 @@ public class UploadActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UploadResponse> call, Throwable t) {
                 Log.d(DEBUG_TAG, "failed: " + t.getMessage());
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Upload failed ", Toast.LENGTH_SHORT).show();
             }
         });
 
