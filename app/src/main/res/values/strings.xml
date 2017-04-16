@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">AudioStory</string>
+    <string name="app_name">Audio Memoir</string>
     <string name="all_btn_continue">Continue</string>
 
-    <string name="splash_screen_tv_app_name">FEELING\nTHINGS</string>
+    <string name="splash_screen_tv_app_name">AUDIO\nMEMOIR</string>
     <string name="splash_screen_desc_logo">Logo</string>
     <string name="splash_screen_desc_splash">splash</string>
 

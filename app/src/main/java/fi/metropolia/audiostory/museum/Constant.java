@@ -31,4 +31,6 @@ public final class Constant {
 
     /** File names **/
     public static final String CACHE_FILE = "cacheImageFile.jpg";
+
+    public static final String BASE_URL = "http://resourcespace.tekniikanmuseo.fi/";
 }

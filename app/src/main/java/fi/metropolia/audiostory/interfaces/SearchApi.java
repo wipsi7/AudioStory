@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 
 public interface SearchApi {
 
-    @GET("/plugins/api_audio_search/index.php/")
+    @GET("plugins/api_audio_search/index.php/")
     Call<SearchResponse[][]> getDataList(
             @Query("key") String apiKey,
             @Query("collection") String collection,

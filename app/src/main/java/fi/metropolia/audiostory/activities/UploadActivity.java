@@ -139,9 +139,15 @@ public class UploadActivity extends AppCompatActivity {
 
         String path = b.getString(Constant.BUNDLE_WAV_PATH);
 
-        File file = new File(path);
-        uploadData.setUploadFile(file);
-        uploadData.setOriginalFileName(file.getName());
+        if(path != null){
+            File file = new File(path);
+            uploadData.setUploadFile(file);
+            uploadData.setOriginalFileName(file.getName());
+        }else {
+            Log.e(DEBUG_TAG, "Error: file path is null" );
+            Toast.makeText(getApplicationContext(), "Error happened, check log for cause", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 
@@ -150,8 +156,6 @@ public class UploadActivity extends AppCompatActivity {
         Log.d(DEBUG_TAG, "API is: " + uploadData.getApiKey());
         Log.d(DEBUG_TAG, "Collection ID is: " + uploadData.getCollectionId());
         Log.d(DEBUG_TAG, "File path is " + uploadData.getUploadFile().getAbsolutePath());
-
-
         progressDialog.show();
         upload();
     }
@@ -177,7 +181,7 @@ public class UploadActivity extends AppCompatActivity {
                 MultipartBody.Part.createFormData("userfile", uploadData.getUploadFile().getName(), file);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
+                .baseUrl(Constant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
@@ -200,6 +204,8 @@ public class UploadActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UploadResponse> call, Throwable t) {
                 Log.d(DEBUG_TAG, "failed: " + t.getMessage());
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Upload failed ", Toast.LENGTH_SHORT).show();
             }
         });
 

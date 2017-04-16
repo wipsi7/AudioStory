@@ -103,7 +103,7 @@ public class ListenActivity extends AppCompatActivity {
         httpClient.addInterceptor(logging);*/
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
+                .baseUrl(Constant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
 /*                .client(httpClient.build())*/
                 .build();
