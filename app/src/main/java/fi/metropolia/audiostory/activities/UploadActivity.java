@@ -181,7 +181,7 @@ public class UploadActivity extends AppCompatActivity {
                 MultipartBody.Part.createFormData("userfile", uploadData.getUploadFile().getName(), file);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
+                .baseUrl(Constant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();

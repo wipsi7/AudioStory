@@ -8,6 +8,7 @@ import android.widget.Toast;
 import fi.metropolia.audiostory.Login.LoginRequest;
 import fi.metropolia.audiostory.Login.LoginResponse;
 import fi.metropolia.audiostory.interfaces.LoginApi;
+import fi.metropolia.audiostory.museum.Constant;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +62,8 @@ public class LoginRetrofit {
 
             }
 
-            @Override /** Called when connection to server fails **/
+            /** Called when connection to server fails **/
+            @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(context, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -76,7 +78,7 @@ public class LoginRetrofit {
         httpClient.addInterceptor(logging);*/
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
+                .baseUrl(Constant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
 /*                .client(httpClient.build())*/
                 .build();

@@ -10,6 +10,7 @@ import android.util.Log;
 import java.io.InputStream;
 
 import fi.metropolia.audiostory.interfaces.ImageApi;
+import fi.metropolia.audiostory.museum.Constant;
 import fi.metropolia.audiostory.search.ImageResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +61,7 @@ public class ImageRetrofit {
         httpClient.addInterceptor(logging);*/
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://resourcespace.tekniikanmuseo.fi/")
+                .baseUrl(Constant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
 /*                .client(httpClient.build())*/
                 .build();
@@ -77,7 +78,7 @@ public class ImageRetrofit {
             @Override
             public void onResponse(Call<ImageResponse[][]> call, Response<ImageResponse[][]> response) {
                 ImageResponse[][] imageResponse = response.body();
-                Log.d(DEBUG_TAG, "ImageResponse length is " + imageResponse.length);
+                Log.d(DEBUG_TAG, "ImageResponse length is " + response.body().length);
                 if (imageResponse.length == 1) {
 
                     new DownloadImageTask().execute(imageResponse[0][0].getDownloadLink());
