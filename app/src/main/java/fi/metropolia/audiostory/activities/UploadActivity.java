@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import fi.metropolia.audiostory.R;
 import fi.metropolia.audiostory.filestorage.ImageStorage;
@@ -95,6 +96,7 @@ public class UploadActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please wait");
         progressDialog.setMessage("Uploading ...");
+        progressDialog.setCancelable(false);
 
 
 
@@ -164,6 +166,9 @@ public class UploadActivity extends AppCompatActivity {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.connectTimeout(30, TimeUnit.SECONDS);
+        httpClient.readTimeout(30,TimeUnit.SECONDS);
+        httpClient.writeTimeout(30, TimeUnit.SECONDS);
         httpClient.addInterceptor(logging);
 
         RequestBody key = RequestBody.create(MediaType.parse("multipart/form-data"), uploadData.getApiKey());
@@ -193,7 +198,6 @@ public class UploadActivity extends AppCompatActivity {
         call.enqueue(new Callback<UploadResponse>() {
             @Override
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
-
                 UploadResponse uploadResponse = response.body();
                 Toast.makeText(getApplicationContext(), uploadResponse.getResponse(), Toast.LENGTH_LONG).show();
                 Log.d(DEBUG_TAG, uploadResponse.getResponse());
