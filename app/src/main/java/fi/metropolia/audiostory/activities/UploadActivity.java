@@ -198,7 +198,6 @@ public class UploadActivity extends AppCompatActivity {
         call.enqueue(new Callback<UploadResponse>() {
             @Override
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
-
                 UploadResponse uploadResponse = response.body();
                 Toast.makeText(getApplicationContext(), uploadResponse.getResponse(), Toast.LENGTH_LONG).show();
                 Log.d(DEBUG_TAG, uploadResponse.getResponse());
